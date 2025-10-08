@@ -1,30 +1,23 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./screens/home/Home";
+import FeaturesPage from "./screens/features/FeaturesPage";
+import ContactPage from "./screens/contact/ContactPage";
+import DemoPage from "./screens/demo/DemoPage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/features"
-            element={
-              <div className="p-8">
-                <h1>Features Page</h1>
-              </div>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <div className="p-8">
-                <h1>Contact Page</h1>
-              </div>
-            }
-          />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/demo" element={<DemoPage />} />
           <Route
             path="/services/crop-management"
             element={
@@ -66,6 +59,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer />{" "}
       </div>
     </Router>
   );

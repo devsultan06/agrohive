@@ -3,73 +3,28 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const services = [
-    { name: "Crop Management", href: "/services/crop-management" },
-    { name: "Soil Analysis", href: "/services/soil-analysis" },
-    { name: "Weather Monitoring", href: "/services/weather" },
-    { name: "Pest Control", href: "/services/pest-control" },
-    { name: "Irrigation Planning", href: "/services/irrigation" },
-  ];
 
   return (
     <nav className="bg-[#FAFAFA] ">
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="flex justify-between items-center h-[85px]">
           <div className="flex gap-[42px] items-center">
-            <div className="flex items-center">
-              <img
-                src="/images/agrohive.png"
-                alt="AgroHive"
-                className="h-[24px] w-[24px]"
-              />
-              <span className="ml-2 text-[16px] font-[700] text-[#333]">
-                Agro<span className="text-[#19641E]">Hive</span>
-              </span>
-            </div>
+            <Link to="/">
+              {" "}
+              <div className="flex items-center">
+                <img
+                  src="/images/agrohive.png"
+                  alt="AgroHive"
+                  className="h-[24px] w-[24px]"
+                />
+                <span className="ml-2 text-[16px] font-[700] text-[#333]">
+                  Agro<span className="text-[#19641E]">Hive</span>
+                </span>
+              </div>
+            </Link>
 
             <div className="hidden md:flex items-center space-x-8">
-              <div
-                className="relative"
-                onMouseEnter={() => setIsServicesOpen(true)}
-                onMouseLeave={() => setIsServicesOpen(false)}
-              >
-                <button className="flex items-center text-[#333] text-[16px] hover:text-[#19641E] tracking-[-0.24px] font-[500] transition-colors duration-200">
-                  Services
-                  <svg
-                    className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                      isServicesOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {isServicesOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    {services.map((service, index) => (
-                      <Link
-                        key={index}
-                        to={service.href}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors duration-200"
-                      >
-                        {service.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
               <Link
                 to="/features"
                 className="text-[#333] text-[16px] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
@@ -82,6 +37,12 @@ const Navbar = () => {
                 className="text-[#333] text-[16px] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
               >
                 Contact
+              </Link>
+              <Link
+                to="/demo"
+                className="text-[#333] text-[16px] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
+              >
+                Watch the Demo
               </Link>
             </div>
           </div>
@@ -188,52 +149,6 @@ const Navbar = () => {
                 </div>
                 <div className="flex-1 py-6">
                   <div className="space-y-1">
-                    <div className="px-6">
-                      <button
-                        onClick={() => setIsServicesOpen(!isServicesOpen)}
-                        className="flex items-center justify-between w-full text-left py-3 text-[#333] text-[16px] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
-                      >
-                        Services
-                        <svg
-                          className={`h-4 w-4 transition-transform duration-200 ${
-                            isServicesOpen ? "rotate-180" : ""
-                          }`}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                      ={" "}
-                      <AnimatePresence>
-                        {isServicesOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="ml-4 border-l border-gray-200 pl-4 space-y-2"
-                          >
-                            {services.map((service, index) => (
-                              <Link
-                                key={index}
-                                to={service.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="block py-2 text-[14px] text-[#333] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
-                              >
-                                {service.name}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
                     <div className="px-6 space-y-1">
                       <Link
                         to="/features"
@@ -248,6 +163,14 @@ const Navbar = () => {
                         className="block py-3 text-[#333] text-[16px] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
                       >
                         Contact
+                      </Link>
+
+                      <Link
+                        to="/demo"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block py-3 text-[#333] text-[16px] tracking-[-0.24px] hover:text-[#19641E] font-[500] transition-colors duration-200"
+                      >
+                        Watch the Demo
                       </Link>
                     </div>
                   </div>

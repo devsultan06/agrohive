@@ -82,7 +82,14 @@ const Benefits = () => {
   ];
 
   return (
-    <section className="py-20">
+    <section
+      style={{
+        backgroundImage: "url('/images/hero2.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="py-20"
+    >
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="mb-12 text-center">
           <p className="text-[24px] font-[400] text-[#000000]">

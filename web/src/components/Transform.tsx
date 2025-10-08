@@ -1,6 +1,13 @@
 const Transform = () => {
   return (
-    <section className="bg-[#1C6206] pt-20">
+    <section
+      style={{
+        backgroundImage: "url('/images/hero.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="bg-[#1C6206] pt-20"
+    >
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-[100px] items-center">
           <img

@@ -93,7 +93,14 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="bg-white py-20">
+    <section
+      style={{
+        backgroundImage: "url('/images/hero2.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="bg-white py-20"
+    >
       <style dangerouslySetInnerHTML={{ __html: swiperStyles }} />
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="text-center mb-16">

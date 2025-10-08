@@ -37,7 +37,14 @@ const FAQ = () => {
   };
 
   return (
-    <section className="bg-white py-20">
+    <section
+      style={{
+        backgroundImage: "url('/images/hero2.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="bg-white  py-20"
+    >
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="text-center mb-16">
           <h2 className="text-[40px] sm:text-[48px] max-w-[743px] leading-[70px] mx-auto lg:text-[48px] font-[600] text-[#000000] ">

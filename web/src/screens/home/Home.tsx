@@ -5,7 +5,6 @@ import Benefits from "../../components/Benefits";
 import Testimonials from "../../components/Testimonials";
 import FAQ from "../../components/FAQ";
 import Transform from "../../components/Transform";
-import Footer from "../../components/Footer";
 
 const Home = () => {
   return (
@@ -77,16 +76,6 @@ const Home = () => {
         }}
       >
         <Transform />
-      </motion.div>
-
-      {/* Footer - Simple fade up */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <Footer />
       </motion.div>
     </div>
   );

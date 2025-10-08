@@ -1,6 +1,13 @@
 const Header = () => {
   return (
-    <header className=" flex items-center">
+    <header
+      style={{
+        backgroundImage: "url('/images/hero2.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className=" flex items-center"
+    >
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px] py-20">
         <div className=" text-center">
           <div className="mb-8">
