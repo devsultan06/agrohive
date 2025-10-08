@@ -5,9 +5,7 @@ const Footer = () => {
     <footer className="bg-white">
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px] py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-[100px]">
-          {/* Left Side - Brand & Newsletter */}
           <div className="lg:col-span-2">
-            {/* Logo */}
             <div className="flex items-center gap-4 mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -26,13 +24,11 @@ const Footer = () => {
               </span>
             </div>
 
-            {/* Description */}
             <p className="text-[16px] text-[#858C95] tracking-[-0.16px] font-[500] mb-8 max-w-[380px]">
               Design outstanding interfaces with advanced Figma features in a
               matter of minutes.
             </p>
 
-            {/* Newsletter Signup */}
             <div className="flex ">
               <input
                 type="email"
@@ -45,7 +41,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Why Choose Us */}
           <div>
             <h3 className="text-[16px] font-[600] text-[#323539] tracking-[-0.16px] mb-6">
               Why Choose Us?
@@ -143,7 +138,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
             <h3 className="text-[16px] font-[600] text-[#323539] tracking-[-0.16px] mb-6">
               Resources
@@ -185,7 +179,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Copyright */}
         <div className="border-t border-[#E5E5E7] mt-12 pt-8">
           <div className="text-center">
             <p className="text-[16px] font-[400] tracking-[-0.16px] text-[#858C95]">

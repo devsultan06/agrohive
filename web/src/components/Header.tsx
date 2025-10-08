@@ -2,7 +2,6 @@ const Header = () => {
   return (
     <header className=" flex items-center">
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px] py-20">
-        {/* Center - Main Content */}
         <div className=" text-center">
           <div className="mb-8">
             <h1 className="text-[32px] sm:text-[48px] lg:text-[64px] leading-[72px] font-[600] text-[#0F0F0F] mb-6">
@@ -36,7 +35,6 @@ const Header = () => {
             </button>
           </div>
 
-          {/* Phone Mockup */}
           <img
             src="/images/2.png"
             alt="Phone Mockup"

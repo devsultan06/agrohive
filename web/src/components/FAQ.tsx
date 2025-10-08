@@ -39,14 +39,12 @@ const FAQ = () => {
   return (
     <section className="bg-white py-20">
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-[40px] sm:text-[48px] max-w-[743px] leading-[70px] mx-auto lg:text-[48px] font-[600] text-[#000000] ">
             Frequently asked questions
           </h2>
         </div>
 
-        {/* Left Side - Image */}
         <div className="">
           <div className="relative">
             <img
@@ -56,8 +54,6 @@ const FAQ = () => {
             />
           </div>
 
-          {/* Description Text */}
-
           <div className="grid grid-cols-1 lg:grid-cols-2 mt-[80px] gap-16 items-start">
             <div className="mt-8">
               <h3 className="text-[36px] font-[500] text-[#000000] mb-4 ">
@@ -65,11 +61,9 @@ const FAQ = () => {
                 stay open
               </h3>
             </div>
-            {/* Right Side - FAQ Items */}
             <div className="order-1 lg:order-2 space-y-4">
               {faqs.map((faq, index) => (
                 <div key={index} className="faq overflow-hidden">
-                  {/* Question Header */}
                   <button
                     onClick={() => toggleFAQ(index)}
                     className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
@@ -78,7 +72,6 @@ const FAQ = () => {
                       {faq.question}
                     </span>
 
-                    {/* Plus/Minus Icon */}
                     <div className="flex-shrink-0">
                       <motion.div
                         animate={{ rotate: openIndex === index ? 45 : 0 }}
@@ -86,7 +79,6 @@ const FAQ = () => {
                         className="w-[20px] bg-[#1C6206] rounded-[100px] h-[20px] flex items-center justify-center"
                       >
                         {openIndex === index ? (
-                          // Minus icon when open
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="12"
@@ -102,7 +94,6 @@ const FAQ = () => {
                             />
                           </svg>
                         ) : (
-                          // Plus icon when closed
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="12"
@@ -121,7 +112,6 @@ const FAQ = () => {
                     </div>
                   </button>
 
-                  {/* Answer Content */}
                   <AnimatePresence>
                     {openIndex === index && (
                       <motion.div

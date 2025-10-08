@@ -93,7 +93,6 @@ const Benefits = () => {
           </h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-[100px] md:gap-[280px] mx-auto items-center">
-          {/* Left Side - Benefits List */}
           <div className="">
             <div className="space-y-[40px]">
               {benefits.map((benefit, index) => (
@@ -113,8 +112,6 @@ const Benefits = () => {
               ))}
             </div>
           </div>
-
-          {/* Right Side - Phone Mockup */}
 
           <div>
             <img

@@ -23,7 +23,6 @@ const Features = () => {
   return (
     <section className="bg-[#1C6206] pt-[100px] pb-[63px]">
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-[28px] sm:text-[36px] lg:text-[48px] font-[700] text-white  mb-6">
             Explore our features
@@ -32,14 +31,12 @@ const Features = () => {
             We provide all the advantages that can simplify and improve your
             farming experiences
           </p>
-        </div>
-
-        {/* Features Grid */}
+        </div>{" "}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {features.map((feature, index) => (
             <div key={index} className="group cursor-pointer h-full">
               <div className="bg overflow-hidden hover:bg-white/15 transition-all duration-300 transform hover:-translate-y-2 h-full flex flex-col">
-                {/* Image */}
+                {" "}
                 <div className="aspect-[4/3] overflow-hidden flex-shrink-0">
                   <img
                     src={feature.image}
@@ -47,8 +44,6 @@ const Features = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-
-                {/* Content */}
                 <div className="p-6 flex-grow flex flex-col">
                   <h3 className="text-[20px] font-[700] text-white mb-[16px]">
                     {feature.title}
@@ -61,8 +56,6 @@ const Features = () => {
             </div>
           ))}
         </div>
-
-        {/* View All Button */}
         <div className="text-center">
           <button className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-[16px] font-[600] rounded-[100px] border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-200">
             View all

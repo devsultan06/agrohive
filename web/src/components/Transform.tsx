@@ -3,13 +3,11 @@ const Transform = () => {
     <section className="bg-[#1C6206] pt-20">
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-[100px] items-center">
-          {/* Left Side - Phone Mockup */}
           <img
             src="/images/transform.png"
             alt="Phone Mockup"
             className="w-[400px] mx-auto"
-          />
-          {/* Right Side - Content */}
+          />{" "}
           <div className="pb-[20px]">
             <div className="text-white">
               <h2 className="text-[48px] sm:text-[56px] lg:text-[48px] font-[700]  mb-6">
@@ -20,7 +18,6 @@ const Transform = () => {
                 Download AgroHive Today and get the best farming experience
               </p>
 
-              {/* App Store Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href="#"

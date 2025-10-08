@@ -18,7 +18,6 @@ const Navbar = () => {
     <nav className="bg-[#FAFAFA] ">
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
         <div className="flex justify-between items-center h-[85px]">
-          {/* Logo */}
           <div className="flex gap-[42px] items-center">
             <div className="flex items-center">
               <img
@@ -31,9 +30,7 @@ const Navbar = () => {
               </span>
             </div>
 
-            {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-8">
-              {/* Services Dropdown */}
               <div
                 className="relative"
                 onMouseEnter={() => setIsServicesOpen(true)}
@@ -58,7 +55,6 @@ const Navbar = () => {
                   </svg>
                 </button>
 
-                {/* Dropdown Menu */}
                 {isServicesOpen && (
                   <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                     {services.map((service, index) => (
@@ -90,7 +86,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* App Store Buttons */}
           <div className="hidden md:flex items-center space-x-[16px]">
             <a
               href="#"
@@ -117,7 +112,6 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -150,11 +144,9 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -163,7 +155,6 @@ const Navbar = () => {
               className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
             />
 
-            {/* Mobile Menu */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -172,7 +163,6 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-full w-1/2 bg-white shadow-lg z-50 md:hidden"
             >
               <div className="flex flex-col h-full">
-                {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b">
                   <span className="text-lg font-semibold text-gray-900">
                     Menu
@@ -196,11 +186,8 @@ const Navbar = () => {
                     </svg>
                   </button>
                 </div>
-
-                {/* Menu Items */}
                 <div className="flex-1 py-6">
                   <div className="space-y-1">
-                    {/* Services Section */}
                     <div className="px-6">
                       <button
                         onClick={() => setIsServicesOpen(!isServicesOpen)}
@@ -223,8 +210,7 @@ const Navbar = () => {
                           />
                         </svg>
                       </button>
-
-                      {/* Services Dropdown */}
+                      ={" "}
                       <AnimatePresence>
                         {isServicesOpen && (
                           <motion.div
@@ -248,7 +234,6 @@ const Navbar = () => {
                       </AnimatePresence>
                     </div>
 
-                    {/* Main Navigation Links */}
                     <div className="px-6 space-y-1">
                       <Link
                         to="/features"
@@ -267,8 +252,7 @@ const Navbar = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* App Store Buttons */}
+                ={" "}
                 <div className="p-6 border-t space-y-3">
                   <a
                     href="#"

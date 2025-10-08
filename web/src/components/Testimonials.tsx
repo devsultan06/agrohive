@@ -6,7 +6,6 @@ const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
 
-  // Add custom styles to ensure only one slide shows
   const swiperStyles = `
     .testimonials-swiper {
       width: 100%;
@@ -54,7 +53,6 @@ const Testimonials = () => {
     },
   ];
 
-  // Custom pagination dots
   const renderCustomPagination = () => {
     return (
       <div className="flex justify-center items-center space-x-2 mt-8">
@@ -71,7 +69,6 @@ const Testimonials = () => {
             }}
           >
             {index === activeIndex ? (
-              // Active state SVG
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="84"
@@ -85,7 +82,6 @@ const Testimonials = () => {
                 />
               </svg>
             ) : (
-              // Inactive state (circle)
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
                 <circle cx="4" cy="4" r="4" fill="#D1D5DB" />
               </svg>
@@ -100,14 +96,12 @@ const Testimonials = () => {
     <section className="bg-white py-20">
       <style dangerouslySetInnerHTML={{ __html: swiperStyles }} />
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-[40px] sm:text-[48px] max-w-[743px] leading-[70px] mx-auto lg:text-[48px] font-[600] text-[#000000] ">
             What our customers say!
           </h2>
         </div>
 
-        {/* Navigation Buttons - Top Right */}
         <div className="flex justify-end gap-4 ">
           <button
             onClick={() => {
@@ -154,7 +148,6 @@ const Testimonials = () => {
           </button>
         </div>
 
-        {/* Testimonials Slider */}
         <div className="relative overflow-hidden">
           <Swiper
             modules={[]}
@@ -178,10 +171,9 @@ const Testimonials = () => {
               <SwiperSlide key={index}>
                 <div className="w-full h-full flex items-center justify-center ">
                   <div className="flex flex-col lg:flex-row items-center justify-between gap-[100px] md:gap-[167px] mx-auto">
-                    {/* Left Side - Testimonial Card */}
                     <div className="flex-shrink-0 ml-[-100px] md:ml-0">
                       <div className="bg-[#1C6206] rounded-[20px] py-[86px] px-[28px] text-white relative ">
-                        {/* Profile Image positioned on the right edge */}
+                        {" "}
                         <div className="absolute -right-[130px] top-[67px]">
                           <div className="w-[218px] h-[180px] rounded-[12px] overflow-hidden">
                             <img
@@ -191,8 +183,6 @@ const Testimonials = () => {
                             />
                           </div>
                         </div>
-
-                        {/* Content */}
                         <div className="pr-24">
                           <h3 className="text-[32px] font-[500] mb-[16px] ">
                             {testimonial.name}
@@ -201,7 +191,6 @@ const Testimonials = () => {
                             {testimonial.role}
                           </p>
 
-                          {/* Rating Stars */}
                           <div className="flex space-x-2">
                             {[...Array(testimonial.rating)].map(() => (
                               <svg
@@ -224,7 +213,6 @@ const Testimonials = () => {
                       </div>
                     </div>
 
-                    {/* Right Side - Quote */}
                     <div className="">
                       <blockquote className="text-[24px] text-[#000] opacity-[0.5] font-[400]">
                         "{testimonial.quote}"
@@ -237,7 +225,6 @@ const Testimonials = () => {
           </Swiper>
         </div>
 
-        {/* Custom Pagination Dots */}
         {renderCustomPagination()}
       </div>
     </section>
