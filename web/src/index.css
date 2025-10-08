@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Parkinsans", sans-serif;
+}
+
+.app {
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.bg {
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(204, 204, 204, 0.09) 100%
+  );
+  box-shadow: 0 2px 6px 0 rgba(71, 113, 138, 0.1);
+}
+
+.icon {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  background: #fafafa;
+}
+
+.prev {
+  border-radius: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.faq {
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #fff;
+}
+
+.get {
+  border-radius: 100px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  background: #fff;
+}
