@@ -47,7 +47,7 @@ const Header = () => {
             alt="Phone Mockup"
             className=" lg:mt-[200px] w-full relative z-40 mx-auto"
           />
-          <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-[400px] overflow-hidden lg:absolute lg:top-[550px] lg:left-[500px] gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-[400px] overflow-hidden lg:absolute lg:top-[550px] lg:left-[650px] gap-8 items-center">
             <img
               src="/images/3.png"
               alt="Phone Mockup"

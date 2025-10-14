@@ -113,7 +113,6 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <motion.section
         style={{
           backgroundImage: "url('/images/hero.png')",
@@ -143,7 +142,6 @@ const ContactPage = () => {
         </div>
       </motion.section>
 
-      {/* Contact Info Cards */}
       <section className="py-[80px] bg-white">
         <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
           <motion.div
@@ -176,11 +174,9 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Contact Form Section */}
       <section className="py-[80px] bg-[#FAFAFA]">
         <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-[26px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            {/* Form */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -293,7 +289,6 @@ const ContactPage = () => {
               </form>
             </motion.div>
 
-            {/* Contact Info & Map */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -395,7 +390,6 @@ const ContactPage = () => {
                   </div>
                 </div>
 
-                {/* Placeholder for Map */}
                 <div className="mt-8 h-[200px] bg-[#F5F5F5] rounded-[12px] flex items-center justify-center border border-[#E5E5E7]">
                   <div className="text-center">
                     <svg
