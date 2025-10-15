@@ -1,60 +1,80 @@
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
+import React, { useEffect } from "react";
 import { View, Image, StyleSheet, ImageBackground, Text } from "react-native";
-import { Dimensions } from "react-native";
 
-export default function SplashScreen() {
+type RootStackParamList = {
+  Onboarding: undefined;
+};
+
+interface SplashScreenProps {
+  onLayoutRootView?: () => void;
+}
+
+export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, "Onboarding">>();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.navigate("Onboarding");
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [navigation]);
   return (
-    <View style={styles.container}>
-      {/* Top half with background image */}
+    <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={styles.topSection}>
         <ImageBackground
-          source={require("../assets/stroke.png")} // 👈 your background image
+          source={require("../assets/splash.png")}
           style={styles.topSection}
           resizeMode="cover"
         >
-          <Text style={styles.title}>Agrohive</Text>
-          {/* <Image
+          <Image
             source={require("../assets/logo.png")}
             style={styles.logo}
             resizeMode="contain"
-          /> */}
+          />
+          <Text style={styles.title}>Agrohive</Text>
+          <Text style={styles.subtitle}>
+            Harvesting hope, one farmer at a time
+          </Text>
         </ImageBackground>
-      </View>
-
-      {/* Bottom half (white background) */}
-      <View style={styles.bottomSection}>
-        {/* You can add text or buttons here later */}
       </View>
     </View>
   );
 }
-
-const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   topSection: {
-    width: "100%", // 👈 full width
-    height: height * 0.6, // 👈 takes half the screen vertically
+    width: "100%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
 
   title: {
     color: "#fff",
-    fontSize: 61,
+    fontSize: 32,
     fontWeight: 700,
-    marginBottom: 20,
+    marginBottom: 12,
     fontFamily: "Parkinsans-Bold",
   },
-  bottomSection: {
-    flex: 1,
-    backgroundColor: "#fff",
+  subtitle: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: 400,
+    marginBottom: 20,
+    fontFamily: "Parkinsans-Regular",
+    width: "60%",
+    textAlign: "center",
   },
+
   logo: {
-    width: 150,
-    height: 150,
+    width: 126,
+    height: 111,
   },
 });
