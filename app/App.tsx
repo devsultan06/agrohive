@@ -52,6 +52,12 @@ export default function App() {
           }
           options={{ headerShown: false }}
         />
+
+        <Stack.Screen
+          name="Login"
+          getComponent={() => require("./components/auth/Login").default}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

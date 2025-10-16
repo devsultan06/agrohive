@@ -10,48 +10,23 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Socials from "./Socials";
 
-export default function CreateAccount({ navigation }: any) {
-  const [name, setName] = useState("");
+export default function Login({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Title */}
       <View style={styles.header}>
-        <Text style={styles.title}>Create account</Text>
+        <Text style={styles.title}>Log in</Text>
         <Text style={styles.subtitle}>
-          Enter details below to create an account.
+          Enter details below to log in to account.
         </Text>
-      </View>
-
-      {/* Profile Image */}
-      <View style={styles.avatarContainer}>
-        <Image
-          source={{
-            uri: "https://i.pravatar.cc/150?img=12",
-          }}
-          style={styles.avatar}
-        />
-        <TouchableOpacity style={styles.cameraButton}>
-          <Image
-            source={require("../../assets/Camera.png")}
-            style={{ width: 17, height: 17 }}
-          />
-        </TouchableOpacity>
       </View>
 
       {/* Input Fields */}
       <View style={styles.form}>
-        <Text style={styles.label}>Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your full name here"
-          placeholderTextColor="#999"
-          value={name}
-          onChangeText={setName}
-        />
-
         <Text style={styles.label}>Email address</Text>
         <TextInput
           style={styles.input}
@@ -59,6 +34,8 @@ export default function CreateAccount({ navigation }: any) {
           placeholderTextColor="#999"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
 
         <Text style={styles.label}>Password</Text>
@@ -70,30 +47,47 @@ export default function CreateAccount({ navigation }: any) {
           value={password}
           onChangeText={setPassword}
         />
+
+        {/* Remember Me & Forgot Password */}
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            style={styles.rememberContainer}
+            onPress={() => setRememberMe(!rememberMe)}
+          >
+            <View
+              style={[styles.checkbox, rememberMe && styles.checkboxActive]}
+            >
+              {rememberMe && <Text style={styles.checkmark}>✓</Text>}
+            </View>
+            <Text style={styles.rememberText}>Remember me</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ForgotPassword")}
+          >
+            <Text style={styles.forgotText}>Forgot password?</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Create Account Button */}
-      <TouchableOpacity style={styles.createButton}>
-        <Text style={styles.createButtonText}>Create account</Text>
-        <Image
-          source={require("../../assets/User-plus.png")}
-          style={{ width: 22, height: 22 }}
-        />
+      {/* Login Button */}
+      <TouchableOpacity style={styles.loginButton}>
+        <Text style={styles.loginButtonText}>Log in</Text>
       </TouchableOpacity>
 
       {/* Divider */}
-      <Text style={styles.orText}>Or sign up with</Text>
+      <Text style={styles.orText}>Or Log in with</Text>
 
       <Socials />
 
-      {/* Login Link */}
+      {/* Sign Up Link */}
       <Text style={styles.footerText}>
-        Already have an account?{" "}
+        Don't have an account?{" "}
         <Text
-          style={styles.loginLink}
-          onPress={() => navigation.navigate("Login")}
+          style={styles.signupLink}
+          onPress={() => navigation.navigate("CreateAccount")}
         >
-          Log in
+          sign up
         </Text>
       </Text>
     </SafeAreaView>
@@ -108,7 +102,8 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 36,
+    marginBottom: 40,
   },
   title: {
     fontSize: 20,
@@ -124,28 +119,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     lineHeight: 14,
   },
-  avatarContainer: {
-    alignSelf: "center",
-    marginVertical: 20,
-  },
-  avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 74,
-  },
-  cameraButton: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    height: 29,
-    boxShadow: "0 0 2.227px 0.742px rgba(123, 162, 183, 0.08)",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 74,
-    padding: 7,
-  },
   form: {
-    marginBottom: 20,
-    marginTop: 23,
+    marginBottom: 30,
   },
   label: {
     fontSize: 12,
@@ -167,18 +142,59 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontFamily: "Poppins-Regular",
   },
-  createButton: {
+  optionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  rememberContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.51)",
+    backgroundColor: "#fff",
+    marginRight: 8,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  checkboxActive: {
+    backgroundColor: "#1C6206",
+    borderColor: "#1C6206",
+  },
+  checkmark: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+  rememberText: {
+    fontSize: 14,
+    lineHeight: 24,
+    color: "#A0A4A8",
+    fontFamily: "Poppins-Regular",
+  },
+  forgotText: {
+    fontSize: 14,
+    color: "#1C6206",
+    fontFamily: "Poppins-Regular",
+    fontWeight: "500",
+    lineHeight: 24,
+  },
+  loginButton: {
     backgroundColor: "#1C6206",
     padding: 10,
     height: 56,
     borderRadius: 100,
-    marginBottom: 20,
-    gap: 8,
+    marginBottom: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  createButtonText: {
+  loginButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "500",
@@ -189,20 +205,19 @@ const styles = StyleSheet.create({
     color: "#000000",
     opacity: 0.5,
     fontFamily: "Poppins-Regular",
-    marginBottom: 14,
+    marginBottom: 20,
+    fontSize: 14,
   },
-
   footerText: {
     textAlign: "center",
     color: "rgba(0, 0, 0, 0.5)",
     fontSize: 12,
-    marginTop: 10,
     fontFamily: "Poppins-Regular",
     fontWeight: "400",
   },
-  loginLink: {
+  signupLink: {
     color: "#1C6206",
-    fontWeight: 500,
+    fontWeight: "500",
     fontFamily: "Poppins-SemiBold",
   },
 });
