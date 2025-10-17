@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Socials from "./Socials";
@@ -17,79 +18,85 @@ export default function Login({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Title */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Log in</Text>
-        <Text style={styles.subtitle}>
-          Enter details below to log in to account.
-        </Text>
-      </View>
-
-      {/* Input Fields */}
-      <View style={styles.form}>
-        <Text style={styles.label}>Email address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter email address"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-
-        {/* Remember Me & Forgot Password */}
-        <View style={styles.optionsContainer}>
-          <TouchableOpacity
-            style={styles.rememberContainer}
-            onPress={() => setRememberMe(!rememberMe)}
-          >
-            <View
-              style={[styles.checkbox, rememberMe && styles.checkboxActive]}
-            >
-              {rememberMe && <Text style={styles.checkmark}>✓</Text>}
-            </View>
-            <Text style={styles.rememberText}>Remember me</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate("ForgotPassword")}
-          >
-            <Text style={styles.forgotText}>Forgot password?</Text>
-          </TouchableOpacity>
+      <ImageBackground
+        source={require("../../assets/bg-app.png")}
+        style={styles.topSection}
+        resizeMode="cover"
+      >
+        {/* Title */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Log in</Text>
+          <Text style={styles.subtitle}>
+            Enter details below to log in to account.
+          </Text>
         </View>
-      </View>
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton}>
-        <Text style={styles.loginButtonText}>Log in</Text>
-      </TouchableOpacity>
+        {/* Input Fields */}
+        <View style={styles.form}>
+          <Text style={styles.label}>Email address</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter email address"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-      {/* Divider */}
-      <Text style={styles.orText}>Or Log in with</Text>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter password"
+            placeholderTextColor="#999"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-      <Socials />
+          {/* Remember Me & Forgot Password */}
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              style={styles.rememberContainer}
+              onPress={() => setRememberMe(!rememberMe)}
+            >
+              <View
+                style={[styles.checkbox, rememberMe && styles.checkboxActive]}
+              >
+                {rememberMe && <Text style={styles.checkmark}>✓</Text>}
+              </View>
+              <Text style={styles.rememberText}>Remember me</Text>
+            </TouchableOpacity>
 
-      {/* Sign Up Link */}
-      <Text style={styles.footerText}>
-        Don't have an account?{" "}
-        <Text
-          style={styles.signupLink}
-          onPress={() => navigation.navigate("CreateAccount")}
-        >
-          sign up
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ForgotPassword")}
+            >
+              <Text style={styles.forgotText}>Forgot password?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Login Button */}
+        <TouchableOpacity style={styles.loginButton}>
+          <Text style={styles.loginButtonText}>Log in</Text>
+        </TouchableOpacity>
+
+        {/* Divider */}
+        <Text style={styles.orText}>Or Log in with</Text>
+
+        <Socials />
+
+        {/* Sign Up Link */}
+        <Text style={styles.footerText}>
+          Don't have an account?{" "}
+          <Text
+            style={styles.signupLink}
+            onPress={() => navigation.navigate("CreateAccount")}
+          >
+            sign up
+          </Text>
         </Text>
-      </Text>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
@@ -99,6 +106,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingHorizontal: 24,
+  },
+  topSection: {
+    width: "100%",
+    height: "100%",
   },
   header: {
     alignItems: "center",

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Socials from "./Socials";
@@ -17,85 +18,91 @@ export default function CreateAccount({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Title */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Create account</Text>
-        <Text style={styles.subtitle}>
-          Enter details below to create an account.
-        </Text>
-      </View>
+      <ImageBackground
+        source={require("../../assets/bg-app.png")}
+        style={styles.topSection}
+        resizeMode="cover"
+      >
+        {/* Title */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Create account</Text>
+          <Text style={styles.subtitle}>
+            Enter details below to create an account.
+          </Text>
+        </View>
 
-      {/* Profile Image */}
-      <View style={styles.avatarContainer}>
-        <Image
-          source={{
-            uri: "https://i.pravatar.cc/150?img=12",
-          }}
-          style={styles.avatar}
-        />
-        <TouchableOpacity style={styles.cameraButton}>
+        {/* Profile Image */}
+        <View style={styles.avatarContainer}>
           <Image
-            source={require("../../assets/Camera.png")}
-            style={{ width: 17, height: 17 }}
+            source={{
+              uri: "https://i.pravatar.cc/150?img=12",
+            }}
+            style={styles.avatar}
+          />
+          <TouchableOpacity style={styles.cameraButton}>
+            <Image
+              source={require("../../assets/Camera.png")}
+              style={{ width: 17, height: 17 }}
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Input Fields */}
+        <View style={styles.form}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your full name here"
+            placeholderTextColor="#999"
+            value={name}
+            onChangeText={setName}
+          />
+
+          <Text style={styles.label}>Email address</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter email address"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+          />
+
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter password"
+            placeholderTextColor="#999"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+        </View>
+
+        {/* Create Account Button */}
+        <TouchableOpacity style={styles.createButton}>
+          <Text style={styles.createButtonText}>Create account</Text>
+          <Image
+            source={require("../../assets/User-plus.png")}
+            style={{ width: 22, height: 22 }}
           />
         </TouchableOpacity>
-      </View>
 
-      {/* Input Fields */}
-      <View style={styles.form}>
-        <Text style={styles.label}>Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your full name here"
-          placeholderTextColor="#999"
-          value={name}
-          onChangeText={setName}
-        />
+        {/* Divider */}
+        <Text style={styles.orText}>Or sign up with</Text>
 
-        <Text style={styles.label}>Email address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter email address"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-        />
+        <Socials />
 
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-      </View>
-
-      {/* Create Account Button */}
-      <TouchableOpacity style={styles.createButton}>
-        <Text style={styles.createButtonText}>Create account</Text>
-        <Image
-          source={require("../../assets/User-plus.png")}
-          style={{ width: 22, height: 22 }}
-        />
-      </TouchableOpacity>
-
-      {/* Divider */}
-      <Text style={styles.orText}>Or sign up with</Text>
-
-      <Socials />
-
-      {/* Login Link */}
-      <Text style={styles.footerText}>
-        Already have an account?{" "}
-        <Text
-          style={styles.loginLink}
-          onPress={() => navigation.navigate("Login")}
-        >
-          Log in
+        {/* Login Link */}
+        <Text style={styles.footerText}>
+          Already have an account?{" "}
+          <Text
+            style={styles.loginLink}
+            onPress={() => navigation.navigate("Login")}
+          >
+            Log in
+          </Text>
         </Text>
-      </Text>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
@@ -109,6 +116,10 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginTop: 20,
+  },
+  topSection: {
+    width: "100%",
+    height: "100%",
   },
   title: {
     fontSize: 20,
