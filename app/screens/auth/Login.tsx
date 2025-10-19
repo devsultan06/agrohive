@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,12 +9,82 @@ import {
   ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Socials from "./Socials";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Socials from "../../components/auth/Socials";
+import { loginSchema, LoginSchemaType } from "../../schemas/loginSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Login({ navigation }: any) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    register,
+    setValue,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  // Load saved credentials on component mount
+  useEffect(() => {
+    loadSavedCredentials();
+  }, []);
+
+  const loadSavedCredentials = async () => {
+    try {
+      const savedCredentials = await AsyncStorage.getItem("loginCredentials");
+      if (savedCredentials) {
+        const { email, rememberMe: savedRememberMe } =
+          JSON.parse(savedCredentials);
+        if (savedRememberMe) {
+          setValue("email", email);
+          setRememberMe(true);
+          console.log("✅ Loaded saved email");
+        }
+      }
+    } catch (error) {
+      console.log("❌ Error loading saved credentials:", error);
+    }
+  };
+
+  const saveCredentials = async (email: string, rememberMe: boolean) => {
+    try {
+      if (rememberMe) {
+        const credentials = {
+          email,
+          rememberMe: true,
+        };
+        await AsyncStorage.setItem(
+          "loginCredentials",
+          JSON.stringify(credentials)
+        );
+        console.log("✅ Email saved");
+      } else {
+        // Remove saved credentials if remember me is unchecked
+        await AsyncStorage.removeItem("loginCredentials");
+        console.log("✅ Saved email removed");
+      }
+    } catch (error) {
+      console.log("❌ Error saving credentials:", error);
+    }
+  };
+
+  const onSubmit = async (data: LoginSchemaType) => {
+    console.log("✅ Form data:", data);
+
+    // Save only email if remember me is checked
+    await saveCredentials(data.email, rememberMe);
+
+    // You can now call your API to login
+  };
+
+  const onError = (errors: any) => {
+    console.log("❌ Form validation errors:", errors);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,11 +108,13 @@ export default function Login({ navigation }: any) {
             style={styles.input}
             placeholder="Enter email address"
             placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => setValue("email", text)}
             keyboardType="email-address"
             autoCapitalize="none"
           />
+          {errors.email && (
+            <Text style={styles.error}>{errors.email.message}</Text>
+          )}
 
           <Text style={styles.label}>Password</Text>
           <TextInput
@@ -50,15 +122,26 @@ export default function Login({ navigation }: any) {
             placeholder="Enter password"
             placeholderTextColor="#999"
             secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setValue("password", text)}
           />
+          {errors.password && (
+            <Text style={styles.error}>{errors.password.message}</Text>
+          )}
 
           {/* Remember Me & Forgot Password */}
           <View style={styles.optionsContainer}>
             <TouchableOpacity
               style={styles.rememberContainer}
-              onPress={() => setRememberMe(!rememberMe)}
+              onPress={() => {
+                const newRememberMe = !rememberMe;
+                setRememberMe(newRememberMe);
+
+                // If unchecking remember me, clear saved credentials
+                if (!newRememberMe) {
+                  AsyncStorage.removeItem("loginCredentials");
+                  console.log("✅ Cleared saved credentials");
+                }
+              }}
             >
               <View
                 style={[styles.checkbox, rememberMe && styles.checkboxActive]}
@@ -77,7 +160,11 @@ export default function Login({ navigation }: any) {
         </View>
 
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity
+          style={[styles.loginButton, isSubmitting && { opacity: 0.6 }]}
+          onPress={handleSubmit(onSubmit, onError)}
+          disabled={isSubmitting}
+        >
           <Text style={styles.loginButtonText}>Log in</Text>
         </TouchableOpacity>
 
@@ -231,4 +318,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: "Poppins-SemiBold",
   },
+  error: { color: "red", fontSize: 12, marginBottom: 12 },
 });

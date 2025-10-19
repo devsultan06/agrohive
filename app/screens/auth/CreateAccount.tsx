@@ -9,12 +9,32 @@ import {
   ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Socials from "./Socials";
-
+import Socials from "../../components/auth/Socials";
+import {
+  registerSchema,
+  RegisterSchemaType,
+} from "../../schemas/registerSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 export default function CreateAccount({ navigation }: any) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterSchemaType>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = (data: RegisterSchemaType) => {
+    console.log("✅ Form data:", data);
+    // You can now call your API to create the account
+  };
+
+  const onError = (errors: any) => {
+    console.log("❌ Form validation errors:", errors);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,18 +74,23 @@ export default function CreateAccount({ navigation }: any) {
             style={styles.input}
             placeholder="Enter your full name here"
             placeholderTextColor="#999"
-            value={name}
-            onChangeText={setName}
+            onChangeText={(text) => setValue("name", text)}
           />
+          {errors.name && (
+            <Text style={styles.error}>{errors.name.message}</Text>
+          )}
 
           <Text style={styles.label}>Email address</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter email address"
             placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
+            keyboardType="email-address"
+            onChangeText={(text) => setValue("email", text)}
           />
+          {errors.email && (
+            <Text style={styles.error}>{errors.email.message}</Text>
+          )}
 
           <Text style={styles.label}>Password</Text>
           <TextInput
@@ -73,13 +98,19 @@ export default function CreateAccount({ navigation }: any) {
             placeholder="Enter password"
             placeholderTextColor="#999"
             secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setValue("password", text)}
           />
+          {errors.password && (
+            <Text style={styles.error}>{errors.password.message}</Text>
+          )}
         </View>
 
         {/* Create Account Button */}
-        <TouchableOpacity style={styles.createButton}>
+        <TouchableOpacity
+          style={[styles.createButton, isSubmitting && { opacity: 0.6 }]}
+          onPress={handleSubmit(onSubmit, onError)}
+          disabled={isSubmitting}
+        >
           <Text style={styles.createButtonText}>Create account</Text>
           <Image
             source={require("../../assets/User-plus.png")}
@@ -172,7 +203,7 @@ const styles = StyleSheet.create({
     borderColor: "#F2F2F2",
     backgroundColor: "#FAFAFA",
     paddingHorizontal: 12,
-    marginBottom: 20,
+    marginBottom: 10,
     fontSize: 14,
     color: "#000000",
     lineHeight: 20,
@@ -216,4 +247,5 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontFamily: "Poppins-SemiBold",
   },
+  error: { color: "red", fontSize: 12, marginBottom: 12 },
 });

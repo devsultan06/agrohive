@@ -6,6 +6,8 @@ import Onboarding from "./screens/Onboarding";
 import { useFonts } from "expo-font";
 import * as SplashScreen2 from "expo-splash-screen";
 import { useCallback } from "react";
+import CreateAccount from "./screens/auth/CreateAccount";
+import Login from "./screens/auth/Login";
 const Stack = createStackNavigator();
 
 // Prevent the splash screen from auto-hiding
@@ -47,15 +49,13 @@ export default function App() {
 
         <Stack.Screen
           name="CreateAccount"
-          getComponent={() =>
-            require("./components/auth/CreateAccount").default
-          }
+          component={CreateAccount}
           options={{ headerShown: false }}
         />
 
         <Stack.Screen
           name="Login"
-          getComponent={() => require("./components/auth/Login").default}
+          component={Login}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
