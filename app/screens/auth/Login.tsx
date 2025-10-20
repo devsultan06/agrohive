@@ -16,6 +16,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Login({ navigation }: any) {
+  const [showPassword, setShowPassword] = useState(false);
+
   const [rememberMe, setRememberMe] = useState(false);
 
   const {
@@ -117,13 +119,25 @@ export default function Login({ navigation }: any) {
           )}
 
           <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter password"
-            placeholderTextColor="#999"
-            secureTextEntry
-            onChangeText={(text) => setValue("password", text)}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input2, { flex: 1 }]}
+              placeholder="Enter password"
+              placeholderTextColor="#999"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setValue("password", text)}
+            />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Image
+                source={
+                  showPassword
+                    ? require("../../assets/off.png")
+                    : require("../../assets/on.png")
+                }
+                style={styles.eyeIcon}
+              />
+            </TouchableOpacity>
+          </View>
           {errors.password && (
             <Text style={styles.error}>{errors.password.message}</Text>
           )}
@@ -227,6 +241,23 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     marginBottom: 9,
   },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#F2F2F2",
+    backgroundColor: "#FAFAFA",
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+    height: 48,
+  },
+
+  eyeIcon: {
+    width: 24,
+    height: 24,
+  },
+
   input: {
     height: 48,
     borderRadius: 6,
@@ -234,7 +265,14 @@ const styles = StyleSheet.create({
     borderColor: "#F2F2F2",
     backgroundColor: "#FAFAFA",
     paddingHorizontal: 12,
-    marginBottom: 20,
+    marginBottom: 10,
+    fontSize: 14,
+    color: "#000000",
+    lineHeight: 20,
+    fontFamily: "Poppins-Regular",
+  },
+
+  input2: {
     fontSize: 14,
     color: "#000000",
     lineHeight: 20,
@@ -318,5 +356,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: "Poppins-SemiBold",
   },
+
   error: { color: "red", fontSize: 12, marginBottom: 12 },
 });

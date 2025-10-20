@@ -16,7 +16,12 @@ import {
 } from "../../schemas/registerSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SuccessModal from "../../components/auth/SuccessModal";
+
 export default function CreateAccount({ navigation }: any) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -29,11 +34,18 @@ export default function CreateAccount({ navigation }: any) {
 
   const onSubmit = (data: RegisterSchemaType) => {
     console.log("✅ Form data:", data);
+    setShowModal(true);
+
     // You can now call your API to create the account
   };
 
   const onError = (errors: any) => {
     console.log("❌ Form validation errors:", errors);
+  };
+
+  const handleGoToLogin = () => {
+    setShowModal(false);
+    navigation.navigate("Login");
   };
 
   return (
@@ -93,13 +105,26 @@ export default function CreateAccount({ navigation }: any) {
           )}
 
           <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter password"
-            placeholderTextColor="#999"
-            secureTextEntry
-            onChangeText={(text) => setValue("password", text)}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input2, { flex: 1 }]}
+              placeholder="Enter password"
+              placeholderTextColor="#999"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setValue("password", text)}
+            />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Image
+                source={
+                  showPassword
+                    ? require("../../assets/off.png")
+                    : require("../../assets/on.png")
+                }
+                style={styles.eyeIcon}
+              />
+            </TouchableOpacity>
+          </View>
+
           {errors.password && (
             <Text style={styles.error}>{errors.password.message}</Text>
           )}
@@ -133,6 +158,12 @@ export default function CreateAccount({ navigation }: any) {
             Log in
           </Text>
         </Text>
+
+        <SuccessModal
+          visible={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={handleGoToLogin}
+        />
       </ImageBackground>
     </SafeAreaView>
   );
@@ -196,6 +227,23 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     marginBottom: 9,
   },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#F2F2F2",
+    backgroundColor: "#FAFAFA",
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+    height: 48,
+  },
+
+  eyeIcon: {
+    width: 24,
+    height: 24,
+  },
+
   input: {
     height: 48,
     borderRadius: 6,
@@ -204,6 +252,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAFAFA",
     paddingHorizontal: 12,
     marginBottom: 10,
+    fontSize: 14,
+    color: "#000000",
+    lineHeight: 20,
+    fontFamily: "Poppins-Regular",
+  },
+
+  input2: {
     fontSize: 14,
     color: "#000000",
     lineHeight: 20,
