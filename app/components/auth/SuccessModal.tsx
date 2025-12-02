@@ -9,12 +9,15 @@ import {
 } from "react-native";
 
 interface SuccessModalProps {
+  message: string;
+
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
+  message,
   visible,
   onClose,
   onConfirm,
@@ -33,9 +36,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
             style={styles.icon}
           />
           <Text style={styles.title}>Congratulations!</Text>
-          <Text style={styles.subtitle}>
-            You have successfully created your account
-          </Text>
+          <Text style={styles.subtitle}>{message}</Text>
 
           <TouchableOpacity style={styles.button} onPress={onConfirm}>
             <Text style={styles.buttonText}>Go to login</Text>

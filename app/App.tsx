@@ -10,6 +10,8 @@ import CreateAccount from "./screens/auth/CreateAccount";
 import Login from "./screens/auth/Login";
 import ForgotPassword from "./screens/auth/ForgotPassword";
 import EnterOtp from "./screens/auth/EnterOTP";
+import ResetPassword from "./screens/auth/ResetPassword";
+import "./global.css";
 const Stack = createStackNavigator();
 
 // Prevent the splash screen from auto-hiding
@@ -48,7 +50,6 @@ export default function App() {
           component={Onboarding}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="CreateAccount"
           component={CreateAccount}
@@ -65,10 +66,14 @@ export default function App() {
           component={ForgotPassword}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
           name="EnterOTP"
           component={EnterOtp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPassword}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

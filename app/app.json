@@ -35,7 +35,6 @@
     },
     "web": {
       "bundler": "metro",
-
       "favicon": "./assets/logo.png"
     }
   }

@@ -9,31 +9,24 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  forgotPasswordSchema,
-  ForgotPasswordSchemaType,
-} from "../../schemas/forgotPasswordSchema";
+import SuccessModal from "../../components/auth/SuccessModal";
 
-export default function ForgotPassword({ navigation }: any) {
-  const {
-    handleSubmit,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordSchemaType>({
-    resolver: zodResolver(forgotPasswordSchema),
-  });
+export default function ResetPassword({ navigation }: any) {
+  const [password, setPassword] = React.useState("");
+  const [confirm, setConfirm] = React.useState("");
+  const [showModal, setShowModal] = React.useState(false);
 
-  const onSubmit = (data: ForgotPasswordSchemaType) => {
-    console.log("✅ Forgot Password data:", data);
-    navigation.navigate("EnterOTP");
-
-    // handle OTP sending logic here
+  const handleReset = () => {
+    if (password !== confirm) {
+      alert("Passwords do not match!");
+      return;
+    }
+    setShowModal(true);
   };
 
-  const onError = (errors: any) => {
-    console.log("❌ Validation Errors:", errors);
+  const handleGoToLogin = () => {
+    setShowModal(false);
+    navigation.navigate("Login");
   };
 
   return (
@@ -53,70 +46,57 @@ export default function ForgotPassword({ navigation }: any) {
           />
           <Text style={styles.backText}>Back to login</Text>
         </TouchableOpacity>
+
         <View style={styles.content}>
-          <Text style={styles.title}>Forgot password?</Text>
+          <Text style={styles.title}>Reset Password</Text>
           <Text style={styles.subtitle}>
-            Enter your email address, and we’ll send a one-time code to verify
-            your identity
+            Create a strong password that you’ll remember.
           </Text>
 
-          {/* Email Field */}
-          <Text style={styles.label}>Email address</Text>
+          <Text style={styles.label}>New Password</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter email address"
-            placeholderTextColor="#999"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            onChangeText={(text) => setValue("email", text)}
+            placeholder="Enter new password"
+            secureTextEntry
+            onChangeText={setPassword}
           />
-          {errors.email && (
-            <Text style={styles.error}>{errors.email.message}</Text>
-          )}
 
-          {/* Send OTP Button */}
-          <TouchableOpacity
-            style={[styles.button, isSubmitting && { opacity: 0.6 }]}
-            onPress={handleSubmit(onSubmit, onError)}
-            disabled={isSubmitting}
-          >
-            <Text style={styles.buttonText}>Send OTP</Text>
+          <Text style={styles.label}>Confirm Password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm password"
+            secureTextEntry
+            onChangeText={setConfirm}
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleReset}>
+            <Text style={styles.buttonText}>Change Password</Text>
           </TouchableOpacity>
         </View>
+
+        <SuccessModal
+          message="You have successfully reset your password"
+          visible={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={handleGoToLogin}
+        />
       </ImageBackground>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  bg: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 24,
-  },
-  arrowIcon: {
-    width: 24,
-    height: 24,
-  },
+  container: { flex: 1, backgroundColor: "#fff" },
+  bg: { flex: 1, width: "100%", height: "100%", paddingHorizontal: 24 },
+  arrowIcon: { width: 24, height: 24 },
   backContainer: {
     marginTop: 40,
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
   },
-  backText: {
-    fontSize: 14,
-    color: "#000",
-    fontFamily: "Poppins-Regular",
-  },
-  content: {
-    marginTop: 55,
-  },
+  backText: { fontSize: 14, color: "#000", fontFamily: "Poppins-Regular" },
+  content: { marginTop: 55 },
   title: {
     fontSize: 20,
     fontWeight: "700",
@@ -159,17 +139,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 346,
+    marginTop: 256,
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "500",
     fontFamily: "Poppins-Regular",
-  },
-  error: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 12,
   },
 });

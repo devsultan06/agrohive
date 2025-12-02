@@ -160,6 +160,7 @@ export default function CreateAccount({ navigation }: any) {
         </Text>
 
         <SuccessModal
+          message="You have successfully created your account"
           visible={showModal}
           onClose={() => setShowModal(false)}
           onConfirm={handleGoToLogin}

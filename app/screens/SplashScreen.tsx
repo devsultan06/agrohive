@@ -22,6 +22,10 @@ export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
 
     return () => clearTimeout(timer);
   }, [navigation]);
+
+  useEffect(() => {
+    onLayoutRootView?.(); // call the callback to hide splash
+  }, []);
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={styles.topSection}>

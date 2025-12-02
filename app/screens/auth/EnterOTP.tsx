@@ -9,7 +9,6 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BackButton from "../../components/auth/BackButton";
 
 export default function EnterOtp({ navigation }: any) {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -33,7 +32,8 @@ export default function EnterOtp({ navigation }: any) {
     const code = otp.join("");
     console.log("Entered OTP:", code);
     if (code.length === 4) {
-      // handle verification logic
+      navigation.navigate("ResetPassword");
+      // handle verification logi
     } else {
       alert("Please enter a 4-digit code");
     }
@@ -46,7 +46,16 @@ export default function EnterOtp({ navigation }: any) {
         style={styles.bg}
         resizeMode="cover"
       >
-        <BackButton />
+        <TouchableOpacity
+          style={styles.backContainer}
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Image
+            source={require("../../assets/arrow-left.png")}
+            style={styles.arrowIcon}
+          />
+          <Text style={styles.backText}>Back to login</Text>
+        </TouchableOpacity>{" "}
         <View style={styles.content}>
           <Text style={styles.title}>Enter the code</Text>
           <Text style={styles.subtitle}>
@@ -84,7 +93,6 @@ export default function EnterOtp({ navigation }: any) {
             </TouchableOpacity>
           </View>
         </View>
-
         {/* Send OTP Button */}
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Verify and proceed</Text>
@@ -104,6 +112,22 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 24,
+  },
+
+  arrowIcon: {
+    width: 24,
+    height: 24,
+  },
+  backContainer: {
+    marginTop: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  backText: {
+    fontSize: 14,
+    color: "#000",
+    fontFamily: "Poppins-Regular",
   },
 
   content: {
