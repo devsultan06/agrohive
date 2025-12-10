@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-} from "react-native";
+import { Modal, View, Text, TouchableOpacity, Image } from "react-native";
 
 interface SuccessModalProps {
   message: string;
@@ -29,20 +22,32 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
+      <View
+        className="flex-1 justify-center items-center"
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
+        <View className="bg-white rounded-2xl p-[43px] items-center w-[90%]">
           <Image
             source={require("../../assets/success.png")} // ✅ your success icon
-            style={styles.icon}
+            className="w-[100px] h-[100px] mb-5 rounded-full p-3 bg-[#1C6206]/[0.16]"
           />
-          <Text style={styles.title}>Congratulations!</Text>
-          <Text style={styles.subtitle}>{message}</Text>
+          <Text className="text-[28px] font-bold text-[#1C6206] mb-2 font-poppins-bold">
+            Congratulations!
+          </Text>
+          <Text className="text-black text-base opacity-40 text-center font-poppins mb-8">
+            {message}
+          </Text>
 
-          <TouchableOpacity style={styles.button} onPress={onConfirm}>
-            <Text style={styles.buttonText}>Go to login</Text>
+          <TouchableOpacity
+            className="bg-[#1C6206] p-[10px] flex-row gap-2 justify-center items-center rounded-full w-full h-14"
+            onPress={onConfirm}
+          >
+            <Text className="text-white text-base font-medium font-poppins">
+              Go to login
+            </Text>
             <Image
               source={require("../../assets/arrow.png")} // ✅ your arrow icon
-              style={styles.arrowIcon}
+              className="w-3 h-[14px]"
             />
           </TouchableOpacity>
         </View>
@@ -52,65 +57,3 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 };
 
 export default SuccessModal;
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modal: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 43,
-    alignItems: "center",
-    width: "90%",
-  },
-  icon: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-    borderRadius: 100,
-    padding: 12,
-    backgroundColor: "rgba(28, 98, 6, 0.16)",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#1C6206",
-    marginBottom: 8,
-    fontFamily: "Poppins-Bold",
-  },
-  subtitle: {
-    color: "#000000",
-    fontSize: 16,
-    opacity: 0.4,
-    textAlign: "center",
-    fontFamily: "Poppins-Regular",
-
-    marginBottom: 32,
-  },
-  button: {
-    backgroundColor: "#1C6206",
-    padding: 10,
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-    width: "100%",
-    height: 56,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "500",
-    fontFamily: "Poppins-Regular",
-  },
-
-  arrowIcon: {
-    width: 12,
-    height: 14,
-  },
-});

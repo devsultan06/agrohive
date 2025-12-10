@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ImageBackground,
   Image,
 } from "react-native";
@@ -40,43 +39,44 @@ export default function EnterOtp({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-white">
       <ImageBackground
         source={require("../../assets/bg-app.png")}
-        style={styles.bg}
+        className="flex-1 w-full h-full px-6"
         resizeMode="cover"
       >
         <TouchableOpacity
-          style={styles.backContainer}
+          className="mt-10 flex-row items-center gap-[5px]"
           onPress={() => navigation.navigate("Login")}
         >
           <Image
             source={require("../../assets/arrow-left.png")}
-            style={styles.arrowIcon}
+            className="w-6 h-6"
           />
-          <Text style={styles.backText}>Back to login</Text>
+          <Text className="text-sm text-black font-poppins">Back to login</Text>
         </TouchableOpacity>{" "}
-        <View style={styles.content}>
-          <Text style={styles.title}>Enter the code</Text>
-          <Text style={styles.subtitle}>
+        <View className="mt-[55px] items-center">
+          <Text className="text-lg font-bold text-[#1D2939] font-parkinsans-bold mb-2">
+            Enter the code
+          </Text>
+          <Text className="text-xs text-black opacity-50 text-center font-poppins mb-10 w-[85%] leading-[18px]">
             We’ve sent a 4-digit code to your email. Please enter it below to
             verify your identity.
           </Text>
 
           {/* OTP Inputs */}
-          <View style={styles.otpContainer}>
+          <View className="flex-row justify-center gap-2 w-[90%] mb-[25px]">
             {otp.map((value, index) => (
               <TextInput
                 key={index}
                 ref={(ref) => {
                   inputs.current[index] = ref;
                 }}
-                style={[
-                  styles.otpInput,
+                className={`w-12 h-[50px] border rounded-[4px] text-center text-sm text-[#1C6206] bg-[#FAFAFA] font-poppins-semibold ${
                   value || inputs.current[index]?.isFocused()
-                    ? { borderColor: "#1C6206" }
-                    : null,
-                ]}
+                    ? "border-[#1C6206]"
+                    : "border-[#F2F2F2]"
+                }`}
                 keyboardType="number-pad"
                 maxLength={1}
                 value={value}
@@ -86,117 +86,27 @@ export default function EnterOtp({ navigation }: any) {
           </View>
 
           {/* Resend */}
-          <View style={styles.resendContainer}>
-            <Text style={styles.resendText}>Didn’t receive the code? </Text>
+          <View className="flex-row mt-[10px]">
+            <Text className="text-sm text-[#A0A4A8] font-poppins">
+              Didn’t receive the code?{" "}
+            </Text>
             <TouchableOpacity>
-              <Text style={styles.resendLink}>Resend</Text>
+              <Text className="text-xs text-[#1C6206] font-poppins">
+                Resend
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
         {/* Send OTP Button */}
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Verify and proceed</Text>
+        <TouchableOpacity
+          className="bg-[#1C6206] h-14 rounded-full justify-center items-center mt-auto mb-[30px]"
+          onPress={handleSubmit}
+        >
+          <Text className="text-white text-base font-medium font-poppins-semibold">
+            Verify and proceed
+          </Text>
         </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  bg: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 24,
-  },
-
-  arrowIcon: {
-    width: 24,
-    height: 24,
-  },
-  backContainer: {
-    marginTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  backText: {
-    fontSize: 14,
-    color: "#000",
-    fontFamily: "Poppins-Regular",
-  },
-
-  content: {
-    marginTop: 55,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#1D2939",
-    fontFamily: "Parkinsans-Bold",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: "#000",
-    opacity: 0.5,
-    textAlign: "center",
-    fontFamily: "Poppins-Regular",
-    marginBottom: 40,
-    lineHeight: 18,
-    width: "85%",
-  },
-  otpContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 8,
-    width: "90%",
-    marginBottom: 25,
-  },
-  otpInput: {
-    width: 48,
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#F2F2F2",
-    borderRadius: 4,
-    textAlign: "center",
-    fontSize: 14,
-    color: "#1C6206",
-    backgroundColor: "#FAFAFA",
-    fontFamily: "Poppins-SemiBold",
-  },
-  resendContainer: {
-    flexDirection: "row",
-    marginTop: 10,
-  },
-  resendText: {
-    fontSize: 14,
-    color: "#A0A4A8",
-    fontFamily: "Poppins-Regular",
-  },
-  resendLink: {
-    fontSize: 12,
-    color: "#1C6206",
-    fontFamily: "Poppins-Regular",
-  },
-  button: {
-    backgroundColor: "#1C6206",
-    height: 56,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "auto",
-    marginBottom: 30,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "500",
-    fontFamily: "Poppins-SemiBold",
-  },
-});

@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ImageBackground,
   Image,
 } from "react-native";
@@ -30,47 +29,60 @@ export default function ResetPassword({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-white">
       <ImageBackground
         source={require("../../assets/bg-app.png")}
-        style={styles.bg}
+        className="flex-1 w-full h-full px-6"
         resizeMode="cover"
       >
         <TouchableOpacity
-          style={styles.backContainer}
+          className="mt-10 flex-row items-center gap-[5px]"
           onPress={() => navigation.navigate("Login")}
         >
           <Image
             source={require("../../assets/arrow-left.png")}
-            style={styles.arrowIcon}
+            className="w-6 h-6"
           />
-          <Text style={styles.backText}>Back to login</Text>
+          <Text className="text-sm text-black font-poppins">Back to login</Text>
         </TouchableOpacity>
 
-        <View style={styles.content}>
-          <Text style={styles.title}>Reset Password</Text>
-          <Text style={styles.subtitle}>
+        <View className="mt-[55px]">
+          <Text className="text-xl font-bold text-[#1D2939] text-center font-parkinsans-bold mb-2">
+            Reset Password
+          </Text>
+          <Text className="text-xs text-black opacity-40 text-center font-poppins mb-10 w-[80%] mx-auto">
             Create a strong password that you’ll remember.
           </Text>
 
-          <Text style={styles.label}>New Password</Text>
+          <Text className="text-xs text-black mb-2 font-poppins">
+            New Password
+          </Text>
           <TextInput
-            style={styles.input}
+            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 text-sm font-poppins text-black mb-5"
             placeholder="Enter new password"
+            placeholderTextColor="#999"
             secureTextEntry
             onChangeText={setPassword}
           />
 
-          <Text style={styles.label}>Confirm Password</Text>
+          <Text className="text-xs text-black mb-2 font-poppins">
+            Confirm Password
+          </Text>
           <TextInput
-            style={styles.input}
+            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 text-sm font-poppins text-black mb-5"
             placeholder="Confirm password"
+            placeholderTextColor="#999"
             secureTextEntry
             onChangeText={setConfirm}
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleReset}>
-            <Text style={styles.buttonText}>Change Password</Text>
+          <TouchableOpacity
+            className="bg-[#1C6206] h-14 rounded-full justify-center items-center mt-64"
+            onPress={handleReset}
+          >
+            <Text className="text-white text-base font-medium font-poppins">
+              Change Password
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -84,67 +96,3 @@ export default function ResetPassword({ navigation }: any) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  bg: { flex: 1, width: "100%", height: "100%", paddingHorizontal: 24 },
-  arrowIcon: { width: 24, height: 24 },
-  backContainer: {
-    marginTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  backText: { fontSize: 14, color: "#000", fontFamily: "Poppins-Regular" },
-  content: { marginTop: 55 },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#1D2939",
-    textAlign: "center",
-    fontFamily: "Parkinsans-Bold",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: "#000",
-    opacity: 0.4,
-    textAlign: "center",
-    fontFamily: "Poppins-Regular",
-    marginBottom: 40,
-    width: "80%",
-    marginHorizontal: "auto",
-  },
-  label: {
-    fontSize: 12,
-    color: "#000",
-    marginBottom: 8,
-    fontFamily: "Poppins-Regular",
-  },
-  input: {
-    height: 48,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "#F2F2F2",
-    backgroundColor: "#FAFAFA",
-    paddingHorizontal: 12,
-    fontSize: 14,
-    fontFamily: "Poppins-Regular",
-    color: "#000",
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "#1C6206",
-    height: 56,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 256,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "500",
-    fontFamily: "Poppins-Regular",
-  },
-});

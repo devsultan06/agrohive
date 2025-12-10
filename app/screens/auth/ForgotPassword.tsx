@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ImageBackground,
   Image,
 } from "react-native";
@@ -37,33 +36,37 @@ export default function ForgotPassword({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-white">
       <ImageBackground
         source={require("../../assets/bg-app.png")}
-        style={styles.bg}
+        className="flex-1 w-full h-full px-6"
         resizeMode="cover"
       >
         <TouchableOpacity
-          style={styles.backContainer}
+          className="mt-10 flex-row items-center gap-[5px]"
           onPress={() => navigation.navigate("Login")}
         >
           <Image
             source={require("../../assets/arrow-left.png")}
-            style={styles.arrowIcon}
+            className="w-6 h-6"
           />
-          <Text style={styles.backText}>Back to login</Text>
+          <Text className="text-sm text-black font-poppins">Back to login</Text>
         </TouchableOpacity>
-        <View style={styles.content}>
-          <Text style={styles.title}>Forgot password?</Text>
-          <Text style={styles.subtitle}>
+        <View className="mt-[55px]">
+          <Text className="text-xl font-bold text-[#1D2939] text-center font-parkinsans-bold mb-2">
+            Forgot password?
+          </Text>
+          <Text className="text-xs text-black opacity-40 text-center font-poppins mb-10 w-[80%] mx-auto">
             Enter your email address, and we’ll send a one-time code to verify
             your identity
           </Text>
 
           {/* Email Field */}
-          <Text style={styles.label}>Email address</Text>
+          <Text className="text-xs text-black mb-2 font-poppins">
+            Email address
+          </Text>
           <TextInput
-            style={styles.input}
+            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 text-sm font-poppins text-black mb-5"
             placeholder="Enter email address"
             placeholderTextColor="#999"
             keyboardType="email-address"
@@ -71,105 +74,25 @@ export default function ForgotPassword({ navigation }: any) {
             onChangeText={(text) => setValue("email", text)}
           />
           {errors.email && (
-            <Text style={styles.error}>{errors.email.message}</Text>
+            <Text className="text-red-500 text-xs mb-3">
+              {errors.email.message}
+            </Text>
           )}
 
           {/* Send OTP Button */}
           <TouchableOpacity
-            style={[styles.button, isSubmitting && { opacity: 0.6 }]}
+            className={`bg-[#1C6206] h-14 rounded-full justify-center items-center mt-[346px] ${
+              isSubmitting ? "opacity-60" : ""
+            }`}
             onPress={handleSubmit(onSubmit, onError)}
             disabled={isSubmitting}
           >
-            <Text style={styles.buttonText}>Send OTP</Text>
+            <Text className="text-white text-base font-medium font-poppins">
+              Send OTP
+            </Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  bg: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 24,
-  },
-  arrowIcon: {
-    width: 24,
-    height: 24,
-  },
-  backContainer: {
-    marginTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  backText: {
-    fontSize: 14,
-    color: "#000",
-    fontFamily: "Poppins-Regular",
-  },
-  content: {
-    marginTop: 55,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#1D2939",
-    textAlign: "center",
-    fontFamily: "Parkinsans-Bold",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: "#000",
-    opacity: 0.4,
-    textAlign: "center",
-    fontFamily: "Poppins-Regular",
-    marginBottom: 40,
-    width: "80%",
-    marginHorizontal: "auto",
-  },
-  label: {
-    fontSize: 12,
-    color: "#000",
-    marginBottom: 8,
-    fontFamily: "Poppins-Regular",
-  },
-  input: {
-    height: 48,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "#F2F2F2",
-    backgroundColor: "#FAFAFA",
-    paddingHorizontal: 12,
-    fontSize: 14,
-    fontFamily: "Poppins-Regular",
-    color: "#000",
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "#1C6206",
-    height: 56,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 346,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "500",
-    fontFamily: "Poppins-Regular",
-  },
-  error: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 12,
-  },
-});

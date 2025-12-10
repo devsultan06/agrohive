@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { View, Image, StyleSheet, ImageBackground, Text } from "react-native";
 
 type RootStackParamList = {
-  Onboarding: undefined;
+  Auth: undefined;
 };
 
 interface SplashScreenProps {
@@ -13,11 +13,11 @@ interface SplashScreenProps {
 
 export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
   const navigation =
-    useNavigation<StackNavigationProp<RootStackParamList, "Onboarding">>();
+    useNavigation<StackNavigationProp<RootStackParamList, "Auth">>();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate("Onboarding");
+      navigation.navigate("Auth");
     }, 4000);
 
     return () => clearTimeout(timer);
@@ -27,11 +27,11 @@ export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
     onLayoutRootView?.(); // call the callback to hide splash
   }, []);
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-      <View style={styles.topSection}>
+    <View className="flex-1" onLayout={onLayoutRootView}>
+      <View className="h-[100%] w-[100%] bg-white items-center justify-center">
         <ImageBackground
           source={require("../assets/splash.png")}
-          style={styles.topSection}
+          className="h-[100%] w-[100%] bg-white items-center justify-center"
           resizeMode="cover"
         >
           <Image
@@ -39,8 +39,10 @@ export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>Agrohive</Text>
-          <Text style={styles.subtitle}>
+          <Text className="text-white mb-[12px]  text-[32px] font-[700] font-[Parkinsans-Bold]">
+            Agrohive
+          </Text>
+          <Text className="text-white text-center text-[16px] w-[60%] mb-[20px]  font-[400] font-[Parkinsans-Regular]">
             Harvesting hope, one farmer at a time
           </Text>
         </ImageBackground>
@@ -50,33 +52,6 @@ export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  topSection: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  title: {
-    color: "#fff",
-    fontSize: 32,
-    fontWeight: 700,
-    marginBottom: 12,
-    fontFamily: "Parkinsans-Bold",
-  },
-  subtitle: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: 400,
-    marginBottom: 20,
-    fontFamily: "Parkinsans-Regular",
-    width: "60%",
-    textAlign: "center",
-  },
-
   logo: {
     width: 126,
     height: 111,
