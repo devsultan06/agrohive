@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Socials from "../../components/auth/Socials";
@@ -17,9 +18,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SuccessModal from "../../components/auth/SuccessModal";
 
+import * as ImagePicker from "expo-image-picker";
+
 export default function CreateAccount({ navigation }: any) {
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
 
   const {
     control,
@@ -30,6 +34,69 @@ export default function CreateAccount({ navigation }: any) {
   } = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
   });
+
+  const handleProfilePicturePress = () => {
+    Alert.alert("Update Profile Picture", "Choose an option", [
+      {
+        text: "Camera",
+        onPress: () => openCamera(),
+      },
+      {
+        text: "Photo Library",
+        onPress: () => openImageLibrary(),
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
+  };
+
+  const openCamera = async () => {
+    const { granted } = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (!granted) {
+      Alert.alert(
+        "Permission Required",
+        "Camera permission is required to take photos."
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const openImageLibrary = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!granted) {
+      Alert.alert(
+        "Permission Required",
+        "Photo library permission is required to select photos."
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const onSubmit = (data: RegisterSchemaType) => {
     console.log("✅ Form data:", data);
@@ -68,11 +135,14 @@ export default function CreateAccount({ navigation }: any) {
         <View className="self-center my-5 relative">
           <Image
             source={{
-              uri: "https://i.pravatar.cc/150?img=12",
+              uri: image || "https://i.pravatar.cc/150?img=12",
             }}
             className="w-[90px] h-[90px] rounded-[74px]"
           />
-          <TouchableOpacity className="absolute bottom-0 right-0 h-[29px] bg-white rounded-[74px] p-[7px] shadow-sm">
+          <TouchableOpacity
+            className="absolute bottom-0 right-0 h-[29px] bg-white rounded-[74px] p-[7px] shadow-sm"
+            onPress={handleProfilePicturePress}
+          >
             <Image
               source={require("../../assets/Camera.png")}
               className="w-[17px] h-[17px]"
