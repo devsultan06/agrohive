@@ -38,6 +38,8 @@ const MARKET_PRODUCTS = [
     price: 899.0,
     image: ROTAVATOR_IMG,
     category: "New Products",
+    description:
+      "Heavy-duty rotavator designed for efficient soil preparation. Features multiple blade configurations for varying soil types.",
   },
   {
     id: "2",
@@ -46,6 +48,8 @@ const MARKET_PRODUCTS = [
     price: 899.0,
     image: ECOWAGON_IMG,
     category: "New Products",
+    description:
+      "Eco-friendly agricultural wagon perfect for transporting crops and tools across the farm with minimal effort.",
   },
   {
     id: "3",
@@ -54,6 +58,8 @@ const MARKET_PRODUCTS = [
     price: 899.0,
     image: MINI_TRACTOR_IMG,
     category: "UK Used",
+    description:
+      "Versatile mini tractor ideal for small to medium farms. Compact design makes it easy to maneuver in tight spaces.",
   },
   {
     id: "4",
@@ -62,6 +68,8 @@ const MARKET_PRODUCTS = [
     price: 899.0,
     image: DRONE_SPRAYER_IMG,
     category: "New Products",
+    description:
+      "High-precision drone sprayer ensuring uniform application of fertilizers and pesticides while protecting your health.",
   },
   {
     id: "5",
@@ -70,6 +78,8 @@ const MARKET_PRODUCTS = [
     price: 32000.0,
     image: ROBOTIC_CULTIVATOR_IMG,
     category: "New Products",
+    description:
+      "Autonomous robotic cultivator that uses AI to distinguish between crops and weeds, providing 24/7 labor-free maintenance.",
   },
   {
     id: "6",
@@ -78,6 +88,8 @@ const MARKET_PRODUCTS = [
     price: 32000.0,
     image: AGRI_DRONE_IMG,
     category: "New Products",
+    description:
+      "All-weather agricultural drone for mapping and thermal imaging, helping you optimize crop yields through data-driven insights.",
   },
   {
     id: "7",
@@ -86,6 +98,8 @@ const MARKET_PRODUCTS = [
     price: 32000.0,
     image: SEED_PLANTER_IMG,
     category: "UK Used",
+    description:
+      "Precision seed planter that ensures optimal depth and spacing for various seed types, significantly improving germination rates.",
   },
 ];
 

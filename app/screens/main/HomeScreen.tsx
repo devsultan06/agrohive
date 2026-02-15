@@ -22,14 +22,18 @@ const FARM_PRODUCTS = [
     name: "Drone Sprayer",
     rating: 5.0,
     price: 899.0,
-    image: require("../../assets/drone_sprayer.png"), // Generated Image
+    image: require("../../assets/drone_sprayer.png"),
+    description:
+      "Advanced drone technology for precise crop spraying. Covers up to 10 hectares per hour with minimal waste and high efficiency.",
   },
   {
     id: "6",
     name: "Agricultural Drone",
     rating: 5.0,
     price: 32000.0,
-    image: require("../../assets/r2.png"), // Generated Image
+    image: require("../../assets/r2.png"),
+    description:
+      "Multi-functional agricultural drone equipped with high-resolution sensors for crop monitoring and health assessment.",
   },
 ];
 

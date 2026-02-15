@@ -8,30 +8,17 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import { Toast } from "../../components/Toast";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useFavoriteStore } from "../../store/useFavoriteStore";
-import { useCartStore } from "../../store/useCartStore";
 
 const { width } = Dimensions.get("window");
 
 export default function FavoriteScreen() {
   const navigation = useNavigation<any>();
   const { favorites, toggleFavorite, clearFavorites } = useFavoriteStore();
-  const { addItem, items, updateQuantity } = useCartStore();
-  const [toastVisible, setToastVisible] = useState(false);
-
-  const getItemQty = (id: string) => {
-    return items.find((item) => item.id === id)?.quantity || 0;
-  };
-
-  const handleAddToCart = (item: any) => {
-    addItem({ ...item, quantity: 1 });
-    setToastVisible(true);
-  };
 
   const handleClearAll = () => {
     Alert.alert(
@@ -84,34 +71,16 @@ export default function FavoriteScreen() {
           <Ionicons name="heart" size={20} color="red" />
         </TouchableOpacity>
 
-        {getItemQty(item.id) > 0 ? (
-          <View className="flex-row items-center bg-[#1C6206] rounded-full h-[28px] px-1">
-            <TouchableOpacity
-              onPress={() => updateQuantity(item.id, -1)}
-              className="px-2"
-            >
-              <Text className="text-white font-bold">-</Text>
-            </TouchableOpacity>
-            <Text className="text-white text-[10px] font-bold font-poppins-bold mx-1">
-              {getItemQty(item.id)}
-            </Text>
-            <TouchableOpacity
-              onPress={() => updateQuantity(item.id, 1)}
-              className="px-2"
-            >
-              <Text className="text-white font-bold">+</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TouchableOpacity
-            onPress={() => handleAddToCart(item)}
-            className="bg-[#1C6206] px-3 py-1.5 rounded-full"
-          >
-            <Text className="text-white text-[10px] font-bold font-poppins-bold">
-              Add to cart
-            </Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("ProductDetail", { product: item })
+          }
+          className="bg-[#1C6206] px-3 py-1.5 rounded-full"
+        >
+          <Text className="text-white text-[10px] font-bold font-poppins-bold">
+            View
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -152,7 +121,7 @@ export default function FavoriteScreen() {
             Start adding products you like to your wishlist!
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Market")}
+            onPress={() => navigation.navigate("Main", { screen: "Market" })}
             className="mt-8 bg-[#1C6206] px-8 py-3 rounded-full"
           >
             <Text className="text-white font-bold font-poppins">
@@ -169,11 +138,6 @@ export default function FavoriteScreen() {
           contentContainerStyle={{ paddingBottom: 20 }}
         />
       )}
-      <Toast
-        message="Added to cart"
-        visible={toastVisible}
-        onHide={() => setToastVisible(false)}
-      />
     </SafeAreaView>
   );
 }
