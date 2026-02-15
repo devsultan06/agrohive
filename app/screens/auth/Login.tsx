@@ -61,7 +61,7 @@ export default function Login({ navigation }: any) {
         };
         await AsyncStorage.setItem(
           "loginCredentials",
-          JSON.stringify(credentials)
+          JSON.stringify(credentials),
         );
         console.log("✅ Email saved");
       } else {
@@ -81,6 +81,12 @@ export default function Login({ navigation }: any) {
     await saveCredentials(data.email, rememberMe);
 
     // You can now call your API to login
+
+    // Navigate to Main screen (reset history so user can't go back to login)
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Main" }],
+    });
   };
 
   const onError = (errors: any) => {
@@ -96,21 +102,21 @@ export default function Login({ navigation }: any) {
       >
         {/* Title */}
         <View className="items-center mt-9 mb-10">
-          <Text className="text-xl font-bold text-[#1D2939] font-parkinsans-bold">
+          <Text className="text-[16px] font-bold text-[#1D2939] font-parkinsans-bold">
             Log in
           </Text>
-          <Text className="text-xs text-black opacity-40 mt-[5px] font-poppins leading-[14px]">
+          <Text className="text-[12px] text-black opacity-40 mt-[5px] font-poppins leading-[14px]">
             Enter details below to log in to account.
           </Text>
         </View>
 
         {/* Input Fields */}
         <View className="mb-[30px]">
-          <Text className="text-xs text-black mb-[9px] font-poppins">
+          <Text className="text-[12px] text-black mb-[9px] font-poppins">
             Email address
           </Text>
           <TextInput
-            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 text-sm font-poppins text-black mb-[10px]"
+            className="h-[48px] rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-[12px] text-[14px] font-poppins text-black mb-[10px]"
             placeholder="Enter email address"
             placeholderTextColor="#999"
             onChangeText={(text) => setValue("email", text)}
@@ -123,12 +129,12 @@ export default function Login({ navigation }: any) {
             </Text>
           )}
 
-          <Text className="text-xs text-black mb-[9px] font-poppins">
+          <Text className="text-[12px] text-black mb-[9px] font-poppins">
             Password
           </Text>
-          <View className="flex-row items-center border border-[#F2F2F2] bg-[#FAFAFA] rounded-md px-3 mb-[10px] h-12">
+          <View className="flex-row items-center border border-[#F2F2F2] bg-[#FAFAFA] rounded-md px-[12px] mb-[10px] h-[48px]">
             <TextInput
-              className="flex-1 text-sm text-black font-poppins"
+              className="flex-1 text-[14px] text-black font-poppins leading-5"
               placeholder="Enter password"
               placeholderTextColor="#999"
               secureTextEntry={!showPassword}
@@ -175,7 +181,7 @@ export default function Login({ navigation }: any) {
                   <Text className="text-white text-[10px] font-bold">✓</Text>
                 )}
               </View>
-              <Text className="text-sm text-[#A0A4A8] font-poppins leading-6">
+              <Text className="text-[14px] text-[#A0A4A8] font-poppins leading-6">
                 Remember me
               </Text>
             </TouchableOpacity>
@@ -183,7 +189,7 @@ export default function Login({ navigation }: any) {
             <TouchableOpacity
               onPress={() => navigation.navigate("ForgotPassword")}
             >
-              <Text className="text-sm text-[#1C6206] font-medium font-poppins leading-6">
+              <Text className="text-[14px] text-[#1C6206] font-bold font-[500] font-poppins leading-6">
                 Forgot password?
               </Text>
             </TouchableOpacity>
@@ -192,26 +198,26 @@ export default function Login({ navigation }: any) {
 
         {/* Login Button */}
         <TouchableOpacity
-          className={`bg-[#1C6206] h-14 rounded-full justify-center items-center mb-[30px] ${
+          className={`bg-[#1C6206] h-[56px] rounded-full justify-center items-center mb-[30px] ${
             isSubmitting ? "opacity-60" : ""
           }`}
           onPress={handleSubmit(onSubmit, onError)}
           disabled={isSubmitting}
         >
-          <Text className="text-white text-base font-medium font-poppins">
+          <Text className="text-white text-[16px] font-medium font-poppins">
             Log in
           </Text>
         </TouchableOpacity>
 
         {/* Divider */}
-        <Text className="text-center text-black opacity-50 font-poppins mb-5 text-sm">
+        <Text className="text-center text-black opacity-50 font-poppins mb-[30px] text-[14px]">
           Or Log in with
         </Text>
 
         <Socials />
 
         {/* Sign Up Link */}
-        <Text className="text-center text-black/50 text-xs font-poppins mt-auto">
+        <Text className="text-center text-black/50 text-[12px] font-poppins">
           Don't have an account?{" "}
           <Text
             className="text-[#1C6206] font-poppins-semibold font-medium"

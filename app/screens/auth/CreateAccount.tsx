@@ -123,10 +123,10 @@ export default function CreateAccount({ navigation }: any) {
       >
         {/* Title */}
         <View className="items-center mt-5">
-          <Text className="text-xl font-bold font-parkinsans-bold text-[#1D2939]">
+          <Text className="text-[16px] font-bold font-parkinsans-bold text-[#1D2939]">
             Create account
           </Text>
-          <Text className="text-xs text-black opacity-40 font-poppins mt-[5px] leading-[14px]">
+          <Text className="text-[12px] text-black opacity-40 font-poppins mt-[5px] leading-[14px]">
             Enter details below to create an account.
           </Text>
         </View>
@@ -152,9 +152,9 @@ export default function CreateAccount({ navigation }: any) {
 
         {/* Input Fields */}
         <View className="mb-5 mt-[23px]">
-          <Text className="text-xs text-black font-poppins mb-[9px]">Name</Text>
+          <Text className="text-[12px] text-black font-poppins mb-[9px]">Name</Text>
           <TextInput
-            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 mb-[10px] text-sm text-black font-poppins leading-5"
+            className="h-[48px] rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-[12px] mb-[20px] text-[14px] text-black font-poppins leading-5"
             placeholder="Enter your full name here"
             placeholderTextColor="#999"
             onChangeText={(text) => setValue("name", text)}
@@ -165,11 +165,11 @@ export default function CreateAccount({ navigation }: any) {
             </Text>
           )}
 
-          <Text className="text-xs text-black font-poppins mb-[9px]">
+          <Text className="text-[12px] text-black font-poppins mb-[9px]">
             Email address
           </Text>
           <TextInput
-            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 mb-[10px] text-sm text-black font-poppins leading-5"
+            className="h-[48px] rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-[12px] mb-[20px] text-[14px] text-black font-poppins leading-5"
             placeholder="Enter email address"
             placeholderTextColor="#999"
             keyboardType="email-address"
@@ -181,12 +181,12 @@ export default function CreateAccount({ navigation }: any) {
             </Text>
           )}
 
-          <Text className="text-xs text-black font-poppins mb-[9px]">
+          <Text className="text-[12px] text-black font-poppins mb-[9px]">
             Password
           </Text>
-          <View className="flex-row items-center border border-[#F2F2F2] bg-[#FAFAFA] rounded-md px-3 mb-[10px] h-12">
+          <View className="flex-row items-center border border-[#F2F2F2] bg-[#FAFAFA] rounded-md px-[12px] mb-[32px] h-[48px]">
             <TextInput
-              className="flex-1 text-sm text-black font-poppins leading-5"
+              className="flex-1 text-[14px] text-black font-poppins leading-5"
               placeholder="Enter password"
               placeholderTextColor="#999"
               secureTextEntry={!showPassword}
@@ -213,13 +213,13 @@ export default function CreateAccount({ navigation }: any) {
 
         {/* Create Account Button */}
         <TouchableOpacity
-          className={`flex-row items-center justify-center bg-[#1C6206] p-[10px] h-14 rounded-full mb-5 gap-2 ${
+          className={`flex-row items-center justify-center bg-[#1C6206] p-[10px] h-[56px] rounded-full mb-5 gap-2 ${
             isSubmitting ? "opacity-60" : ""
           }`}
           onPress={handleSubmit(onSubmit, onError)}
           disabled={isSubmitting}
         >
-          <Text className="text-white text-base font-medium font-poppins">
+          <Text className="text-white text-[16px] font-medium font-poppins">
             Create account
           </Text>
           <Image
@@ -229,14 +229,14 @@ export default function CreateAccount({ navigation }: any) {
         </TouchableOpacity>
 
         {/* Divider */}
-        <Text className="text-center text-black opacity-50 font-poppins mb-[14px]">
+        <Text className="text-center text-black text-[14px] opacity-50 font-poppins mb-[14px]">
           Or sign up with
         </Text>
 
         <Socials />
 
         {/* Login Link */}
-        <Text className="text-center text-black/50 text-xs mt-2.5 font-poppins">
+        <Text className="text-center text-black/50 text-[12px] mt-2.5 font-poppins">
           Already have an account?{" "}
           <Text
             className="text-[#1C6206] font-medium font-poppins-semibold"

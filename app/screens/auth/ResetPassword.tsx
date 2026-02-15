@@ -43,48 +43,50 @@ export default function ResetPassword({ navigation }: any) {
             source={require("../../assets/arrow-left.png")}
             className="w-6 h-6"
           />
-          <Text className="text-sm text-black font-poppins">Back to login</Text>
+          <Text className="text-[14px] text-black font-poppins">
+            Back to login
+          </Text>
         </TouchableOpacity>
 
         <View className="mt-[55px]">
-          <Text className="text-xl font-bold text-[#1D2939] text-center font-parkinsans-bold mb-2">
+          <Text className="text-[16px] font-bold text-[#1D2939] text-center font-parkinsans-bold mb-2">
             Reset Password
           </Text>
-          <Text className="text-xs text-black opacity-40 text-center font-poppins mb-10 w-[80%] mx-auto">
+          <Text className="text-[12px] text-black opacity-40 text-center font-poppins mb-10 w-[80%] mx-auto">
             Create a strong password that you’ll remember.
           </Text>
 
-          <Text className="text-xs text-black mb-2 font-poppins">
+          <Text className="text-[12px] text-black mb-2 font-poppins">
             New Password
           </Text>
           <TextInput
-            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 text-sm font-poppins text-black mb-5"
+            className="h-[48px] rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-[12px] text-[14px] font-poppins text-black mb-5"
             placeholder="Enter new password"
             placeholderTextColor="#999"
             secureTextEntry
             onChangeText={setPassword}
           />
 
-          <Text className="text-xs text-black mb-2 font-poppins">
+          <Text className="text-[12px] text-black mb-2 font-poppins">
             Confirm Password
           </Text>
           <TextInput
-            className="h-12 rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-3 text-sm font-poppins text-black mb-5"
+            className="h-[48px] rounded-md border border-[#F2F2F2] bg-[#FAFAFA] px-[12px] text-[14px] font-poppins text-black mb-5"
             placeholder="Confirm password"
             placeholderTextColor="#999"
             secureTextEntry
             onChangeText={setConfirm}
           />
-
-          <TouchableOpacity
-            className="bg-[#1C6206] h-14 rounded-full justify-center items-center mt-64"
-            onPress={handleReset}
-          >
-            <Text className="text-white text-base font-medium font-poppins">
-              Change Password
-            </Text>
-          </TouchableOpacity>
         </View>
+
+        <TouchableOpacity
+          className="bg-[#1C6206] h-[56px] rounded-full justify-center items-center mt-auto mb-[30px]"
+          onPress={handleReset}
+        >
+          <Text className="text-white text-[16px] font-medium font-poppins">
+            Change Password
+          </Text>
+        </TouchableOpacity>
 
         <SuccessModal
           message="You have successfully reset your password"

@@ -1,0 +1,294 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import MenuIcon from "../../assets/menu.svg";
+import { useNavigation } from "@react-navigation/native";
+import { useFavoriteStore } from "../../store/useFavoriteStore";
+import { Toast } from "../../components/Toast";
+
+// Dummy Data
+const FARM_PRODUCTS = [
+  {
+    id: "4",
+    name: "Drone Sprayer",
+    rating: 5.0,
+    price: 899.0,
+    image: require("../../assets/drone_sprayer.png"), // Generated Image
+  },
+  {
+    id: "6",
+    name: "Agricultural Drone",
+    rating: 5.0,
+    price: 32000.0,
+    image: require("../../assets/r2.png"), // Generated Image
+  },
+];
+
+const RECENT_POSTS = [
+  {
+    id: "1",
+    user: "Suarau uthman",
+    date: "Jul 21",
+    content: "Today is a good day to apply insecticide",
+    image: require("../../assets/home3.png"), // Placeholder
+    avatar: require("../../assets/icon.png"), // Placeholder
+  },
+];
+
+const { width } = Dimensions.get("window");
+
+import { SideMenu } from "../../components/SideMenu";
+
+export default function HomeScreen() {
+  const navigation = useNavigation<any>();
+  const { favorites, toggleFavorite } = useFavoriteStore();
+  const [toastVisible, setToastVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const renderProductItem = ({ item }: { item: any }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ProductDetail", { product: item })}
+        activeOpacity={0.8}
+      >
+        <View
+          className="bg-white mr-[16px] w-[160px] mb-2"
+          style={{
+            borderRadius: 8,
+            shadowColor: "rgba(48, 57, 60, 0.07)",
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 1, // Color handles alpha
+            shadowRadius: 6,
+            elevation: 2,
+          }}
+        >
+          <View className="relative mb-[8px]">
+            <Image
+              source={item.image}
+              className="w-full h-[100px] bg-gray-200"
+              style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
+              resizeMode="cover"
+            />
+            <TouchableOpacity
+              className="absolute top-2 right-2 bg-white/80 p-1 rounded-full"
+              onPress={() => toggleFavorite(item)}
+            >
+              <Ionicons
+                name={
+                  favorites.some((f) => f.id === item.id)
+                    ? "heart"
+                    : "heart-outline"
+                }
+                size={16}
+                color="red"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View className="px-[8px] pb-[12px]">
+            <View className="flex-row justify-between items-center mb-[15px]">
+              <Text
+                className="text-[12px] font-bold text-[#1D2939] font-poppins-bold flex-1 mr-1"
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+              <View className="flex-row items-center">
+                <Ionicons name="star" size={14} color="#FFD700" />
+                <Text className="text-[12px] text-gray-500 ml-1 font-poppins">
+                  {item.rating.toFixed(1)}
+                </Text>
+              </View>
+            </View>
+            <View className="flex-row justify-between items-center mt-2">
+              <Text className="text-[12px] font-bold text-[#1D2939] font-poppins-bold">
+                ₦{item.price.toLocaleString()}
+              </Text>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("ProductDetail", { product: item })
+                }
+                className="bg-[#1C6206] px-3 py-1.5 rounded-full"
+              >
+                <Text className="text-white text-[10px] font-bold font-poppins-bold">
+                  View
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        className="px-5 pt-2"
+      >
+        {/* Header */}
+        <View className="flex-row justify-between items-center mb-[31px]">
+          <View className="flex-row items-center gap-3">
+            <Image
+              source={{
+                uri: "https://i.pravatar.cc/150?img=12",
+              }}
+              className="w-10 h-10 rounded-full bg-gray-200"
+            />
+            <View>
+              <Text className="text-[16px] font-bold text-[#000000] font-parkinsans-bold">
+                Hi Boluwa,
+              </Text>
+              <Text className="text-[12px] text-gray-500 font-poppins">
+                Good afternoon.
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            onPress={() => setMenuVisible(true)}
+            className="w-[44px] h-[44px] bg-white rounded-full justify-center items-center"
+            style={{
+              shadowColor: "#92B3BD",
+              shadowOffset: { width: 1.497, height: 1.497 },
+              shadowOpacity: 0.2,
+              shadowRadius: 5.986,
+              elevation: 5, // Android fallback
+            }}
+          >
+            <MenuIcon width={17} height={17} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Weather Update */}
+        <Text className="text-[14px] font-bold text-[#1D2939] mb-3 font-parkinsans-bold">
+          Weather Update
+        </Text>
+        <View className="bg-[#FAFAFA] rounded-2xl p-5 mb-6 border border-gray-100">
+          <View className="flex-row justify-between mb-4">
+            <View>
+              <Text className="text-[12px] text-gray-500 mb-[4px] font-poppins">
+                Ajah Lago, Mon 27 Nov 2023
+              </Text>
+              <Text className="text-[20px] mb-[4px] font-bold text-[#1C6206] font-parkinsans-bold">
+                35°C
+              </Text>
+              <Text className="text-[12px] text-[#1D2939] font-poppins">
+                Humidity 72%
+              </Text>
+            </View>
+            <View className="items-center">
+              <View className="mb-1">
+                <Ionicons name="cloud-outline" size={40} color="#A0A0A0" />
+                <View className="absolute top-0 right-0">
+                  <Ionicons name="sunny" size={20} color="#FFD700" />
+                </View>
+              </View>
+              <Text className="text-[12px] font-medium text-[#1D2939] font-poppins">
+                Cloudy
+              </Text>
+            </View>
+          </View>
+          <View className="h-[1px] bg-gray-200 w-full mb-3" />
+          <Text className="text-[12px] text-gray-500 font-poppins">
+            Today is a good day to apply insecticide
+          </Text>
+        </View>
+
+        {/* Farm Products */}
+        <View className="flex-row justify-between items-center mb-[8px]">
+          <Text className="text-[14px] font-bold text-[#1D2939] font-parkinsans-bold">
+            Farm products
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Market")}>
+            <Text className="text-[12px] underline text-[#1C6206] font-medium font-poppins">
+              View all
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          data={FARM_PRODUCTS}
+          renderItem={renderProductItem}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mb-6"
+        />
+
+        {/* Recent Post */}
+        <View className="flex-row justify-between items-center mb-3">
+          <Text className="text-[14px] font-bold text-[#1D2939] font-parkinsans-bold">
+            Recent post
+          </Text>
+          <TouchableOpacity>
+            <Text className="text-[12px] underline text-[#1C6206] font-medium font-poppins">
+              See all posts
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {RECENT_POSTS.map((post) => (
+          <View
+            key={post.id}
+            className="rounded-2xl bg-[#FAFAFA] border border-gray-100 p-4 mb-4 "
+          >
+            <View className="flex-row justify-between items-center mb-3">
+              <View className="flex-row items-center gap-2">
+                <Image
+                  source={post.avatar}
+                  className="w-8 h-8 rounded-full bg-gray-200"
+                />
+                <View>
+                  <Text className="text-[14px] font-bold text-[#1D2939] font-parkinsans-bold">
+                    {post.user}
+                  </Text>
+                  <Text className="text-[10px] text-gray-400 font-poppins">
+                    {post.date}
+                  </Text>
+                </View>
+              </View>
+              <View className="flex-row items-center gap-2">
+                <TouchableOpacity>
+                  <MaterialCommunityIcons
+                    name="dots-horizontal"
+                    size={20}
+                    color="gray"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text className="text-[#1C6206] text-[14px] font-medium font-poppins">
+                    Follow
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View className="h-[150px] w-full rounded-xl bg-gray-100 overflow-hidden">
+              <Image
+                source={post.image}
+                className="w-full h-full"
+                resizeMode="cover"
+              />
+            </View>
+          </View>
+        ))}
+        <Toast
+          message="Added to cart"
+          visible={toastVisible}
+          onHide={() => setToastVisible(false)}
+        />
+        <SideMenu visible={menuVisible} onClose={() => setMenuVisible(false)} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}

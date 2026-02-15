@@ -53,13 +53,13 @@ export default function EnterOtp({ navigation }: any) {
             source={require("../../assets/arrow-left.png")}
             className="w-6 h-6"
           />
-          <Text className="text-sm text-black font-poppins">Back to login</Text>
+          <Text className="text-[14px] text-black font-poppins">Back to login</Text>
         </TouchableOpacity>{" "}
         <View className="mt-[55px] items-center">
-          <Text className="text-lg font-bold text-[#1D2939] font-parkinsans-bold mb-2">
+          <Text className="text-[16px] font-bold text-[#1D2939] font-parkinsans-bold mb-2">
             Enter the code
           </Text>
-          <Text className="text-xs text-black opacity-50 text-center font-poppins mb-10 w-[85%] leading-[18px]">
+          <Text className="text-[12px] text-black opacity-50 text-center font-poppins mb-10 w-[85%] leading-[18px]">
             We’ve sent a 4-digit code to your email. Please enter it below to
             verify your identity.
           </Text>
@@ -72,7 +72,7 @@ export default function EnterOtp({ navigation }: any) {
                 ref={(ref) => {
                   inputs.current[index] = ref;
                 }}
-                className={`w-12 h-[50px] border rounded-[4px] text-center text-sm text-[#1C6206] bg-[#FAFAFA] font-poppins-semibold ${
+                className={`w-[48px] h-[50px] border rounded-[4px] text-center text-sm text-[#1C6206] bg-[#FAFAFA] font-poppins-semibold ${
                   value || inputs.current[index]?.isFocused()
                     ? "border-[#1C6206]"
                     : "border-[#F2F2F2]"
@@ -87,11 +87,11 @@ export default function EnterOtp({ navigation }: any) {
 
           {/* Resend */}
           <View className="flex-row mt-[10px]">
-            <Text className="text-sm text-[#A0A4A8] font-poppins">
+            <Text className="text-[14px] text-[#A0A4A8] font-poppins">
               Didn’t receive the code?{" "}
             </Text>
             <TouchableOpacity>
-              <Text className="text-xs text-[#1C6206] font-poppins">
+              <Text className="text-[14px] text-[#1C6206] font-poppins">
                 Resend
               </Text>
             </TouchableOpacity>
@@ -99,10 +99,10 @@ export default function EnterOtp({ navigation }: any) {
         </View>
         {/* Send OTP Button */}
         <TouchableOpacity
-          className="bg-[#1C6206] h-14 rounded-full justify-center items-center mt-auto mb-[30px]"
+          className="bg-[#1C6206] h-[56px] rounded-full justify-center items-center mt-auto mb-[30px]"
           onPress={handleSubmit}
         >
-          <Text className="text-white text-base font-medium font-poppins-semibold">
+          <Text className="text-white text-[16px] font-medium font-poppins-semibold">
             Verify and proceed
           </Text>
         </TouchableOpacity>
