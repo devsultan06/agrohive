@@ -266,9 +266,9 @@ export default function ChangePasswordScreen() {
         <View className="absolute bottom-10 left-5 right-5">
           <TouchableOpacity
             onPress={handleChangePassword}
-            className="bg-[#1C6206] h-14 rounded-full justify-center items-center"
+            className="bg-[#1C6206] h-[56px] rounded-full justify-center items-center"
           >
-            <Text className="text-white font-bold text-[16px] font-poppins">
+            <Text className="text-white font-bold text-[16px] font-medium font-poppins-semibold">
               Change Password
             </Text>
           </TouchableOpacity>

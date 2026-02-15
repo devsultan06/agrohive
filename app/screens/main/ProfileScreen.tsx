@@ -188,7 +188,7 @@ export default function ProfileScreen() {
                   <Ionicons name="location-outline" size={20} color="#344054" />
                 }
                 label="Shipping Addresses"
-                onPress={() => {}}
+                onPress={() => navigation.navigate("ShippingAddresses")}
               />
             </View>
 

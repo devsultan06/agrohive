@@ -11,10 +11,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useCartStore } from "../../store/useCartStore";
+import { useAddressStore } from "../../store/useAddressStore";
 
 export default function CartScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { items, removeItem, updateQuantity } = useCartStore();
+  const { selectedAddress } = useAddressStore();
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<string | null>(null);
 
@@ -132,7 +134,7 @@ export default function CartScreen() {
 
             {/* Footer Summary */}
             <View
-              className="absolute  bottom-0 left-[20px] right-[20px] bg-white rounded-3xl shadow-lg p-6"
+              className="absolute bottom-0 left-[20px] right-[20px] bg-white rounded-3xl shadow-lg p-6 mb-4"
               style={{
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: -4 },
@@ -141,6 +143,33 @@ export default function CartScreen() {
                 elevation: 10,
               }}
             >
+              {/* Shipping Address Section */}
+              <View className="mb-4 pb-4 border-b border-gray-100">
+                <View className="flex-row justify-between items-center mb-2">
+                  <Text className="text-[12px] text-gray-400 font-poppins font-medium">
+                    Deliver to
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("ShippingAddresses")}
+                  >
+                    <Text className="text-[12px] text-[#1C6206] font-poppins font-bold">
+                      Change
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View className="flex-row items-center">
+                  <Ionicons name="location-outline" size={16} color="#1D2939" />
+                  <Text
+                    className="text-[14px] text-[#1D2939] font-poppins ml-2 flex-1"
+                    numberOfLines={1}
+                  >
+                    {selectedAddress
+                      ? selectedAddress.address
+                      : "Add a shipping address"}
+                  </Text>
+                </View>
+              </View>
+
               <Text className="text-[16px] font-bold text-[#1D2939] mb-4 font-parkinsans-bold">
                 Cart Summary
               </Text>

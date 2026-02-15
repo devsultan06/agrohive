@@ -15,6 +15,8 @@ import PrivacyPolicyScreen from "./screens/main/PrivacyPolicyScreen";
 import TermsOfServiceScreen from "./screens/main/TermsOfServiceScreen";
 import OrdersScreen from "./screens/main/OrdersScreen";
 import ProductDetailScreen from "./screens/main/ProductDetailScreen";
+import ShippingAddressesScreen from "./screens/main/ShippingAddressesScreen";
+import AddAddressScreen from "./screens/main/AddAddressScreen";
 import "./global.css";
 const Stack = createStackNavigator();
 
@@ -97,6 +99,16 @@ export default function App() {
         <Stack.Screen
           name="ProductDetail"
           component={ProductDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ShippingAddresses"
+          component={ShippingAddressesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddAddress"
+          component={AddAddressScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
