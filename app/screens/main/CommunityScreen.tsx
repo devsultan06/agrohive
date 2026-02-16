@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRoute } from "@react-navigation/native";
 import FarmingGuide from "../../components/community/FarmingGuide";
 import AgroConnect from "../../components/community/AgroConnect";
 
 export default function CommunityScreen() {
-  const [activeTab, setActiveTab] = useState("Farming Guide");
+  const route = useRoute<any>();
+  const [activeTab, setActiveTab] = useState("AgroConnect");
+
+  useEffect(() => {
+    if (route.params?.activeTab) {
+      setActiveTab(route.params.activeTab);
+    }
+  }, [route.params]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

@@ -20,6 +20,7 @@ import AddAddressScreen from "./screens/main/AddAddressScreen";
 import CreatePostScreen from "./screens/main/CreatePostScreen";
 import PostDetailsScreen from "./screens/main/PostDetailsScreen";
 import SavedPostsScreen from "./screens/main/SavedPostsScreen";
+import UserPostsScreen from "./screens/main/UserPostsScreen";
 import "./global.css";
 const Stack = createStackNavigator();
 
@@ -127,6 +128,11 @@ export default function App() {
         <Stack.Screen
           name="SavedPosts"
           component={SavedPostsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserPosts"
+          component={UserPostsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

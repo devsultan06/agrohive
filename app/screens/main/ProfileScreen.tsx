@@ -13,6 +13,7 @@ import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { useSavedPostStore } from "../../store/useSavedPostStore";
+import { usePostStore } from "../../store/usePostStore";
 
 const ProfileMenuItem = ({
   icon,
@@ -59,6 +60,8 @@ export default function ProfileScreen() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { savedPosts } = useSavedPostStore();
+  const { getPostsByUser } = usePostStore();
+  const userPostsCount = getPostsByUser("AGBOHOR Boluwa").length;
 
   const handleLogout = () => {
     setShowLogoutModal(false);
@@ -125,8 +128,8 @@ export default function ProfileScreen() {
                   />
                 }
                 label="All posts"
-                value="5"
-                onPress={() => {}}
+                value={userPostsCount.toString()}
+                onPress={() => navigation.navigate("UserPosts")}
               />
               <ProfileMenuItem
                 icon={

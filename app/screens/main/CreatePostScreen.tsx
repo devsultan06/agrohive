@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,22 +6,66 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Falsy,
-  RecursiveArray,
-  RegisteredStyle,
-  ViewStyle,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { usePostStore } from "../../store/usePostStore";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 export default function CreatePostScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [postContent, setPostContent] = useState("");
+  const [showDraftModal, setShowDraftModal] = useState(false);
+
+  const { addPost, draftContent, setDraftContent, clearDraftContent } =
+    usePostStore();
+
+  useEffect(() => {
+    if (draftContent) {
+      setPostContent(draftContent);
+    }
+  }, []);
 
   const handlePost = () => {
-    // Logic to handle posting content would go here
-    console.log("Post content:", postContent);
+    if (!postContent.trim()) return;
+
+    const newPost = {
+      id: Date.now().toString(),
+      user: {
+        name: "AGBOHOR Boluwa", // Using current user's name from profile
+        avatar: { uri: "https://i.pravatar.cc/150?img=12" }, // Using avatar from profile
+      },
+      date: "Just now",
+      content: postContent,
+      likes: 0,
+      comments: 0,
+      isLiked: false,
+      isSaved: false,
+    };
+
+    addPost(newPost);
+    clearDraftContent();
+    navigation.goBack();
+  };
+
+  const handleBack = () => {
+    if (postContent.trim() && postContent !== draftContent) {
+      setShowDraftModal(true);
+    } else {
+      navigation.goBack();
+    }
+  };
+
+  const handleSaveDraft = () => {
+    setDraftContent(postContent);
+    setShowDraftModal(false);
+    navigation.goBack();
+  };
+
+  const handleDiscardDraft = () => {
+    clearDraftContent();
+    setShowDraftModal(false);
     navigation.goBack();
   };
 
@@ -34,7 +78,7 @@ export default function CreatePostScreen() {
         {/* Header */}
         <View className="flex-row items-center justify-between px-5 pt-2 pb-4 border-gray-100">
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={handleBack}
             className="w-10 h-10 justify-center items-center"
           >
             <Ionicons name="chevron-back" size={24} color="#1D2939" />
@@ -88,6 +132,17 @@ export default function CreatePostScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+
+      <ConfirmationModal
+        visible={showDraftModal}
+        title="Save as draft?"
+        message="You can continue from where you stopped"
+        confirmText="Save"
+        cancelText="Discard"
+        onConfirm={handleSaveDraft}
+        onCancel={handleDiscardDraft}
+        type="success" // Using success type for green primary button (Save)
+      />
     </SafeAreaView>
   );
 }

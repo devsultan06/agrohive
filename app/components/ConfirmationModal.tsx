@@ -10,7 +10,7 @@ interface ConfirmationModalProps {
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
-  type?: "danger" | "warning";
+  type?: "danger" | "warning" | "success";
 }
 
 export default function ConfirmationModal({
@@ -23,9 +23,22 @@ export default function ConfirmationModal({
   onCancel,
   type = "warning",
 }: ConfirmationModalProps) {
-  const iconColor = type === "danger" ? "#F04438" : "#F79009";
-  const iconBgColor = type === "danger" ? "bg-red-100" : "bg-orange-100";
-  const confirmBgColor = type === "danger" ? "bg-[#F04438]" : "bg-[#F79009]";
+  let iconColor = "#F79009";
+  let iconBgColor = "bg-orange-100";
+  let confirmBgColor = "bg-[#F79009]";
+  let iconName: any = "warning";
+
+  if (type === "danger") {
+    iconColor = "#F04438";
+    iconBgColor = "bg-red-100";
+    confirmBgColor = "bg-[#F04438]";
+    iconName = "alert-circle";
+  } else if (type === "success") {
+    iconColor = "#1C6206";
+    iconBgColor = "bg-[#ECFDF3]";
+    confirmBgColor = "bg-[#1C6206]";
+    iconName = "checkmark-circle";
+  }
 
   return (
     <Modal
@@ -35,16 +48,12 @@ export default function ConfirmationModal({
       onRequestClose={onCancel}
     >
       <View className="flex-1 justify-center items-center bg-black/50 px-6">
-        <View className="bg-white rounded-2xl p-6 w-full max-w-sm">
+        <View className="bg-white rounded-2xl p-6 w-full max-w-sm items-center">
           {/* Icon */}
           <View
-            className={`w-12 h-12 ${iconBgColor} rounded-full justify-center items-center mb-4 self-center`}
+            className={`w-12 h-12 ${iconBgColor} rounded-full justify-center items-center mb-4`}
           >
-            <Ionicons
-              name={type === "danger" ? "alert-circle" : "warning"}
-              size={24}
-              color={iconColor}
-            />
+            <Ionicons name={iconName} size={24} color={iconColor} />
           </View>
 
           {/* Title */}
@@ -58,10 +67,10 @@ export default function ConfirmationModal({
           </Text>
 
           {/* Buttons */}
-          <View className="gap-3">
+          <View className="gap-3 w-full">
             <TouchableOpacity
               onPress={onConfirm}
-              className={`${confirmBgColor} h-12 rounded-full justify-center items-center`}
+              className={`${confirmBgColor} h-12 rounded-full justify-center items-center w-full`}
             >
               <Text className="text-white font-bold text-[14px] font-poppins">
                 {confirmText}
@@ -70,7 +79,7 @@ export default function ConfirmationModal({
 
             <TouchableOpacity
               onPress={onCancel}
-              className="bg-gray-100 h-12 rounded-full justify-center items-center"
+              className="bg-gray-100 h-12 rounded-full justify-center items-center w-full"
             >
               <Text className="text-[#344054] font-bold text-[14px] font-poppins">
                 {cancelText}
