@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
+  Share,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -44,6 +45,29 @@ export default function CartScreen() {
   );
   const deliveryFee = items.length > 0 ? 2000 : 0;
   const total = subtotal + deliveryFee;
+
+  const handleShareCart = async () => {
+    if (items.length === 0) return;
+
+    const itemsList = items
+      .map(
+        (item) =>
+          `- ${item.name} (${item.quantity}x) - ₦${(
+            item.price * item.quantity
+          ).toLocaleString()}`,
+      )
+      .join("\n");
+
+    const message = `Check out my cart on AgroHive:\n\n${itemsList}\n\nTotal: ₦${total.toLocaleString()}`;
+
+    try {
+      await Share.share({
+        message,
+      });
+    } catch (error) {
+      console.log("Error sharing cart:", error);
+    }
+  };
 
   const renderItem = ({ item }: { item: any }) => (
     <View
@@ -116,7 +140,8 @@ export default function CartScreen() {
           <Text className="text-[18px] font-bold text-[#1D2939] font-parkinsans-bold">
             My Cart
           </Text>
-          <TouchableOpacity>
+          {/* Duplicate text removed */}
+          <TouchableOpacity onPress={handleShareCart}>
             <Ionicons name="share-social-outline" size={24} color="#1D2939" />
           </TouchableOpacity>
         </View>
