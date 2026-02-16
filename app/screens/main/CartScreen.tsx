@@ -245,11 +245,11 @@ export default function CartScreen() {
               Looks like you haven't added any items to your cart yet.
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.navigate("Market")}
               className="bg-[#1C6206] px-6 py-3 rounded-full"
             >
-              <Text className="text-white font-bold font-poppins-bold">
-                Start Shopping
+              <Text className="text-white text-[16px] font-bold font-poppins">
+                Start shopping
               </Text>
             </TouchableOpacity>
           </View>
