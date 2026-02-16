@@ -17,6 +17,9 @@ import OrdersScreen from "./screens/main/OrdersScreen";
 import ProductDetailScreen from "./screens/main/ProductDetailScreen";
 import ShippingAddressesScreen from "./screens/main/ShippingAddressesScreen";
 import AddAddressScreen from "./screens/main/AddAddressScreen";
+import CreatePostScreen from "./screens/main/CreatePostScreen";
+import PostDetailsScreen from "./screens/main/PostDetailsScreen";
+import SavedPostsScreen from "./screens/main/SavedPostsScreen";
 import "./global.css";
 const Stack = createStackNavigator();
 
@@ -109,6 +112,21 @@ export default function App() {
         <Stack.Screen
           name="AddAddress"
           component={AddAddressScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CreatePost"
+          component={CreatePostScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PostDetails"
+          component={PostDetailsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SavedPosts"
+          component={SavedPostsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -44,8 +44,29 @@ const FEED_DATA = [
   },
 ];
 
+import { useNavigation } from "@react-navigation/native";
+import { useSavedPostStore } from "../../store/useSavedPostStore";
+
 export default function AgroConnect() {
+  const navigation = useNavigation<any>();
   const [searchQuery, setSearchQuery] = useState("");
+  const [posts, setPosts] = useState(FEED_DATA);
+  const { toggleSavePost, isPostSaved } = useSavedPostStore();
+
+  const toggleLike = (id: string) => {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === id) {
+          return {
+            ...post,
+            isLiked: !post.isLiked,
+            likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+          };
+        }
+        return post;
+      }),
+    );
+  };
 
   const renderPostItem = ({ item }: { item: any }) => (
     <View className="bg-white p-4 mb-4 rounded-[20px] border border-gray-100 shadow-sm mx-5">
@@ -98,14 +119,24 @@ export default function AgroConnect() {
       {/* Actions */}
       <View className="flex-row items-center justify-between mb-3">
         <View className="flex-row items-center gap-4">
-          <TouchableOpacity className="flex-row items-center gap-1">
-            <Ionicons name="heart-outline" size={22} color="#1D2939" />
+          <TouchableOpacity
+            className="flex-row items-center gap-1"
+            onPress={() => toggleLike(item.id)}
+          >
+            <Ionicons
+              name={item.isLiked ? "heart" : "heart-outline"}
+              size={22}
+              color={item.isLiked ? "#F04438" : "#1D2939"}
+            />
             <Text className="text-[12px] text-[#1D2939] font-medium font-poppins">
               {item.likes}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center gap-1">
+          <TouchableOpacity
+            className="flex-row items-center gap-1"
+            onPress={() => navigation.navigate("PostDetails", { post: item })}
+          >
             <Ionicons name="chatbubble-outline" size={20} color="#1D2939" />
             <Text className="text-[12px] text-[#1D2939] font-medium font-poppins">
               {item.comments}
@@ -117,8 +148,12 @@ export default function AgroConnect() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity>
-          <Ionicons name="bookmark-outline" size={20} color="#1D2939" />
+        <TouchableOpacity onPress={() => toggleSavePost(item)}>
+          <Ionicons
+            name={isPostSaved(item.id) ? "bookmark" : "bookmark-outline"}
+            size={20}
+            color={isPostSaved(item.id) ? "#1C6206" : "#1D2939"}
+          />
         </TouchableOpacity>
       </View>
 
@@ -135,20 +170,20 @@ export default function AgroConnect() {
       </View>
 
       {/* Add Comment Input */}
-      <View className="flex-row items-center mt-2 pt-3 border-t border-gray-50">
+      <TouchableOpacity
+        className="flex-row items-center mt-2 pt-3 border-t border-gray-50"
+        onPress={() => navigation.navigate("PostDetails", { post: item })}
+      >
         <Image
           source={require("../../assets/icon.png")} // Current user avatar placeholder
           className="w-6 h-6 rounded-full bg-gray-200 mr-2"
         />
-        <TextInput
-          placeholder="Add a comment..."
-          placeholderTextColor="#98A2B3"
-          className="flex-1 text-[12px] font-poppins text-[#1D2939] h-8"
-        />
-        <TouchableOpacity className="bg-gray-50 p-1.5 rounded-full">
-          <Ionicons name="add" size={16} color="#1C6206" />
-        </TouchableOpacity>
-      </View>
+        <View className="flex-1 h-8 justify-center">
+          <Text className="text-[12px] font-poppins text-[#98A2B3]">
+            Add a comment...
+          </Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 
@@ -178,14 +213,25 @@ export default function AgroConnect() {
 
         {/* Feed List */}
         <View>
-          {FEED_DATA.map((item) => (
-            <View key={item.id}>{renderPostItem({ item })}</View>
-          ))}
+          {posts
+            .filter(
+              (item) =>
+                item.content
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                item.user.name
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()),
+            )
+            .map((item) => (
+              <View key={item.id}>{renderPostItem({ item })}</View>
+            ))}
         </View>
       </ScrollView>
 
       {/* FAB */}
       <TouchableOpacity
+        onPress={() => navigation.navigate("CreatePost")}
         className="absolute bottom-6 right-5 w-14 h-14 bg-white rounded-full justify-center items-center shadow-lg shadow-[#1C6206]/20 border border-gray-50"
         style={{ elevation: 5 }}
       >

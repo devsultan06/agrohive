@@ -28,6 +28,7 @@ const MENU_ITEMS = [
     label: "Notifications",
     screen: "Notifications",
   },
+  { icon: "bookmark-outline", label: "Saved Posts", screen: "SavedPosts" },
   { icon: "help-circle-outline", label: "FAQ's", screen: "FAQ" },
 ];
 
@@ -60,21 +61,20 @@ export const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
 
   const handleNavigation = (screen: string) => {
     onClose(); // Trigger close animation
-    // Navigate logic
-    if (screen === "Cart") {
-      navigation.navigate("Cart");
-    } else if (screen === "Profile") {
-      navigation.navigate("Profile");
-    } else if (screen === "Favorite") {
-      navigation.navigate("Favorite");
-    } else if (screen === "Notifications") {
-      navigation.navigate("Notifications");
-    } else if (screen === "FAQ") {
-      navigation.navigate("FAQ");
-    } else if (screen === "Orders") {
-      navigation.navigate("Orders");
+
+    // Check for Tab Screens
+    if (
+      screen === "Home" ||
+      screen === "Market" ||
+      screen === "Community" ||
+      screen === "Cart" ||
+      screen === "Profile"
+    ) {
+      navigation.navigate("Main", { screen: screen });
+    } else {
+      // Stack Screens
+      navigation.navigate(screen);
     }
-    // Add others...
   };
 
   if (!showModal) return null;
