@@ -9,6 +9,8 @@ interface UserProfile {
   location: string;
   bio: string;
   avatar: string | null;
+  followers: number;
+  following: number;
 }
 
 interface UserState {
@@ -26,6 +28,8 @@ export const useUserStore = create<UserState>()(
         location: "Lagos, Nigeria",
         bio: "Passionate about sustainable farming and modern agricultural technology.",
         avatar: "https://i.pravatar.cc/150?img=12",
+        followers: 1250,
+        following: 450,
       },
       updateUser: (updates) =>
         set((state) => ({
@@ -35,6 +39,21 @@ export const useUserStore = create<UserState>()(
     {
       name: "user-storage",
       storage: createJSONStorage(() => AsyncStorage),
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0) {
+          // If the stored data is from version 0, add the new fields
+          return {
+            ...persistedState,
+            user: {
+              ...persistedState.user,
+              followers: 1250,
+              following: 450,
+            },
+          };
+        }
+        return persistedState;
+      },
     },
   ),
 );

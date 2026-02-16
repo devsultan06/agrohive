@@ -99,16 +99,45 @@ export default function ProfileScreen() {
                 className="w-full h-full"
               />
             </View>
-           
           </View>
 
           <Text className="text-[20px] font-bold text-[#101828] mt-4 font-parkinsans-bold">
             {user.name}
           </Text>
 
+          {/* Bio */}
+          {user.bio && (
+            <Text className="text-[12px] text-gray-500 mt-2 font-poppins text-center px-10 leading-[18px]">
+              {user.bio}
+            </Text>
+          )}
+
+          {/* Followers/Following Stats */}
+          <View className="flex-row items-center mt-5 gap-8">
+            <View className="items-center">
+              <Text className="text-[18px] font-bold text-[#101828] font-parkinsans-bold">
+                {(user.followers ?? 0) >= 1000
+                  ? ((user.followers ?? 0) / 1000).toFixed(1) + "k"
+                  : (user.followers ?? 0)}
+              </Text>
+              <Text className="text-[12px] text-gray-400 font-poppins">
+                Followers
+              </Text>
+            </View>
+            <View className="w-[1px] h-8 bg-gray-100" />
+            <View className="items-center">
+              <Text className="text-[18px] font-bold text-[#101828] font-parkinsans-bold">
+                {user.following ?? 0}
+              </Text>
+              <Text className="text-[12px] text-gray-400 font-poppins">
+                Following
+              </Text>
+            </View>
+          </View>
+
           <TouchableOpacity
             onPress={() => navigation.navigate("EditProfile")}
-            className="mt-4 bg-white/80 px-4 py-2 rounded-full border border-gray-200 flex-row items-center shadow-sm"
+            className="mt-6 bg-white/80 px-8 py-2.5 rounded-full border border-gray-200 flex-row items-center shadow-sm"
           >
             <Feather name="edit-2" size={14} color="#344054" />
             <Text className="text-[12px] font-medium text-[#344054] ml-2 font-poppins">
