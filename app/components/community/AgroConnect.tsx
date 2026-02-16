@@ -27,6 +27,21 @@ const FEED_DATA = [
     isLiked: false,
     isSaved: false,
   },
+  {
+    id: "2",
+    user: {
+      name: "Ibrahim Yusuf",
+      avatar: require("../../assets/icon.png"), // Placeholder
+    },
+    date: "Jul 22",
+    content:
+      "Just installed a new smart irrigation system on my tomato farm. The water savings have been incredible so far! Has anyone else tried drip irrigation for vegetables? Would love to hear your experiences.",
+    image: require("../../assets/drone_sprayer.png"), // Irrigation image placeholder
+    likes: 24,
+    comments: 12,
+    isLiked: true,
+    isSaved: false,
+  },
 ];
 
 export default function AgroConnect() {
@@ -122,7 +137,7 @@ export default function AgroConnect() {
       {/* Add Comment Input */}
       <View className="flex-row items-center mt-2 pt-3 border-t border-gray-50">
         <Image
-          source={require("../../../assets/icon.png")} // Current user avatar placeholder
+          source={require("../../assets/icon.png")} // Current user avatar placeholder
           className="w-6 h-6 rounded-full bg-gray-200 mr-2"
         />
         <TextInput
