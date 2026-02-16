@@ -23,6 +23,24 @@ const FARM_PRODUCTS = [
     description:
       "Multi-functional agricultural drone equipped with high-resolution sensors for crop monitoring and health assessment.",
   },
+  {
+    id: "1",
+    name: "Rotavator",
+    rating: 4.8,
+    price: 899.0,
+    image: require("../../assets/rotavator.png"),
+    description:
+      "Heavy-duty rotavator designed for efficient soil preparation. Features multiple blade configurations for varying soil types.",
+  },
+  {
+    id: "2",
+    name: "EcoWagon",
+    rating: 4.5,
+    price: 899.0,
+    image: require("../../assets/ecowagon.png"),
+    description:
+      "Eco-friendly agricultural wagon perfect for transporting crops and tools across the farm with minimal effort.",
+  },
 ];
 
 export default function FarmProductsSection() {

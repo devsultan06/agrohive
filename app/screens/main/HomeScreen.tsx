@@ -19,12 +19,14 @@ import FarmProductsSection from "../../components/home/FarmProductsSection";
 
 const { width } = Dimensions.get("window");
 
+import { useUserStore } from "../../store/useUserStore";
 import { SideMenu } from "../../components/SideMenu";
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const [toastVisible, setToastVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
+  const { user } = useUserStore();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -38,13 +40,13 @@ export default function HomeScreen() {
           <View className="flex-row items-center gap-3">
             <Image
               source={{
-                uri: "https://i.pravatar.cc/150?img=12",
+                uri: user.avatar || "https://i.pravatar.cc/150?img=12",
               }}
               className="w-10 h-10 rounded-full bg-gray-200"
             />
             <View>
               <Text className="text-[16px] font-bold text-[#000000] font-parkinsans-bold">
-                Hi Boluwa,
+                Hi {user.name.split(" ")[0]},
               </Text>
               <Text className="text-[12px] text-gray-500 font-poppins">
                 Good afternoon.

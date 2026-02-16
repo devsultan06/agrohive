@@ -107,6 +107,8 @@ const FILTERS = ["All products", "New Products", "UK Used"];
 
 const { width } = Dimensions.get("window");
 
+import { useUserStore } from "../../store/useUserStore";
+
 export default function MarketScreen() {
   const navigation = useNavigation<any>();
   const [activeFilter, setActiveFilter] = useState("All products");
@@ -122,6 +124,7 @@ export default function MarketScreen() {
   const [toastVisible, setToastVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const { favorites, toggleFavorite } = useFavoriteStore();
+  const { user } = useUserStore();
 
   const filteredProducts = MARKET_PRODUCTS.filter((product) => {
     // 1. Category Filter
@@ -241,13 +244,13 @@ export default function MarketScreen() {
           <View className="flex-row items-center gap-3">
             <Image
               source={{
-                uri: "https://i.pravatar.cc/150?img=12",
+                uri: user.avatar || "https://i.pravatar.cc/150?img=12",
               }}
               className="w-10 h-10 rounded-full bg-gray-200"
             />
             <View>
               <Text className="text-[16px] font-bold text-[#000000] font-parkinsans-bold">
-                Hi Boluwa,
+                Hi {user.name.split(" ")[0]},
               </Text>
               <Text className="text-[12px] text-gray-500 font-poppins">
                 Good afternoon.
