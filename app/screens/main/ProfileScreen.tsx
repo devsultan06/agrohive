@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { useSavedPostStore } from "../../store/useSavedPostStore";
 
 const ProfileMenuItem = ({
   icon,
@@ -57,6 +58,7 @@ export default function ProfileScreen() {
   const navigation = useNavigation<any>();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { savedPosts } = useSavedPostStore();
 
   const handleLogout = () => {
     setShowLogoutModal(false);
@@ -131,8 +133,8 @@ export default function ProfileScreen() {
                   <Ionicons name="bookmark-outline" size={20} color="#344054" />
                 }
                 label="Bookmarks"
-                value="10"
-                onPress={() => {}}
+                value={savedPosts.length.toString()}
+                onPress={() => navigation.navigate("SavedPosts")}
               />
               <ProfileMenuItem
                 icon={
