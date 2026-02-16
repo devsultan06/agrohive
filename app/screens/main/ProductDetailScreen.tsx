@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCartStore } from "../../store/useCartStore";
 import { Toast } from "../../components/Toast";
+import ReviewModal from "../../components/ReviewModal";
 
 const { width } = Dimensions.get("window");
 
@@ -27,6 +28,36 @@ export default function ProductDetailScreen() {
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const [reviews, setReviews] = useState([
+    {
+      id: 1,
+      user: "John Doe",
+      rating: 5,
+      comment: "I loved this product! It worked exactly as described.",
+      date: "Feb 10",
+    },
+    {
+      id: 2,
+      user: "Sarah Smith",
+      rating: 4,
+      comment: "Good quality, fast delivery.",
+      date: "Feb 12",
+    },
+  ]);
+
+  const handleReviewSubmit = (rating: number, comment: string) => {
+    const newReview = {
+      id: Date.now(),
+      user: "Me",
+      rating,
+      comment,
+      date: "Just now",
+    };
+    setReviews([newReview, ...reviews]);
+    setToastMessage("Review submitted!");
+    setToastVisible(true);
+  };
 
   // Get current quantity from cart
   const currentQty = items.find((i) => i.id === product?.id)?.quantity || 0;
@@ -153,6 +184,50 @@ export default function ProductDetailScreen() {
               ))}
             </View>
           )}
+
+          {/* Reviews Header */}
+          <View className="flex-row justify-between items-center mt-6 mb-4">
+            <Text className="text-[18px] font-bold text-[#1D2939] font-parkinsans-bold">
+              Reviews ({reviews.length})
+            </Text>
+            <TouchableOpacity onPress={() => setReviewModalVisible(true)}>
+              <Text className="text-[#1C6206] font-bold font-poppins">
+                Write a review
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Reviews List */}
+          <View className="gap-4 mb-6">
+            {reviews.map((review) => (
+              <View
+                key={review.id}
+                className="bg-gray-50 p-4 rounded-xl border border-gray-100"
+              >
+                <View className="flex-row justify-between mb-2">
+                  <Text className="font-bold text-[#1D2939] font-parkinsans-bold">
+                    {review.user}
+                  </Text>
+                  <Text className="text-gray-400 text-[12px] font-poppins">
+                    {review.date}
+                  </Text>
+                </View>
+                <View className="flex-row mb-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Ionicons
+                      key={star}
+                      name={star <= review.rating ? "star" : "star-outline"}
+                      size={14}
+                      color="#FFD700"
+                    />
+                  ))}
+                </View>
+                <Text className="text-gray-600 text-[13px] font-poppins leading-5">
+                  {review.comment}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
       </ScrollView>
 
@@ -194,6 +269,12 @@ export default function ProductDetailScreen() {
           </View>
         )}
       </View>
+
+      <ReviewModal
+        visible={reviewModalVisible}
+        onClose={() => setReviewModalVisible(false)}
+        onSubmit={handleReviewSubmit}
+      />
 
       <Toast
         message={toastMessage}

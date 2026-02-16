@@ -113,7 +113,8 @@ export default function OrdersScreen() {
     return (
       <TouchableOpacity
         className="bg-white rounded-[20px] p-4 border border-black/[0.03] mb-4"
-        onPress={() => {}}
+        onPress={() => navigation.navigate("OrderDetails", { order: item })}
+        activeOpacity={0.7}
       >
         {/* Header */}
         <View className="flex-row justify-between items-center mb-3">
@@ -174,7 +175,10 @@ export default function OrdersScreen() {
               ₦{item.total.toLocaleString()}
             </Text>
           </View>
-          <TouchableOpacity className="flex-row items-center">
+          <TouchableOpacity
+            className="flex-row items-center"
+            onPress={() => navigation.navigate("OrderDetails", { order: item })}
+          >
             <Text className="text-[12px] font-medium text-[#1C6206] mr-1 font-poppins">
               View Details
             </Text>

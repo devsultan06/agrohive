@@ -26,6 +26,8 @@ import WeatherScreen from "./screens/main/WeatherScreen";
 import PublicProfileScreen from "./screens/main/PublicProfileScreen";
 import ChatScreen from "./screens/main/ChatScreen";
 import MessageListScreen from "./screens/main/MessageListScreen";
+import EditProfileScreen from "./screens/main/EditProfileScreen";
+import OrderDetailsScreen from "./screens/main/OrderDetailsScreen";
 import "./global.css";
 const Stack = createStackNavigator();
 
@@ -163,6 +165,16 @@ export default function App() {
         <Stack.Screen
           name="MessageList"
           component={MessageListScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OrderDetails"
+          component={OrderDetailsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

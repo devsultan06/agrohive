@@ -55,13 +55,16 @@ const ProfileMenuItem = ({
   </TouchableOpacity>
 );
 
+import { useUserStore } from "../../store/useUserStore";
+
 export default function ProfileScreen() {
   const navigation = useNavigation<any>();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { savedPosts } = useSavedPostStore();
   const { getPostsByUser } = usePostStore();
-  const userPostsCount = getPostsByUser("AGBOHOR Boluwa").length;
+  const { user } = useUserStore();
+  const userPostsCount = getPostsByUser(user.name).length;
 
   const handleLogout = () => {
     setShowLogoutModal(false);
@@ -90,20 +93,23 @@ export default function ProfileScreen() {
           <View className="relative">
             <View className="w-[100px] h-[100px] rounded-full border-4 border-white shadow-sm overflow-hidden bg-gray-200">
               <Image
-                source={{ uri: "https://i.pravatar.cc/150?img=12" }}
+                source={{
+                  uri: user.avatar || "https://i.pravatar.cc/150?img=12",
+                }}
                 className="w-full h-full"
               />
             </View>
-            <TouchableOpacity className="absolute bottom-0 right-0 w-8 h-8 bg-white rounded-full justify-center items-center shadow-sm border border-gray-100">
-              <Ionicons name="camera-outline" size={16} color="#1C6206" />
-            </TouchableOpacity>
+           
           </View>
 
           <Text className="text-[20px] font-bold text-[#101828] mt-4 font-parkinsans-bold">
-            AGBOHOR Boluwa
+            {user.name}
           </Text>
 
-          <TouchableOpacity className="mt-4 bg-white/80 px-4 py-2 rounded-full border border-gray-200 flex-row items-center shadow-sm">
+          <TouchableOpacity
+            onPress={() => navigation.navigate("EditProfile")}
+            className="mt-4 bg-white/80 px-4 py-2 rounded-full border border-gray-200 flex-row items-center shadow-sm"
+          >
             <Feather name="edit-2" size={14} color="#344054" />
             <Text className="text-[12px] font-medium text-[#344054] ml-2 font-poppins">
               Edit Profile
