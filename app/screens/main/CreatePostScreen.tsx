@@ -12,11 +12,13 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { usePostStore } from "../../store/usePostStore";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { Toast } from "../../components/Toast";
 
 export default function CreatePostScreen() {
   const navigation = useNavigation<any>();
   const [postContent, setPostContent] = useState("");
   const [showDraftModal, setShowDraftModal] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
 
   const { addPost, draftContent, setDraftContent, clearDraftContent } =
     usePostStore();
@@ -46,7 +48,10 @@ export default function CreatePostScreen() {
 
     addPost(newPost);
     clearDraftContent();
-    navigation.goBack();
+    setToastVisible(true);
+    setTimeout(() => {
+      navigation.goBack();
+    }, 1500);
   };
 
   const handleBack = () => {
@@ -141,7 +146,13 @@ export default function CreatePostScreen() {
         cancelText="Discard"
         onConfirm={handleSaveDraft}
         onCancel={handleDiscardDraft}
-        type="success" // Using success type for green primary button (Save)
+        type="success"
+      />
+
+      <Toast
+        message="Post added successfully"
+        visible={toastVisible}
+        onHide={() => setToastVisible(false)}
       />
     </SafeAreaView>
   );

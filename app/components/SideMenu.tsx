@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -23,6 +30,11 @@ const MENU_ITEMS = [
   { icon: "cart-outline", label: "My Cart", screen: "Cart" },
   { icon: "heart-outline", label: "Favorite", screen: "Favorite" },
   { icon: "cube-outline", label: "Orders", screen: "Orders" },
+  {
+    icon: "chatbubble-ellipses-outline",
+    label: "Messages",
+    screen: "MessageList",
+  },
   {
     icon: "notifications-outline",
     label: "Notifications",
@@ -103,9 +115,17 @@ export const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
           className="bg-white h-full px-6 shadow-xl z-50 rounded-r-[32px] w-[75%]"
           style={animatedStyle}
         >
-          <View className="flex-1 pt-40 items-center">
+          <ScrollView
+            className="flex-1 w-full"
+            contentContainerStyle={{
+              paddingTop: 80,
+              paddingBottom: 40,
+              alignItems: "flex-start", // Changed from center to flex-start
+            }}
+            showsVerticalScrollIndicator={false}
+          >
             {/* Logo */}
-            <View className="flex-row items-center gap-3 mb-10">
+            <View className="flex-row items-center gap-3 mb-10 pl-8">
               <Logo2 width={40} height={40} />
               <Text className="text-[24px] font-bold text-[#000] font-parkinsans-bold">
                 AgroHive
@@ -113,7 +133,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
             </View>
 
             {/* Menu Items */}
-            <View className="gap-[50px]">
+            <View className="gap-[30px] mb-12 w-full pl-8">
               {MENU_ITEMS.map((item, index) => (
                 <TouchableOpacity
                   key={index}
@@ -127,21 +147,21 @@ export const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
 
-          {/* Divider */}
-          <View className="h-[1px] bg-gray-100 mb-8 w-full" />
+            {/* Divider */}
+            <View className="h-[1px] bg-gray-100 mb-8 w-full" />
 
-          {/* Sign Out */}
-          <TouchableOpacity
-            className="flex-row items-center gap-4 mb-12 self-center"
-            onPress={() => console.log("Sign Out")}
-          >
-            <Ionicons name="log-out-outline" size={24} color="#667085" />
-            <Text className="text-[16px] text-[#1D2939] font-poppins font-medium">
-              Sign Out
-            </Text>
-          </TouchableOpacity>
+            {/* Sign Out */}
+            <TouchableOpacity
+              className="flex-row items-center gap-4 mb-8 w-full pl-8"
+              onPress={() => console.log("Sign Out")}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#667085" />
+              <Text className="text-[16px] text-[#1D2939] font-poppins font-medium">
+                Sign Out
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
         </Animated.View>
       </View>
     </Modal>

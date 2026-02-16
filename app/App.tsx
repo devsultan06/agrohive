@@ -9,6 +9,7 @@ import AuthNavigator from "./navigation/AuthNavigator";
 import MainNavigator from "./navigation/MainNavigator";
 import FavoriteScreen from "./screens/main/FavoriteScreen";
 import NotificationsScreen from "./screens/main/NotificationsScreen";
+import NotificationSettingsScreen from "./screens/main/NotificationSettingsScreen";
 import FAQScreen from "./screens/main/FAQScreen";
 import ChangePasswordScreen from "./screens/main/ChangePasswordScreen";
 import PrivacyPolicyScreen from "./screens/main/PrivacyPolicyScreen";
@@ -21,6 +22,10 @@ import CreatePostScreen from "./screens/main/CreatePostScreen";
 import PostDetailsScreen from "./screens/main/PostDetailsScreen";
 import SavedPostsScreen from "./screens/main/SavedPostsScreen";
 import UserPostsScreen from "./screens/main/UserPostsScreen";
+import WeatherScreen from "./screens/main/WeatherScreen";
+import PublicProfileScreen from "./screens/main/PublicProfileScreen";
+import ChatScreen from "./screens/main/ChatScreen";
+import MessageListScreen from "./screens/main/MessageListScreen";
 import "./global.css";
 const Stack = createStackNavigator();
 
@@ -73,6 +78,11 @@ export default function App() {
         <Stack.Screen
           name="Notifications"
           component={NotificationsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NotificationSettings"
+          component={NotificationSettingsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -133,6 +143,26 @@ export default function App() {
         <Stack.Screen
           name="UserPosts"
           component={UserPostsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Weather"
+          component={WeatherScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PublicProfile"
+          component={PublicProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MessageList"
+          component={MessageListScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

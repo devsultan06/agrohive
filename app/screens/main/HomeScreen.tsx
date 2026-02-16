@@ -67,10 +67,20 @@ export default function HomeScreen() {
         </View>
 
         {/* Weather Update */}
-        <Text className="text-[14px] font-bold text-[#1D2939] mb-3 font-parkinsans-bold">
-          Weather Update
-        </Text>
-        <View className="bg-[#FAFAFA] rounded-2xl p-5 mb-6 border border-gray-100">
+        <View className="flex-row justify-between items-center mb-3">
+          <Text className="text-[14px] font-bold text-[#1D2939] font-parkinsans-bold">
+            Weather Update
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Weather")}>
+            <Text className="text-[12px] underline text-[#1C6206] font-medium font-poppins">
+              See forecast
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Weather")}
+          className="bg-[#FAFAFA] rounded-2xl p-5 mb-6 border border-gray-100"
+        >
           <View className="flex-row justify-between mb-4">
             <View>
               <Text className="text-[12px] text-gray-500 mb-[4px] font-poppins">
@@ -99,7 +109,7 @@ export default function HomeScreen() {
           <Text className="text-[12px] text-gray-500 font-poppins">
             Today is a good day to apply insecticide
           </Text>
-        </View>
+        </TouchableOpacity>
 
         {/* Farm Products */}
         <FarmProductsSection />

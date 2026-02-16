@@ -147,9 +147,8 @@ export default function ProfileScreen() {
                     color="#344054"
                   />
                 }
-                label="Notification"
-                value="On"
-                onPress={() => navigation.navigate("Notifications")}
+                label="Notifications"
+                onPress={() => navigation.navigate("NotificationSettings")}
               />
             </View>
 

@@ -30,7 +30,12 @@ export default function AgroConnect() {
       <View className="bg-white p-4 mb-4 rounded-[20px] border border-gray-100 shadow-sm mx-5">
         {/* Header */}
         <View className="flex-row items-center justify-between mb-3">
-          <View className="flex-row items-center flex-1">
+          <TouchableOpacity
+            className="flex-row items-center flex-1"
+            onPress={() =>
+              navigation.navigate("PublicProfile", { user: item.user })
+            }
+          >
             <Image
               source={item.user.avatar}
               className="w-10 h-10 rounded-full bg-gray-200"
@@ -55,7 +60,7 @@ export default function AgroConnect() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity>
             <Text className="text-[#1C6206] text-[12px] font-bold font-poppins">
               Follow

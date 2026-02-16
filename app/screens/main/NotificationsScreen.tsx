@@ -14,15 +14,47 @@ import { useNavigation } from "@react-navigation/native";
 const NOTIFICATIONS = [
   {
     id: "1",
+    type: "like",
+    title: "New Like",
+    message: "John Doe liked your post: 'Best practices for irrigation...'",
+    time: "2 mins ago",
+    read: false,
+  },
+  {
+    id: "2",
+    type: "comment",
+    title: "New Comment",
+    message: "Sarah Smith commented on your post: 'Totally agree with this!'",
+    time: "15 mins ago",
+    read: false,
+  },
+  {
+    id: "6",
+    type: "follow",
+    title: "New Follower",
+    message: "GreenFarm Ltd started following you.",
+    time: "30 mins ago",
+    read: false,
+  },
+  {
+    id: "7",
+    type: "weather",
+    title: "Weather Alert",
+    message: "Heavy rain expected tomorrow in your area. Prepare your crops.",
+    time: "1 hour ago",
+    read: true,
+  },
+  {
+    id: "3",
     type: "order",
     title: "Order Delivered",
     message:
       "Your order #12345 has been successfully delivered. Enjoy your products!",
     time: "2 hours ago",
-    read: false,
+    read: true,
   },
   {
-    id: "2",
+    id: "4",
     type: "promo",
     title: "20% Off on Tools",
     message:
@@ -31,19 +63,11 @@ const NOTIFICATIONS = [
     read: true,
   },
   {
-    id: "3",
+    id: "5",
     type: "system",
     title: "Account Update",
     message: "Your profile information has been successfully updated.",
     time: "1 day ago",
-    read: true,
-  },
-  {
-    id: "4",
-    type: "order",
-    title: "Order Shipped",
-    message: "Your order #12345 is on its way! Track your shipment.",
-    time: "2 days ago",
     read: true,
   },
 ];
@@ -66,6 +90,30 @@ const NotificationIcon = ({ type }: { type: string }) => {
       return (
         <View className="w-10 h-10 rounded-full bg-blue-100 justify-center items-center">
           <Ionicons name="settings-outline" size={20} color="#007AFF" />
+        </View>
+      );
+    case "like":
+      return (
+        <View className="w-10 h-10 rounded-full bg-red-100 justify-center items-center">
+          <Ionicons name="heart" size={20} color="#F04438" />
+        </View>
+      );
+    case "comment":
+      return (
+        <View className="w-10 h-10 rounded-full bg-purple-100 justify-center items-center">
+          <Ionicons name="chatbubble" size={20} color="#7F56D9" />
+        </View>
+      );
+    case "follow":
+      return (
+        <View className="w-10 h-10 rounded-full bg-teal-100 justify-center items-center">
+          <Ionicons name="person-add" size={20} color="#0D9488" />
+        </View>
+      );
+    case "weather":
+      return (
+        <View className="w-10 h-10 rounded-full bg-yellow-100 justify-center items-center">
+          <Ionicons name="rainy" size={20} color="#D97706" />
         </View>
       );
     default:
