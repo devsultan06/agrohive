@@ -53,19 +53,38 @@ export default function HomeScreen() {
               </Text>
             </View>
           </View>
-          <TouchableOpacity
-            onPress={() => setMenuVisible(true)}
-            className="w-[44px] h-[44px] bg-white rounded-full justify-center items-center"
-            style={{
-              shadowColor: "#92B3BD",
-              shadowOffset: { width: 1.497, height: 1.497 },
-              shadowOpacity: 0.2,
-              shadowRadius: 5.986,
-              elevation: 5, // Android fallback
-            }}
-          >
-            <MenuIcon width={17} height={17} />
-          </TouchableOpacity>
+          <View className="flex-row items-center gap-3">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("MessageList")}
+              className="w-[44px] h-[44px] bg-white rounded-full justify-center items-center"
+              style={{
+                shadowColor: "#92B3BD",
+                shadowOffset: { width: 1.497, height: 1.497 },
+                shadowOpacity: 0.2,
+                shadowRadius: 5.986,
+                elevation: 5,
+              }}
+            >
+              <Ionicons
+                name="chatbubble-ellipses-outline"
+                size={22}
+                color="#1C6206"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setMenuVisible(true)}
+              className="w-[44px] h-[44px] bg-white rounded-full justify-center items-center"
+              style={{
+                shadowColor: "#92B3BD",
+                shadowOffset: { width: 1.497, height: 1.497 },
+                shadowOpacity: 0.2,
+                shadowRadius: 5.986,
+                elevation: 5,
+              }}
+            >
+              <MenuIcon width={17} height={17} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Weather Update */}
