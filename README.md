@@ -53,8 +53,8 @@ AgroHive is a modern, all-in-one agricultural platform designed to empower farme
 ### ⚙️ Backend
 
 - **Runtime:** [Node.js](https://nodejs.org/)
-- **Framework:** [Express](https://expressjs.com/)
-- **Database:** [MongoDB](https://www.mongodb.com/) (Mongoose)
+- **Framework:** [NestJS](https://nestjs.com/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/) ([Prisma ORM](https://www.prisma.io/))
 - **Language:** TypeScript
 
 ---
@@ -64,21 +64,19 @@ AgroHive is a modern, all-in-one agricultural platform designed to empower farme
 ```text
 agrohive/
 ├── app/                    # Mobile Application (React Native / Expo)
-│   ├── assets/             # SVGs, high-quality images, and icons
-│   ├── components/         # Reusable UI components
-│   ├── navigation/         # Navigation configuration
-│   ├── screens/            # Main application screens
-│   ├── store/              # Zustand store definitions
-│   └── App.tsx             # Application entry point
-├── backend/                # Backend Service (Node.js / Express)
-│   ├── src/                # Source code
-│   ├── config/             # Configuration files
-│   └── main.ts             # Server entry point
+├── backend/                # Backend Service (NestJS)
 └── web/                    # Web Frontend (React / Vite)
-    ├── src/                # React components and logic
-    ├── public/             # Static assets
-    └── index.html          # HTML entry point
 ```
+
+---
+
+## 🛠️ Monorepo Management
+
+This project is organized as a monorepo.
+
+- **Git Management:** Use the root Git repository for all commits.
+- **Environment Variables:** Each service has its own `.env` file within its directory.
+- **Dependencies:** Run `npm install` within each subdirectory (`app/`, `backend/`, `web/`) separately.
 
 ---
 
@@ -106,7 +104,8 @@ agrohive/
 
 1. Navigate to the backend directory: `cd backend`
 2. Install dependencies: `npm install`
-3. Start development server: `npm run dev`
+3. Run Prisma migrations: `npx prisma generate`
+4. Start development server: `npm run start:dev`
 
 ---
 
