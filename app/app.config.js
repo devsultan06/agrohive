@@ -56,6 +56,7 @@ module.exports = {
       googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,
       googleAndroidClientId: process.env.GOOGLE_ANDROID_CLIENT_ID,
       googleIosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
+      weatherApiKey: process.env.EXPO_PUBLIC_WEATHER_API_KEY,
       eas: {
         projectId: "279b6cef-437e-458f-a437-864090abb2a0",
       },
