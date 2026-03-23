@@ -2,6 +2,11 @@
 
 AgroHive is a modern, all-in-one agricultural platform designed to empower farmers and agricultural enthusiasts. It features a **React Native mobile application**, a **React web frontend**, and a **Node.js/NestJS backend service**.
 
+🔗 **Live Links:**
+
+- **Landing Page:** [https://agrohive.vercel.app](https://agrohive.vercel.app)
+- **Admin Dashboard:** [https://agrohive.vercel.app/admin/login](https://agrohive.vercel.app/admin/login)
+
 ---
 
 ## 📖 Project Overview
