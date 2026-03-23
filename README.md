@@ -1,6 +1,33 @@
 # AgroHive 🚜📦
 
-AgroHive is a modern, all-in-one agricultural platform designed to empower farmers and agricultural enthusiasts. It features a **React Native mobile application**, a **React web frontend**, and a **Node.js/Express backend service**. The platform combines a marketplace for premium tools, a vibrant community for knowledge sharing, real-time weather tracking, and advanced social features.
+AgroHive is a modern, all-in-one agricultural platform designed to empower farmers and agricultural enthusiasts. It features a **React Native mobile application**, a **React web frontend**, and a **Node.js/NestJS backend service**.
+
+---
+
+## 📖 Project Overview
+
+### 🎯 Problem Statement
+
+Farmers across Nigeria face significant challenges in achieving sustainable and profitable farming. Access to modern farming tools, such as UK-used and locally sourced equipment, remains a hurdle due to high costs and limited availability. Additionally, farmers lack a platform to connect with each other, share knowledge, and collaborate on best practices. The absence of a trusted marketplace leaves them unable to purchase products from fellow farmers at affordable prices or sell their produce at fair rates. These issues hinder growth, innovation, and community development within the agricultural sector, leaving farmers isolated and under-resourced.
+
+### 🚩 Objectives & Goals
+
+- **Enhance Farmers' Access to Technology:** Provide a seamless platform where farmers can easily access modern agricultural tools, including UK-used, locally used, and brand-new equipment at affordable prices.
+- **Knowledge Sharing:** Create a platform for farmers to learn about farming tools and connect with fellow farmers for peer-to-peer support.
+
+### ⚙️ Our Process
+
+1. **Discover:** Understanding farmer needs and market gaps.
+2. **Define:** Strategizing solutions for equipment accessibility.
+3. **Ideate:** Creating features like the marketplace and social connect.
+4. **Design:** Building a premium, user-friendly interface for all platforms.
+
+### 🏢 Business Challenges
+
+- **Limited Tech Adoption:** Overcoming hesitation to embrace modern agricultural tools.
+- **High Cost of Equipment:** Bridging the gap for farmers struggling to afford technology.
+- **Fragmented Marketplace:** Solving the difficulty in connecting buyers with reliable sellers.
+- **Lack of Awareness:** Educating farmers on available UK-used and local-used equipment options.
 
 ---
 
