@@ -4,12 +4,12 @@ The core API service for the AgroHive platform, built with **NestJS** and **Pris
 
 ## 🚀 API Features
 
-- **🔐 Auth:** Local and Google OAuth 2.0 with JWT strategies.
-- **🛒 Products:** CRUD for the marketplace with category and price filtering.
-- **🌱 Posts:** Community feed with likes, comments, and media support via Cloudinary.
-- **📦 Orders:** Managed purchase timelines and status tracking.
-- **🔔 Notifications:** Automated event-driven alerts using Firebase Admin.
-- **📧 Resend:** Integrated email system for OTPs and notifications.
+- **Auth:** Local and Google OAuth 2.0 with JWT strategies.
+- **Products:** CRUD for the marketplace with category and price filtering.
+- **Posts:** Community feed with likes, comments, and media support via Cloudinary.
+- **Orders:** Managed purchase timelines and status tracking.
+- **Notifications:** Automated event-driven alerts using Firebase Admin.
+- **Resend:** Integrated email system for OTPs and notifications.
 - **🌿 Prisma & PostgreSQL:** Robust data modeling and migrations.
 
 ---
