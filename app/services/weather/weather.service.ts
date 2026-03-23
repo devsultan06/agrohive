@@ -7,7 +7,7 @@ export interface WeatherData {
   date: string;
 }
 
-const API_KEY = "74a74a84e360effda29135ab6207a157";
+const API_KEY = process.env.EXPO_PUBLIC_WEATHER_API_KEY;
 
 export const fetchWeatherByCoords = async (
   lat: number,
