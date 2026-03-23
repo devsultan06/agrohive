@@ -76,6 +76,11 @@ Farmers across Nigeria face significant challenges in achieving sustainable and 
 - **Framework:** [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)
 - **Styling:** Tailwind CSS
 - **Language:** TypeScript
+- **Admin Dashboard:**
+  - **User & Order Management:** Full control over users, orders, and payments.
+  - **Content Moderation:** Manage marketplace products, community posts, and reviews.
+  - **Farming Guides:** Create and update curated guides for the community.
+  - **Notifications:** Send system-wide announcements and direct notifications.
 
 ### ⚙️ Backend
 
