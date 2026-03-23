@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: agrohive-backend
+    env: docker
+    dockerContext: backend
+    dockerfilePath: Dockerfile
+    plan: free # or your preferred plan
+    region: oregon # or your preferred region
+    envVars:
+      - key: DATABASE_URL
+        sync: false # Set your Neon connection string in Render Dashboard
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      # - key: REDIS_URL
+      #   sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY_PATH
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        value: onboarding@resend.dev
+      - key: FRONTEND_URL
+        value: https://your-frontend-url.render.com # Change this later

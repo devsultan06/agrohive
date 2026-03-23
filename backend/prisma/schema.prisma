@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+  MANAGER
+  SUPPORT
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  username     String   @unique
+  fullName     String
+  password     String?
+  role         UserRole @default(USER)
+  provider     String   @default("local") // "local" or "google"
+  providerId   String?  @unique           // Google ID
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  avatarUrl    String?
+  isVerified   Boolean  @default(false)
+  refreshToken String?
+  bio          String?
+  location     String?
+  phone        String?
+  fcmToken     String?
+  following    Follow[] @relation("UserFollowing")
+  followers    Follow[] @relation("UserFollowers")
+  reviews      Review[]
+  favorites    Favorite[]
+  notifications Notification[]
+  posts        Post[]
+  likes        Like[]
+  comments     Comment[]
+  bookmarks    Bookmark[]
+}
+
+enum NotificationType {
+  FOLLOW
+  LIKE
+  COMMENT
+  ORDER_UPDATE
+  PROMOTION
+  SYSTEM
+  WELCOME
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  metadata  Json?            // To store related IDs like productId, etc.
+  createdAt DateTime         @default(now())
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id])
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  category    String
+  imageUrl    String?
+  rating      Float    @default(0)
+  stock       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  reviews     Review[]
+  favoritedBy Favorite[]
+}
+
+model FarmingGuide {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  videoUrl     String?
+  thumbnailUrl String?
+  duration     String?
+  views        Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  content   String
+  imageUrl  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  likes     Like[]
+  comments  Comment[]
+  bookmarks Bookmark[]
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
