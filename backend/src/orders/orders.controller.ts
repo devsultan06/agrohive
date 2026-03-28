@@ -44,16 +44,18 @@ export class OrdersController {
   @Get('admin/all')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER)
-  findAll(
-    @Query('status') status?: OrderStatus,
-    @Query('search') search?: string,
-  ) {
-    return this.ordersService.findAll({ status, search });
+  findAll() {
+    return this.ordersService.findAllAdmin();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(id);
+  }
+
+  @Post(':id/payment/initiate')
+  initiatePayment(@GetCurrentUserId() userId: string, @Param('id') id: string) {
+    return this.ordersService.initiatePayment(id, userId);
   }
 
   @Patch('admin/:id/status')

@@ -86,18 +86,24 @@ export class UsersService {
 
   async getGeneralStats() {
     this.logger.log('Calculating general dashboard highlights');
-    const [totalUsers, totalPosts, activeListings] = await Promise.all([
-      this.prisma.user.count({ where: { role: UserRole.USER } }),
-      this.prisma.post.count(),
-      this.prisma.product.count({ where: { isActive: true } }),
-    ]);
+    const [totalUsers, totalPosts, activeListings, ordersData] =
+      await Promise.all([
+        this.prisma.user.count({ where: { role: UserRole.USER } }),
+        this.prisma.post.count(),
+        this.prisma.product.count({ where: { isActive: true } }),
+        this.prisma.order.aggregate({
+          where: { paymentStatus: 'SUCCESS' },
+          _count: true,
+          _sum: { totalAmount: true },
+        }),
+      ]);
 
     return {
       totalUsers,
       totalPosts,
       activeListings,
-      totalOrders: 0,
-      totalRevenue: 0,
+      totalOrders: ordersData._count ?? 0,
+      totalRevenue: Number(ordersData._sum?.totalAmount) || 0,
     };
   }
 

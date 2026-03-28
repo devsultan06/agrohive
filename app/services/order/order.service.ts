@@ -8,4 +8,6 @@ export const orderService = {
     shippingAddress?: string;
     shippingPhone?: string;
   }) => http.post<any>("/api/v1/orders", data),
+  initiatePayment: (orderId: string) =>
+    http.post<any>(`/api/v1/orders/${orderId}/payment/initiate`),
 };

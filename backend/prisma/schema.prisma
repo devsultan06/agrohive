@@ -6,79 +6,53 @@ datasource db {
   provider = "postgresql"
 }
 
-enum UserRole {
-  USER
-  ADMIN
-  SUPER_ADMIN
-  MANAGER
-  SUPPORT
-}
-
-enum OrderStatus {
-  PLACED
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  username     String   @unique
-  fullName     String
-  password     String?
-  role         UserRole @default(USER)
-  provider     String   @default("local") // "local" or "google"
-  providerId   String?  @unique           // Google ID
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  avatarUrl    String?
-  isVerified   Boolean  @default(false)
-  refreshToken String?
-  bio          String?
-  location     String?
-  phone        String?
-  fcmToken     String?
-  following    Follow[] @relation("UserFollowing")
-  followers    Follow[] @relation("UserFollowers")
-  reviews      Review[]
-  favorites    Favorite[]
+  id            String         @id @default(uuid())
+  email         String         @unique
+  username      String         @unique
+  fullName      String
+  password      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  avatarUrl     String?
+  isVerified    Boolean        @default(false)
+  refreshToken  String?
+  bio           String?
+  location      String?
+  phone         String?
+  fcmToken      String?
+  provider      String         @default("local")
+  providerId    String?        @unique
+  role          UserRole       @default(USER)
+  bookmarks     Bookmark[]
+  comments      Comment[]
+  favorites     Favorite[]
+  following     Follow[]       @relation("UserFollowing")
+  followers     Follow[]       @relation("UserFollowers")
+  likes         Like[]
   notifications Notification[]
-  posts        Post[]
-  likes        Like[]
-  comments     Comment[]
-  bookmarks    Bookmark[]
-  orders       Order[]
-  orderHistory OrderHistory[]
-  addresses    UserAddress[]
+  orders        Order[]
+  orderHistory  OrderHistory[]
+  posts         Post[]
+  reviews       Review[]
+  addresses     UserAddress[]
 
   @@index([fullName, email, username])
 }
 
 model UserAddress {
   id        String   @id @default(uuid())
-  label     String   // Home, Office, etc.
+  label     String
   fullName  String
   address   String
   phone     String
   isDefault Boolean  @default(false)
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-}
-
-enum NotificationType {
-  FOLLOW
-  LIKE
-  COMMENT
-  ORDER_UPDATE
-  PROMOTION
-  SYSTEM
-  WELCOME
 }
 
 model Notification {
@@ -88,9 +62,9 @@ model Notification {
   message   String
   isRead    Boolean          @default(false)
   userId    String
-  user      User             @relation(fields: [userId], references: [id])
-  metadata  Json?            // To store related IDs like productId, etc.
+  metadata  Json?
   createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
 }
 
 model Follow {
@@ -104,20 +78,20 @@ model Follow {
 }
 
 model Product {
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   description String
   price       Float
   category    String
   imageUrl    String?
-  rating      Float    @default(0)
-  stock       Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  reviews     Review[]
+  rating      Float       @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  isActive    Boolean     @default(true)
+  stock       Int         @default(0)
   favoritedBy Favorite[]
   orderItems  OrderItem[]
+  reviews     Review[]
 
   @@index([category, name])
 }
@@ -142,33 +116,33 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   productId String
   product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Favorite {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, productId])
 }
 
 model Post {
-  id        String    @id @default(uuid())
+  id        String     @id @default(uuid())
   content   String
   imageUrl  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  likes     Like[]
-  comments  Comment[]
   bookmarks Bookmark[]
+  comments  Comment[]
+  likes     Like[]
+  user      User       @relation(fields: [userId], references: [id])
 
   @@index([createdAt])
 }
@@ -176,10 +150,10 @@ model Post {
 model Like {
   id        String   @id @default(uuid())
   postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, postId])
 }
@@ -188,44 +162,38 @@ model Comment {
   id        String   @id @default(uuid())
   content   String
   postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Bookmark {
   id        String   @id @default(uuid())
   postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, postId])
 }
 
-enum PaymentStatus {
-  PENDING
-  SUCCESS
-  FAILED
-}
-
 model Order {
-  id          String      @id @default(uuid())
-  orderNumber String      @unique // e.g., ORD-2024-001
-  status      OrderStatus @default(PLACED)
-  totalAmount Float
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
-  items          OrderItem[]
-  statusHistory  OrderHistory[]
-  shippingAddress String?
-  shippingPhone   String?
-  paymentStatus   PaymentStatus @default(PENDING)
-  paymentReference String?      @unique
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id               String         @id @default(uuid())
+  orderNumber      String         @unique
+  status           OrderStatus    @default(PLACED)
+  totalAmount      Float
+  userId           String
+  shippingAddress  String?
+  shippingPhone    String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  paymentReference String?        @unique
+  paymentStatus    PaymentStatus  @default(PENDING)
+  user             User           @relation(fields: [userId], references: [id])
+  statusHistory    OrderHistory[]
+  items            OrderItem[]
 
   @@index([userId])
   @@index([orderNumber])
@@ -236,8 +204,8 @@ model OrderItem {
   quantity  Int
   price     Float
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
 
   @@index([orderId])
@@ -248,10 +216,42 @@ model OrderHistory {
   id        String      @id @default(uuid())
   status    OrderStatus
   orderId   String
-  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
   userId    String
-  user      User        @relation(fields: [userId], references: [id])
   createdAt DateTime    @default(now())
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id])
 
   @@index([orderId])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+  MANAGER
+  SUPPORT
+}
+
+enum OrderStatus {
+  PLACED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum NotificationType {
+  FOLLOW
+  LIKE
+  COMMENT
+  ORDER_UPDATE
+  PROMOTION
+  SYSTEM
+  WELCOME
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

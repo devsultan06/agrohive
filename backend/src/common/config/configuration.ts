@@ -34,4 +34,8 @@ export default () => ({
     apiKey: process.env.CLOUDINARY_API_KEY,
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
+  paystack: {
+    secretKey: process.env.PAYSTACK_SECRET_KEY,
+    callbackUrl: process.env.PAYSTACK_CALLBACK_URL,
+  },
 });

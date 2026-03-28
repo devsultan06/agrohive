@@ -48,6 +48,7 @@ export default function SplashScreen({ onLayoutRootView }: SplashScreenProps) {
   useEffect(() => {
     onLayoutRootView?.(); // call the callback to hide splash
   }, []);
+
   return (
     <View className="flex-1" onLayout={onLayoutRootView}>
       <View className="h-[100%] w-[100%] bg-white items-center justify-center">

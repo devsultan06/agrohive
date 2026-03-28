@@ -1,6 +1,7 @@
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useQuery } from "@tanstack/react-query";
 import { dashboardService } from "../../services/admin/dashboardService";
+import { productService } from "../../services/admin/productService";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -41,6 +42,11 @@ const AdminDashboard = () => {
     queryFn: () => dashboardService.getRecentUsers(),
   });
 
+  const { data: inventoryStats = [], isLoading: inventoryLoading } = useQuery({
+    queryKey: ["admin-dashboard-inventory"],
+    queryFn: () => productService.getInventoryStats(),
+  });
+
   // Stats derived from live data
   const stats = [
     {
@@ -49,11 +55,16 @@ const AdminDashboard = () => {
       change: "Regular customers",
       up: true,
     },
-    { label: "Revenue", value: "₦0.00", change: "Sales coming soon", up: true },
+    {
+      label: "Revenue",
+      value: `₦${generalStats?.totalRevenue?.toLocaleString() ?? "0"}`,
+      change: "Successful sales",
+      up: true,
+    },
     {
       label: "Total orders",
-      value: "0",
-      change: "Orders coming soon",
+      value: generalStats?.totalOrders?.toLocaleString() ?? "0",
+      change: "Verified orders",
       up: true,
     },
     {
@@ -70,27 +81,29 @@ const AdminDashboard = () => {
     },
   ];
 
-  // Bar chart remains dummy for now (Stock vs Sold)
+  // Dynamic bar chart data (Stock vs Sold)
   const barData = {
-    labels: [
-      "Rotavator",
-      "EcoWagon",
-      "Mini Tractor",
-      "Drone Sprayer",
-      "Seed Planter",
-      "Mini Tractor (Used)",
-    ],
+    labels:
+      inventoryStats.length > 0
+        ? inventoryStats.map((i: any) => i.name)
+        : ["No data"],
     datasets: [
       {
         label: "Current Stock",
-        data: [12, 8, 4, 8, 6, 3],
+        data:
+          inventoryStats.length > 0
+            ? inventoryStats.map((i: any) => i.stock)
+            : [0],
         backgroundColor: "#1C6206",
         borderRadius: 4,
         barThickness: 28,
       },
       {
         label: "Sold (all time)",
-        data: [48, 32, 12, 25, 18, 9],
+        data:
+          inventoryStats.length > 0
+            ? inventoryStats.map((i: any) => i.sold)
+            : [0],
         backgroundColor: "#60A5FA",
         borderRadius: 4,
         barThickness: 28,

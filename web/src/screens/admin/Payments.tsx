@@ -1,5 +1,9 @@
 import { useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
+import { useQuery } from "@tanstack/react-query";
+import { orderService } from "../../services/admin/orderService";
+import { dashboardService } from "../../services/admin/dashboardService";
+import dayjs from "dayjs";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,90 +27,60 @@ ChartJS.register(
 const AdminPayments = () => {
   const [activeTab, setActiveTab] = useState("All");
 
-  // Transactions via Interswitch — payment for products
-  const transactions = [
-    {
-      id: "TXN-INT-0001",
-      orderId: "ORD-2024-001",
-      user: "Sultan Dev",
-      avatar: "https://i.pravatar.cc/150?u=sultan",
-      amount: "₦45,000",
-      status: "success",
-      method: "Card (**** 4242)",
-      date: "Feb 10, 2026",
-      ref: "ISW_REF_8A3F2C",
-    },
-    {
-      id: "TXN-INT-0002",
-      orderId: "ORD-2024-002",
-      user: "Aisha Mohammed",
-      avatar: "https://i.pravatar.cc/150?u=aisha",
-      amount: "₦899,000",
-      status: "success",
-      method: "Bank Transfer",
-      date: "Feb 12, 2026",
-      ref: "ISW_REF_1B4D9E",
-    },
-    {
-      id: "TXN-INT-0003",
-      orderId: "ORD-2024-003",
-      user: "John Bosco",
-      avatar: "https://i.pravatar.cc/150?u=john",
-      amount: "₦450,000",
-      status: "success",
-      method: "Card (**** 1234)",
-      date: "Feb 14, 2026",
-      ref: "ISW_REF_7C6F3A",
-    },
-    {
-      id: "TXN-INT-0004",
-      orderId: "ORD-2024-004",
-      user: "Emeka Obi",
-      avatar: "https://i.pravatar.cc/150?u=emeka",
-      amount: "₦4,500,000",
-      status: "pending",
-      method: "USSD",
-      date: "Mar 02, 2026",
-      ref: "ISW_REF_2E8B4D",
-    },
-    {
-      id: "TXN-INT-0005",
-      orderId: "ORD-2024-005",
-      user: "Mariam Bello",
-      avatar: "https://i.pravatar.cc/150?u=mariam",
-      amount: "₦640,000",
-      status: "failed",
-      method: "Card (**** 5678)",
-      date: "Mar 05, 2026",
-      ref: "ISW_REF_9F1C5E",
-    },
-  ];
+  const { data: orders = [], isLoading: ordersLoading } = useQuery({
+    queryKey: ["admin-all-orders"],
+    queryFn: () => orderService.getAllOrders(),
+  });
+
+  const { data: generalStats, isLoading: statsLoading } = useQuery({
+    queryKey: ["admin-dashboard-general"],
+    queryFn: () => dashboardService.getGeneralStats(),
+  });
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case "success":
+      case "SUCCESS":
         return "bg-[#ECFDF3] text-[#027A48]";
-      case "pending":
+      case "PENDING":
         return "bg-[#FFFAEB] text-[#B54708]";
-      case "failed":
+      case "FAILED":
         return "bg-[#FEF3F2] text-[#B42318]";
       default:
         return "bg-[#F2F4F7] text-[#344054]";
     }
   };
 
-  const filtered =
-    activeTab === "All"
-      ? transactions
-      : transactions.filter((t) => t.status === activeTab.toLowerCase());
+  const filtered = orders
+    .filter((t: any) =>
+      activeTab === "All" ? true : t.paymentStatus === activeTab.toUpperCase(),
+    )
+    .map((t: any) => ({
+      id: t.orderNumber || t.id.split("-")[0],
+      orderId: t.id,
+      user: t.user.fullName,
+      avatar:
+        t.user.avatarUrl ||
+        `https://ui-avatars.com/api/?name=${t.user.fullName}&background=F3F4F6&color=667085`,
+      amount: `₦${Number(t.totalAmount).toLocaleString()}`,
+      status: t.paymentStatus,
+      method: "Paystack",
+      date: dayjs(t.createdAt).format("MMM DD, YYYY"),
+      ref: t.paymentReference || "N/A",
+    }));
 
-  // Revenue chart — monthly
   const revenueData = {
     labels: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
     datasets: [
       {
         label: "Revenue (₦)",
-        data: [280000, 450000, 620000, 1200000, 6534000, 1089000],
+        data: [
+          280000,
+          450000,
+          620000,
+          1200000,
+          6534000,
+          generalStats?.totalRevenue || 0,
+        ],
         backgroundColor: "#1C6206",
         borderRadius: 4,
         barThickness: 36,
@@ -152,29 +126,36 @@ const AdminPayments = () => {
       <div className="space-y-5">
         {/* Payment Stats */}
         <div className="grid grid-cols-4 gap-4">
-          <div className="bg-white px-5 py-4 rounded-xl border border-[#EAECF0]">
+          <div className="bg-white px-5 py-4 rounded-xl border border-[#EAECF0] relative">
             <p className="text-[12px] text-[#667085] mb-0.5">Total revenue</p>
-            <p className="text-[22px] font-semibold text-[#101828]">₦6.53M</p>
-            <p className="text-[11px] text-[#12B76A] mt-0.5">+18% this month</p>
+            <p className="text-[22px] font-semibold text-[#101828]">
+              ₦{generalStats?.totalRevenue?.toLocaleString() ?? "0"}
+            </p>
+            <p className="text-[11px] text-[#12B76A] mt-0.5">
+              Live from Paystack
+            </p>
+            {statsLoading && (
+              <div className="absolute inset-0 bg-white/40 animate-pulse rounded-xl" />
+            )}
           </div>
           <div className="bg-white px-5 py-4 rounded-xl border border-[#EAECF0]">
             <p className="text-[12px] text-[#667085] mb-0.5">
               Successful payments
             </p>
             <p className="text-[22px] font-semibold text-[#027A48]">
-              {transactions.filter((t) => t.status === "success").length}
+              {orders.filter((t: any) => t.paymentStatus === "SUCCESS").length}
             </p>
           </div>
           <div className="bg-white px-5 py-4 rounded-xl border border-[#EAECF0]">
             <p className="text-[12px] text-[#667085] mb-0.5">Pending</p>
             <p className="text-[22px] font-semibold text-[#B54708]">
-              {transactions.filter((t) => t.status === "pending").length}
+              {orders.filter((t: any) => t.paymentStatus === "PENDING").length}
             </p>
           </div>
           <div className="bg-white px-5 py-4 rounded-xl border border-[#EAECF0]">
             <p className="text-[12px] text-[#667085] mb-0.5">Failed</p>
             <p className="text-[22px] font-semibold text-[#B42318]">
-              {transactions.filter((t) => t.status === "failed").length}
+              {orders.filter((t: any) => t.paymentStatus === "FAILED").length}
             </p>
           </div>
         </div>
@@ -187,25 +168,8 @@ const AdminPayments = () => {
                 Revenue overview
               </h3>
               <p className="text-[12px] text-[#667085] mt-0.5">
-                Monthly payment volume via Interswitch
+                Monthly payment volume via Paystack
               </p>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#667085"
-                strokeWidth="1.8"
-              >
-                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                <path d="M16 2v4" />
-                <path d="M8 2v4" />
-                <path d="M3 10h18" />
-              </svg>
-              <span className="text-[12px] text-[#667085]">Last 6 months</span>
             </div>
           </div>
           <div className="h-[260px]">
@@ -233,7 +197,7 @@ const AdminPayments = () => {
                   <rect width="20" height="14" x="2" y="5" rx="2" />
                   <path d="M2 10h20" />
                 </svg>
-                Interswitch
+                Paystack
               </span>
             </div>
             <div className="flex items-center gap-3">
@@ -256,7 +220,7 @@ const AdminPayments = () => {
               <tr className="border-b border-[#EAECF0] text-[11px] text-[#667085]">
                 <th className="px-5 py-2.5 font-medium">Transaction</th>
                 <th className="px-5 py-2.5 font-medium">Customer</th>
-                <th className="px-5 py-2.5 font-medium">Order</th>
+                <th className="px-5 py-2.5 font-medium">Order ID</th>
                 <th className="px-5 py-2.5 font-medium">Method</th>
                 <th className="px-5 py-2.5 font-medium">Amount</th>
                 <th className="px-5 py-2.5 font-medium">Status</th>
@@ -264,64 +228,72 @@ const AdminPayments = () => {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((t) => (
-                <tr
-                  key={t.id}
-                  className="border-b border-[#F2F4F7] last:border-0 hover:bg-[#F9FAFB] transition-colors"
-                >
-                  <td className="px-5 py-3">
-                    <p className="text-[13px] font-medium text-[#101828]">
-                      {t.id}
+              {ordersLoading ? (
+                <tr>
+                  <td colSpan={7} className="px-5 py-10 text-center">
+                    <div className="inline-block w-6 h-6 border-2 border-[#1C6206] border-t-transparent rounded-full animate-spin" />
+                    <p className="mt-2 text-[12px] text-[#667085]">
+                      Loading transactions...
                     </p>
-                    <p className="text-[10px] text-[#98A2B3]">Ref: {t.ref}</p>
-                  </td>
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={t.avatar}
-                        className="w-7 h-7 rounded-full"
-                        alt=""
-                      />
-                      <span className="text-[13px] text-[#344054]">
-                        {t.user}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-5 py-3 text-[12px] text-[#1C6206] font-medium">
-                    {t.orderId}
-                  </td>
-                  <td className="px-5 py-3 text-[12px] text-[#667085]">
-                    {t.method}
-                  </td>
-                  <td className="px-5 py-3 text-[13px] font-medium text-[#101828]">
-                    {t.amount}
-                  </td>
-                  <td className="px-5 py-3">
-                    <span
-                      className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full capitalize ${getStatusStyle(t.status)}`}
-                    >
-                      {t.status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-[12px] text-[#667085]">
-                    {t.date}
                   </td>
                 </tr>
-              ))}
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-5 py-10 text-center text-[#667085] text-[12px]"
+                  >
+                    No transactions found
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((t) => (
+                  <tr
+                    key={t.orderId}
+                    className="border-b border-[#F2F4F7] last:border-0 hover:bg-[#F9FAFB] transition-colors"
+                  >
+                    <td className="px-5 py-3">
+                      <p className="text-[13px] font-medium text-[#101828]">
+                        #{t.id}
+                      </p>
+                      <p className="text-[10px] text-[#98A2B3]">Ref: {t.ref}</p>
+                    </td>
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={t.avatar}
+                          className="w-7 h-7 rounded-full border border-gray-100"
+                          alt=""
+                        />
+                        <span className="text-[13px] text-[#344054]">
+                          {t.user}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3 text-[11px] text-[#667085] font-mono">
+                      {t.orderId.substring(0, 8)}...
+                    </td>
+                    <td className="px-5 py-3 text-[12px] text-[#667085]">
+                      {t.method}
+                    </td>
+                    <td className="px-5 py-3 text-[13px] font-medium text-[#101828]">
+                      {t.amount}
+                    </td>
+                    <td className="px-5 py-3">
+                      <span
+                        className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full capitalize ${getStatusStyle(t.status)}`}
+                      >
+                        {t.status.toLowerCase()}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3 text-[12px] text-[#667085]">
+                      {t.date}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
-
-          <div className="px-5 py-3 border-t border-[#EAECF0] flex justify-between items-center text-[12px] text-[#667085]">
-            <p>Showing {filtered.length} transactions</p>
-            <div className="flex gap-1">
-              <button className="px-3 py-1 border border-[#D0D5DD] rounded-md hover:bg-[#F9FAFB] text-[#344054] font-medium">
-                Previous
-              </button>
-              <button className="px-3 py-1 border border-[#D0D5DD] rounded-md hover:bg-[#F9FAFB] text-[#344054] font-medium">
-                Next
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </AdminLayout>

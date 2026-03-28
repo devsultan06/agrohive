@@ -14,7 +14,7 @@ const AdminOrders = () => {
     try {
       setLoading(true);
       const res = await orderService.getAllOrders();
-      setOrders(res.data || []);
+      setOrders(res || []);
     } catch (err) {
       console.error("Failed to fetch orders:", err);
       toast.error("Failed to fetch orders");

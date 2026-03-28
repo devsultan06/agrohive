@@ -2,11 +2,18 @@ import { http } from "../../lib/fetch";
 import type { OrderStatus } from "../../types/api";
 
 export const orderService = {
-  getAllOrders: (params?: { status?: OrderStatus; search?: string }) =>
-    http.get<any[]>("/orders/admin/all", params),
+  getAllOrders: async (params?: { status?: OrderStatus; search?: string }) => {
+    const res = await http.get<any[]>("/orders/admin/all", params);
+    return res.data;
+  },
 
-  getOrderDetails: (id: string) => http.get<any>(`/orders/${id}`),
+  getOrderDetails: async (id: string) => {
+    const res = await http.get<any>(`/orders/${id}`);
+    return res.data;
+  },
 
-  updateOrderStatus: (id: string, status: OrderStatus) =>
-    http.patch<any>(`/orders/admin/${id}/status`, { status }),
+  updateOrderStatus: async (id: string, status: OrderStatus) => {
+    const res = await http.patch<any>(`/orders/admin/${id}/status`, { status });
+    return res.data;
+  },
 };

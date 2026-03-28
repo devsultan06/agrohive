@@ -57,6 +57,21 @@ export class ProductsController {
     return this.productsService.findAll({ category, search, limit, offset });
   }
 
+  @Get('admin/stats/categories')
+  @UseInterceptors(CacheInterceptor)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER)
+  async getCategoriesStats() {
+    return this.productsService.getProductsByCategory();
+  }
+
+  @Get('admin/stats/inventory')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER)
+  async getInventoryStats() {
+    return this.productsService.getInventoryStats();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
@@ -89,13 +104,5 @@ export class ProductsController {
   )
   async remove(@Param('id') id: string) {
     return this.productsService.remove(id);
-  }
-
-  @Get('admin/stats/categories')
-  @UseInterceptors(CacheInterceptor)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER)
-  async getCategoriesStats() {
-    return this.productsService.getProductsByCategory();
   }
 }

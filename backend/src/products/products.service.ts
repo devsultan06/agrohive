@@ -139,4 +139,35 @@ export class ProductsService {
         total > 0 ? Number(((cat._count / total) * 100).toFixed(1)) : 0,
     }));
   }
+
+  async getInventoryStats() {
+    this.logger.log('Calculating live inventory highlights');
+    const products = await this.prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        stock: true,
+        orderItems: {
+          where: {
+            order: {
+              paymentStatus: 'SUCCESS',
+            },
+          },
+          select: {
+            quantity: true,
+          },
+        },
+      },
+      take: 6,
+      orderBy: {
+        stock: 'desc',
+      },
+    });
+
+    return products.map((p) => ({
+      name: p.name,
+      stock: p.stock,
+      sold: p.orderItems.reduce((acc, item) => acc + item.quantity, 0),
+    }));
+  }
 }

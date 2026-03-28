@@ -14,12 +14,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useCartStore } from "../../store/useCartStore";
 import { useAddressStore } from "../../store/useAddressStore";
+import { useUserProfile } from "../../hooks/useUserProfile";
 import { orderService } from "../../services/order/order.service";
 
 export default function CartScreen() {
   const navigation = useNavigation<any>();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { selectedAddress } = useAddressStore();
+  const { data: user } = useUserProfile();
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -242,7 +244,7 @@ export default function CartScreen() {
                   }
                   try {
                     setLoading(true);
-                    await orderService.createOrder({
+                    const orderRes = await orderService.createOrder({
                       items: items.map((i) => ({
                         productId: i.id,
                         quantity: i.quantity,
@@ -250,8 +252,17 @@ export default function CartScreen() {
                       shippingAddress: selectedAddress.address,
                       shippingPhone: selectedAddress.phone,
                     });
+
+                    const order = orderRes.data;
+
+                    // Navigate to Payment screen
+                    // We'll pass the order details for Paystack
+                    navigation.navigate("Payment", {
+                      order,
+                      email: user?.email, // Assuming user is available from useAuthStore
+                    });
+
                     clearCart();
-                    navigation.navigate("Orders");
                   } catch (err: any) {
                     alert(err.message || "Failed to place order");
                   } finally {

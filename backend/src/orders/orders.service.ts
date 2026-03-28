@@ -7,6 +7,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { OrderStatus } from '@prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
+import { PaymentService } from '../payment/payment.service';
 
 @Injectable()
 export class OrdersService {
@@ -15,6 +16,7 @@ export class OrdersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly paymentService: PaymentService,
   ) {}
 
   async create(
@@ -54,7 +56,9 @@ export class OrdersService {
         price: product.price,
       });
 
-      // Update stock
+      // We only update stock AFTER successful payment in a real system,
+      // but for simplicity we can do it here or handle it in the webhook.
+      // Let's keep it simple for now and update it during order creation.
       await this.prisma.product.update({
         where: { id: item.productId },
         data: { stock: product.stock - item.quantity },
@@ -146,11 +150,7 @@ export class OrdersService {
   }
 
   async updateStatus(id: string, status: OrderStatus) {
-    const order = await this.prisma.order.findUnique({
-      where: { id },
-      include: { user: true },
-    });
-    if (!order) throw new NotFoundException('Order not found');
+    const order = await this.findOne(id);
 
     const updatedOrder = await this.prisma.order.update({
       where: { id },
@@ -163,7 +163,6 @@ export class OrdersService {
           },
         },
       },
-      include: { statusHistory: true },
     });
 
     // Notify user of status change
@@ -194,5 +193,81 @@ export class OrdersService {
 
     this.logger.log(`Order ${id} status updated to ${status}`);
     return updatedOrder;
+  }
+
+  async initiatePayment(orderId: string, userId: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId, userId },
+      include: { user: true },
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
+    if (order.paymentStatus === 'SUCCESS') {
+      throw new BadRequestException('Order already paid');
+    }
+
+    const reference = `PAY-${order.orderNumber}-${Date.now()}`;
+
+    const paymentData = await this.paymentService.initializeTransaction(
+      order.user.email,
+      order.totalAmount,
+      reference,
+    );
+
+    await this.prisma.order.update({
+      where: { id: orderId },
+      data: { paymentReference: reference },
+    });
+
+    return paymentData; // returns authorization_url
+  }
+
+  async findAllAdmin() {
+    this.logger.log('Fetching all orders for admin');
+    return this.prisma.order.findMany({
+      include: {
+        user: { select: { fullName: true, email: true, avatarUrl: true } },
+        items: {
+          include: { product: { select: { name: true, imageUrl: true } } },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async handlePaymentWebhook(payload: any) {
+    const { reference } = payload.data;
+
+    if (payload.event === 'charge.success') {
+      const order = await this.prisma.order.findUnique({
+        where: { paymentReference: reference },
+      });
+
+      if (order && order.paymentStatus !== 'SUCCESS') {
+        await this.prisma.order.update({
+          where: { id: order.id },
+          data: {
+            paymentStatus: 'SUCCESS',
+            status: OrderStatus.PROCESSING,
+            statusHistory: {
+              create: {
+                status: OrderStatus.PROCESSING,
+                userId: order.userId,
+              },
+            },
+          },
+        });
+
+        // Notify user
+        await this.notifications.create(order.userId, {
+          type: 'ORDER_UPDATE',
+          title: 'Payment Confirmed! ✅',
+          message: `We've received payment for order ${order.orderNumber}. Processing now.`,
+          metadata: { orderId: order.id, status: 'PROCESSING' },
+        });
+      }
+    }
+
+    return { status: 'success' };
   }
 }

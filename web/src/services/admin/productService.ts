@@ -80,4 +80,11 @@ export const productService = {
     const response = await http.del(`/products/${id}`);
     return response.data;
   },
+
+  async getInventoryStats() {
+    const response = await http.get<
+      { name: string; stock: number; sold: number }[]
+    >("/products/admin/stats/inventory");
+    return response.data;
+  },
 };

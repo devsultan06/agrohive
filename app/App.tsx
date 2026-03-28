@@ -28,10 +28,12 @@ import ChatScreen from "./screens/main/ChatScreen";
 import MessageListScreen from "./screens/main/MessageListScreen";
 import EditProfileScreen from "./screens/main/EditProfileScreen";
 import OrderDetailsScreen from "./screens/main/OrderDetailsScreen";
+import PaymentScreen from "./screens/main/PaymentScreen";
 import "./global.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "./lib/toastConfig";
+import { PaystackProvider } from "react-native-paystack-webview";
 
 const Stack = createStackNavigator();
 
@@ -61,131 +63,138 @@ export default function App() {
   }
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
-          <Stack.Screen name="Splash" options={{ headerShown: false }}>
-            {(props) => (
-              <SplashScreen {...props} onLayoutRootView={onLayoutRootView} />
-            )}
-          </Stack.Screen>
+      <PaystackProvider publicKey="pk_test_f051bf90cad93f06c5c3d9dfa013b5cd21f003a1">
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Splash">
+            <Stack.Screen name="Splash" options={{ headerShown: false }}>
+              {(props) => (
+                <SplashScreen {...props} onLayoutRootView={onLayoutRootView} />
+              )}
+            </Stack.Screen>
 
-          <Stack.Screen
-            name="Auth"
-            component={AuthNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Main"
-            component={MainNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Favorite"
-            component={FavoriteScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Notifications"
-            component={NotificationsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="NotificationSettings"
-            component={NotificationSettingsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="FAQ"
-            component={FAQScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ChangePassword"
-            component={ChangePasswordScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PrivacyPolicy"
-            component={PrivacyPolicyScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TermsOfService"
-            component={TermsOfServiceScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Orders"
-            component={OrdersScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ProductDetail"
-            component={ProductDetailScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ShippingAddresses"
-            component={ShippingAddressesScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AddAddress"
-            component={AddAddressScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CreatePost"
-            component={CreatePostScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PostDetails"
-            component={PostDetailsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="SavedPosts"
-            component={SavedPostsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="UserPosts"
-            component={UserPostsScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Weather"
-            component={WeatherScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PublicProfile"
-            component={PublicProfileScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Chat"
-            component={ChatScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MessageList"
-            component={MessageListScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="EditProfile"
-            component={EditProfileScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="OrderDetails"
-            component={OrderDetailsScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen
+              name="Auth"
+              component={AuthNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Main"
+              component={MainNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Favorite"
+              component={FavoriteScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Notifications"
+              component={NotificationsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NotificationSettings"
+              component={NotificationSettingsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="FAQ"
+              component={FAQScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChangePassword"
+              component={ChangePasswordScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PrivacyPolicy"
+              component={PrivacyPolicyScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TermsOfService"
+              component={TermsOfServiceScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Orders"
+              component={OrdersScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ProductDetail"
+              component={ProductDetailScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ShippingAddresses"
+              component={ShippingAddressesScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AddAddress"
+              component={AddAddressScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CreatePost"
+              component={CreatePostScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PostDetails"
+              component={PostDetailsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SavedPosts"
+              component={SavedPostsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UserPosts"
+              component={UserPostsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Weather"
+              component={WeatherScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PublicProfile"
+              component={PublicProfileScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Chat"
+              component={ChatScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MessageList"
+              component={MessageListScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditProfile"
+              component={EditProfileScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OrderDetails"
+              component={OrderDetailsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Payment"
+              component={PaymentScreen}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaystackProvider>
       <Toast config={toastConfig} topOffset={60} />
     </QueryClientProvider>
   );
