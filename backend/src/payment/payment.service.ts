@@ -17,6 +17,7 @@ export class PaymentService {
     email: string,
     amount: number,
     reference: string,
+    metadata?: any,
   ) {
     try {
       const response = await axios.post(
@@ -26,6 +27,7 @@ export class PaymentService {
           amount: Math.round(amount * 100), // convert to kobo
           reference,
           callback_url: this.configService.get('paystack.callbackUrl'),
+          metadata,
         },
         {
           headers: {

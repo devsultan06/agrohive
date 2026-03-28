@@ -98,6 +98,10 @@ export class UsersService {
         }),
       ]);
 
+    this.logger.log(
+      `General stats: users=${totalUsers}, posts=${totalPosts}, products=${activeListings}, orders=${ordersData._count}, revenue=${ordersData._sum?.totalAmount}`,
+    );
+
     return {
       totalUsers,
       totalPosts,

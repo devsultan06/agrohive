@@ -208,10 +208,32 @@ export class OrdersService {
 
     const reference = `PAY-${order.orderNumber}-${Date.now()}`;
 
+    const metadata = {
+      orderNumber: order.orderNumber,
+      orderId: order.id,
+      shipping: {
+        address: order.shippingAddress,
+        phone: order.shippingPhone,
+      },
+      custom_fields: [
+        {
+          display_name: 'Shipping Address',
+          variable_name: 'shipping_address',
+          value: order.shippingAddress || 'N/A',
+        },
+        {
+          display_name: 'Phone Number',
+          variable_name: 'phone_number',
+          value: order.shippingPhone || 'N/A',
+        },
+      ],
+    };
+
     const paymentData = await this.paymentService.initializeTransaction(
       order.user.email,
       order.totalAmount,
       reference,
+      metadata,
     );
 
     await this.prisma.order.update({

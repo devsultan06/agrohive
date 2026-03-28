@@ -3,6 +3,7 @@ import { View, ActivityIndicator, Text } from "react-native";
 import { usePaystack } from "react-native-paystack-webview";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { orderService } from "../../services/order/order.service";
 
 export default function PaymentScreen() {
   const navigation = useNavigation<any>();
@@ -16,24 +17,38 @@ export default function PaymentScreen() {
     if (!order || initiated.current) return;
     initiated.current = true;
 
-    // Auto-start checkout
-    popup.checkout({
-      email: email || "user@example.com",
-      amount: Number(order.totalAmount),
-      reference: `PAY-${order.orderNumber}-${Date.now()}`,
-      onSuccess: (res: any) => {
-        console.log("Payment success:", res);
-        navigation.navigate("Orders");
-      },
-      onCancel: () => {
-        console.log("Payment cancelled");
+    const startPayment = async () => {
+      try {
+        // Sync with backend to get a valid payment reference
+        const response = await orderService.initiatePayment(order.id);
+        const { reference } = response.data;
+
+        // Start Paystack checkout with backend-generated reference
+        popup.checkout({
+          email: email || "user@example.com",
+          amount: Number(order.totalAmount),
+          reference: reference,
+          onSuccess: (res: any) => {
+            console.log("Payment success:", res);
+            navigation.replace("Orders"); // Use replace to avoid going back to PaymentScreen
+          },
+          onCancel: () => {
+            console.log("Payment cancelled");
+            navigation.goBack();
+          },
+          onError: (err: any) => {
+            console.error("Payment error:", err);
+            navigation.goBack();
+          },
+        });
+      } catch (error) {
+        console.error("Failed to initiate payment:", error);
+        alert("Could not start payment. Please try again.");
         navigation.goBack();
-      },
-      onError: (err: any) => {
-        console.error("Payment error:", err);
-        navigation.goBack();
-      },
-    });
+      }
+    };
+
+    startPayment();
   }, [order, email, popup, navigation]);
 
   return (
