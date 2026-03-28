@@ -26,3 +26,17 @@ export interface CustomError extends Error {
   status?: number;
   code?: string;
 }
+export type OrderStatus =
+  | "PLACED"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED";
+
+export const ORDER_STATUSES: OrderStatus[] = [
+  "PLACED",
+  "PROCESSING",
+  "SHIPPED",
+  "DELIVERED",
+  "CANCELLED",
+];

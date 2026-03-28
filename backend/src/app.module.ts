@@ -19,6 +19,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { PostsModule } from './posts/posts.module';
 import { GuidesModule } from './guides/guides.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { GuidesModule } from './guides/guides.module';
     FirebaseModule,
     PostsModule,
     GuidesModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [

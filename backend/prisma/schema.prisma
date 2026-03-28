@@ -14,6 +14,14 @@ enum UserRole {
   SUPPORT
 }
 
+enum OrderStatus {
+  PLACED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
@@ -41,6 +49,8 @@ model User {
   likes        Like[]
   comments     Comment[]
   bookmarks    Bookmark[]
+  orders       Order[]
+  orderHistory OrderHistory[]
 
   @@index([fullName, email, username])
 }
@@ -91,6 +101,7 @@ model Product {
   updatedAt   DateTime @updatedAt
   reviews     Review[]
   favoritedBy Favorite[]
+  orderItems  OrderItem[]
 
   @@index([category, name])
 }
@@ -176,4 +187,45 @@ model Bookmark {
   createdAt DateTime @default(now())
 
   @@unique([userId, postId])
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  orderNumber String      @unique // e.g., ORD-2024-001
+  status      OrderStatus @default(PLACED)
+  totalAmount Float
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  items          OrderItem[]
+  statusHistory  OrderHistory[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([orderNumber])
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  quantity  Int
+  price     Float
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderHistory {
+  id        String      @id @default(uuid())
+  status    OrderStatus
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+
+  @@index([orderId])
 }
