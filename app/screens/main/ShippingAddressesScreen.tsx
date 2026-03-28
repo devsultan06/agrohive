@@ -2,16 +2,30 @@ import React from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useAddressStore, Address } from "../../store/useAddressStore";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { useAddressStore } from "../../store/useAddressStore";
+import { Address } from "../../services/address/address.service";
 
 export default function ShippingAddressesScreen() {
   const navigation = useNavigation<any>();
-  const { addresses, selectedAddress, selectAddress, deleteAddress } =
-    useAddressStore();
+  const isFocused = useIsFocused();
+  const {
+    addresses,
+    selectedAddress,
+    selectAddress,
+    deleteAddress,
+    syncAddresses,
+    loading,
+  } = useAddressStore();
 
-  const handleSelect = (address: Address) => {
-    selectAddress(address);
+  React.useEffect(() => {
+    if (isFocused) {
+      syncAddresses();
+    }
+  }, [isFocused]);
+
+  const handleSelect = async (address: Address) => {
+    await selectAddress(address);
     // If user came from cart, nav back to cart might be nice
     // but for now just selecting is enough.
     // If we want to automatically go back after selection:

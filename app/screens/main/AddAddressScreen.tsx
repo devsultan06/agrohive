@@ -13,7 +13,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Toast } from "../../components/Toast";
-import { useAddressStore, Address } from "../../store/useAddressStore";
+import { useAddressStore } from "../../store/useAddressStore";
+import { Address } from "../../services/address/address.service";
 
 export default function AddAddressScreen() {
   const navigation = useNavigation<any>();
@@ -34,15 +35,14 @@ export default function AddAddressScreen() {
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!fullName || !phone || !address) {
       setToastMessage("Please fill in all required fields");
       setToastVisible(true);
       return;
     }
 
-    const addressData: Address = {
-      id: editingAddress?.id || Math.random().toString(36).substr(2, 9),
+    const addressData: Partial<Address> = {
       label,
       fullName,
       phone,
@@ -50,19 +50,23 @@ export default function AddAddressScreen() {
       isDefault,
     };
 
-    if (editingAddress) {
-      updateAddress(addressData);
-      setToastMessage("Address updated successfully");
-    } else {
-      addAddress(addressData);
-      setToastMessage("Address added successfully");
+    try {
+      if (editingAddress) {
+        await updateAddress(editingAddress.id, addressData);
+        setToastMessage("Address updated successfully");
+      } else {
+        await addAddress(addressData);
+        setToastMessage("Address added successfully");
+      }
+
+      setToastVisible(true);
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1500);
+    } catch (err) {
+      setToastMessage("Failed to save address. Please try again.");
+      setToastVisible(true);
     }
-
-    setToastVisible(true);
-
-    setTimeout(() => {
-      navigation.goBack();
-    }, 1500);
   };
 
   return (

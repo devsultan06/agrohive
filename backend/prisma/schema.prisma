@@ -51,8 +51,24 @@ model User {
   bookmarks    Bookmark[]
   orders       Order[]
   orderHistory OrderHistory[]
+  addresses    UserAddress[]
 
   @@index([fullName, email, username])
+}
+
+model UserAddress {
+  id        String   @id @default(uuid())
+  label     String   // Home, Office, etc.
+  fullName  String
+  address   String
+  phone     String
+  isDefault Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 enum NotificationType {
