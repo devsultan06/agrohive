@@ -7,19 +7,22 @@ import {
   FlatList,
   Modal,
   Share,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useCartStore } from "../../store/useCartStore";
 import { useAddressStore } from "../../store/useAddressStore";
+import { orderService } from "../../services/order/order.service";
 
 export default function CartScreen() {
   const navigation = useNavigation<any>();
-  const { items, removeItem, updateQuantity } = useCartStore();
+  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { selectedAddress } = useAddressStore();
   const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
 
   const handleRemoveItem = (id: string) => {
     setItemToDelete(id);
@@ -232,10 +235,39 @@ export default function CartScreen() {
                 </Text>
               </View>
 
-              <TouchableOpacity className="bg-[#1C6206] h-[50px] rounded-full justify-center items-center">
-                <Text className="text-white font-bold text-[16px] font-poppins-bold">
-                  Checkout
-                </Text>
+              <TouchableOpacity
+                onPress={async () => {
+                  if (!selectedAddress) {
+                    return alert("Please select a shipping address");
+                  }
+                  try {
+                    setLoading(true);
+                    await orderService.createOrder({
+                      items: items.map((i) => ({
+                        productId: i.id,
+                        quantity: i.quantity,
+                      })),
+                      shippingAddress: selectedAddress.address,
+                      shippingPhone: selectedAddress.phone,
+                    });
+                    clearCart();
+                    navigation.navigate("Orders");
+                  } catch (err: any) {
+                    alert(err.message || "Failed to place order");
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className={`bg-[#1C6206] h-[50px] rounded-full justify-center items-center ${loading ? "opacity-70" : ""}`}
+              >
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text className="text-white font-bold text-[16px] font-poppins-bold">
+                    Checkout
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           </>

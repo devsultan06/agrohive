@@ -20,6 +20,8 @@ export class OrdersService {
   async create(
     userId: string,
     items: { productId: string; quantity: number }[],
+    shippingAddress?: string,
+    shippingPhone?: string,
   ) {
     this.logger.log(`Creating order for user: ${userId}`);
 
@@ -51,6 +53,12 @@ export class OrdersService {
         quantity: item.quantity,
         price: product.price,
       });
+
+      // Update stock
+      await this.prisma.product.update({
+        where: { id: item.productId },
+        data: { stock: product.stock - item.quantity },
+      });
     }
 
     const orderNumber = `ORD-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -61,6 +69,8 @@ export class OrdersService {
         userId,
         totalAmount,
         status: OrderStatus.PLACED,
+        shippingAddress,
+        shippingPhone,
         items: {
           create: orderItemsData,
         },

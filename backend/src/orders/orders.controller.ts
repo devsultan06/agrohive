@@ -25,8 +25,15 @@ export class OrdersController {
   create(
     @GetCurrentUserId() userId: string,
     @Body('items') items: { productId: string; quantity: number }[],
+    @Body('shippingAddress') shippingAddress?: string,
+    @Body('shippingPhone') shippingPhone?: string,
   ) {
-    return this.ordersService.create(userId, items);
+    return this.ordersService.create(
+      userId,
+      items,
+      shippingAddress,
+      shippingPhone,
+    );
   }
 
   @Get('me')
