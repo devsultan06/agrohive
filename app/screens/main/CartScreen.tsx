@@ -79,7 +79,13 @@ export default function CartScreen() {
       }}
     >
       <Image
-        source={item.image}
+        source={
+          item.imageUrl
+            ? { uri: item.imageUrl }
+            : item.image
+              ? item.image
+              : require("../../assets/rotavator.png")
+        }
         className="w-[80px] h-[80px] rounded-xl bg-gray-100"
         resizeMode="cover"
       />

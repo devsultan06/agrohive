@@ -19,43 +19,49 @@ const getStatusConfig = (status: string) => {
     case "delivered":
       return {
         label: "Delivered",
-        bgColor: "bg-green-100",
-        textColor: "text-[#1C6206]",
+        bgColor: "bg-green-50",
+        textColor: "text-[#027A48]",
+        hex: "#027A48",
         icon: "checkmark-circle",
       };
     case "shipped":
       return {
         label: "Shipped",
-        bgColor: "bg-blue-100",
-        textColor: "text-blue-600",
+        bgColor: "bg-blue-50",
+        textColor: "text-[#175CD3]",
+        hex: "#175CD3",
         icon: "airplane",
       };
     case "processing":
       return {
         label: "Processing",
-        bgColor: "bg-orange-100",
-        textColor: "text-orange-600",
+        bgColor: "bg-orange-50",
+        textColor: "text-[#B54708]",
+        hex: "#B54708",
         icon: "time",
       };
     case "placed":
       return {
         label: "Placed",
-        bgColor: "bg-gray-100",
-        textColor: "text-gray-600",
+        bgColor: "bg-gray-50",
+        textColor: "text-[#344054]",
+        hex: "#344054",
         icon: "cart-outline",
       };
     case "cancelled":
       return {
         label: "Cancelled",
-        bgColor: "bg-red-100",
-        textColor: "text-red-600",
+        bgColor: "bg-red-50",
+        textColor: "text-[#B42318]",
+        hex: "#B42318",
         icon: "close-circle",
       };
     default:
       return {
         label: status,
-        bgColor: "bg-gray-100",
-        textColor: "text-gray-600",
+        bgColor: "bg-gray-50",
+        textColor: "text-[#344054]",
+        hex: "#344054",
         icon: "help-circle",
       };
   }
@@ -104,13 +110,12 @@ export default function OrdersScreen() {
           >
             <Ionicons
               name={statusConfig.icon as any}
-              size={14}
-              color={
-                statusConfig.textColor === "text-[#1C6206]" ? "#1C6206" : "#667"
-              } // Fallback for color replacement
+              size={13}
+              color={statusConfig.hex}
             />
             <Text
-              className={`${statusConfig.textColor} text-[12px] font-bold ml-1 font-poppins`}
+              className={`${statusConfig.textColor} text-[11px] font-bold ml-1.5 font-poppins leading-[14px]`}
+              style={{ color: statusConfig.hex, textAlignVertical: "center" }}
             >
               {statusConfig.label}
             </Text>
