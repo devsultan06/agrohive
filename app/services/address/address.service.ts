@@ -10,11 +10,11 @@ export interface Address {
 }
 
 export const addressService = {
-  getAddresses: () => http.get<Address[]>("/addresses"),
+  getAddresses: () => http.get<Address[]>("/api/v1/addresses"),
   createAddress: (data: Partial<Address>) =>
-    http.post<Address>("/addresses", data),
+    http.post<Address>("/api/v1/addresses", data),
   updateAddress: (id: string, data: Partial<Address>) =>
-    http.patch<Address>(`/addresses/${id}`, data),
-  deleteAddress: (id: string) => http.del(`/addresses/${id}`),
-  setDefault: (id: string) => http.patch(`/addresses/${id}/default`),
+    http.patch<Address>(`/api/v1/addresses/${id}`, data),
+  deleteAddress: (id: string) => http.del(`/api/v1/addresses/${id}`),
+  setDefault: (id: string) => http.patch(`/api/v1/addresses/${id}/default`),
 };
