@@ -86,13 +86,20 @@ export class ProductsService {
     return product;
   }
 
-  async findAll(query?: { category?: string; search?: string }) {
-    const { category, search } = query || {};
+  async findAll(query?: {
+    category?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const { category, search, limit = 10, offset = 0 } = query || {};
     this.logger.log(
       `Fetching products — category: ${category || 'all'}, search: ${search || 'none'}`,
     );
 
     return this.prisma.product.findMany({
+      take: Number(limit),
+      skip: Number(offset),
       where: {
         ...(category && category !== 'All products' ? { category } : {}),
         ...(search

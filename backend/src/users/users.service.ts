@@ -23,13 +23,20 @@ export class UsersService {
     private readonly notifications: NotificationsService,
   ) {}
 
-  async findAll(query?: { verified?: string; search?: string }) {
-    const { verified, search } = query || {};
+  async findAll(query?: {
+    verified?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const { verified, search, limit = 10, offset = 0 } = query || {};
     this.logger.log(
       `Admin feting users — verified: ${verified || 'all'}, search: ${search || 'none'}`,
     );
 
     return this.prisma.user.findMany({
+      take: Number(limit),
+      skip: Number(offset),
       where: {
         role: UserRole.USER,
         ...(verified === 'true'

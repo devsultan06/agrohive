@@ -252,6 +252,14 @@ export class AuthService {
     this.logger.log(`Login attempt for: ${dto.email}`);
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        isVerified: true,
+        role: true,
+        fullName: true,
+      },
     });
 
     if (!user) {

@@ -10,6 +10,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -46,11 +47,14 @@ export class ProductsController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
   ) {
-    return this.productsService.findAll({ category, search });
+    return this.productsService.findAll({ category, search, limit, offset });
   }
 
   @Get(':id')
@@ -88,6 +92,7 @@ export class ProductsController {
   }
 
   @Get('admin/stats/categories')
+  @UseInterceptors(CacheInterceptor)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.MANAGER)
   async getCategoriesStats() {
