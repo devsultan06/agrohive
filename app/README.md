@@ -5,8 +5,10 @@ The mobile application for the AgroHive platform, built with **Expo** (React Nat
 ## 🚀 Features
 
 - **Marketplace:** Browse and purchase high-quality farming equipment.
+- **Paystack Payment:** Full payment integration with backend synchronization.
 - **AgroConnect:** Social platform for sharing farming updates and knowledge.
 - **Weather Tracker:** Real-time weather data and alerts for farmers.
+- **Dynamic Farming Tools:** Database-backed video tutorials for modern farming.
 - **Messaging:** Direct chat with experts and sellers.
 - **Order Tracking:** Dynamic timelines for your purchases.
 - **Notifications:** Rich notification system for likes, comments, and alerts.
@@ -31,4 +33,3 @@ The mobile application for the AgroHive platform, built with **Expo** (React Nat
    ```bash
    npx expo start
    ```
-

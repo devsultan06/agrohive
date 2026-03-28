@@ -6,6 +6,8 @@ export interface DashboardStats {
   activeListings: number;
   totalOrders: number;
   totalRevenue: number;
+  monthlyRevenue: number[];
+  monthlyLabels: string[];
 }
 
 export interface CategoryStat {

@@ -98,8 +98,65 @@ export class UsersService {
         }),
       ]);
 
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
+    const monthlyData = await this.prisma.order.findMany({
+      where: {
+        paymentStatus: 'SUCCESS',
+        createdAt: { gte: sixMonthsAgo },
+      },
+      select: {
+        createdAt: true,
+        totalAmount: true,
+      },
+    });
+
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    const last6Months: {
+      name: string;
+      month: number;
+      year: number;
+      total: number;
+    }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      last6Months.push({
+        name: monthNames[d.getMonth()],
+        month: d.getMonth(),
+        year: d.getFullYear(),
+        total: 0,
+      });
+    }
+
+    monthlyData.forEach((record) => {
+      const date = new Date(record.createdAt);
+      const m = date.getMonth();
+      const y = date.getFullYear();
+      const match = last6Months.find((lm) => lm.month === m && lm.year === y);
+      if (match) {
+        match.total += Number(record.totalAmount) || 0;
+      }
+    });
+
     this.logger.log(
-      `General stats: users=${totalUsers}, posts=${totalPosts}, products=${activeListings}, orders=${ordersData._count}, revenue=${ordersData._sum?.totalAmount}`,
+      `General stats: users=${totalUsers}, orders=${ordersData._count}, revenue=${ordersData._sum?.totalAmount}`,
     );
 
     return {
@@ -108,6 +165,8 @@ export class UsersService {
       activeListings,
       totalOrders: ordersData._count ?? 0,
       totalRevenue: Number(ordersData._sum?.totalAmount) || 0,
+      monthlyRevenue: last6Months.map((m) => m.total),
+      monthlyLabels: last6Months.map((m) => m.name),
     };
   }
 

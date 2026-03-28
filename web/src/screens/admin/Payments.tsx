@@ -69,18 +69,18 @@ const AdminPayments = () => {
     }));
 
   const revenueData = {
-    labels: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
+    labels: generalStats?.monthlyLabels || [
+      "Oct",
+      "Nov",
+      "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+    ],
     datasets: [
       {
         label: "Revenue (₦)",
-        data: [
-          280000,
-          450000,
-          620000,
-          1200000,
-          6534000,
-          generalStats?.totalRevenue || 0,
-        ],
+        data: generalStats?.monthlyRevenue || [0, 0, 0, 0, 0, 0],
         backgroundColor: "#1C6206",
         borderRadius: 4,
         barThickness: 36,

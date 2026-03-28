@@ -5,11 +5,13 @@ The web-based dashboard and landing page for the AgroHive platform.
 ## 🚀 Features
 
 - **Admin Dashboard:** Full management suite for users, orders, products, and reviews.
+- **Advanced Analytics:** Real-time monthly revenue trends and inventory monitoring.
+- **Detailed Order Management:** Explore comprehensive order details, items, and customer info in individual detail views.
 - **Content Management:** Tools for creating and editing Farming Guides.
 - **System Notifications:** Interface for sending announcements to the mobile app.
 - **Responsive Design:** Optimized for both admin and public-facing pages.
 - **Modern Animations:** Smooth transitions powered by [Framer Motion](https://www.framer.com/motion/).
-- **Data Visualization:** Real-time charts for business metrics (using Chart.js).
+- **Data Visualization:** Interactive charts for business metrics (using Chart.js).
 
 ## 📂 Structure
 

@@ -42,7 +42,7 @@ const AdminDashboard = () => {
     queryFn: () => dashboardService.getRecentUsers(),
   });
 
-  const { data: inventoryStats = [], isLoading: inventoryLoading } = useQuery({
+  const { data: inventoryStats = [] } = useQuery({
     queryKey: ["admin-dashboard-inventory"],
     queryFn: () => productService.getInventoryStats(),
   });

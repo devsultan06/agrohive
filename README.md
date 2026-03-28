@@ -20,20 +20,6 @@ Farmers across Nigeria face significant challenges in achieving sustainable and 
 - **Enhance Farmers' Access to Technology:** Provide a seamless platform where farmers can easily access modern agricultural tools, including UK-used, locally used, and brand-new equipment at affordable prices.
 - **Knowledge Sharing:** Create a platform for farmers to learn about farming tools and connect with fellow farmers for peer-to-peer support.
 
-### ⚙️ Our Process
-
-1. **Discover:** Understanding farmer needs and market gaps.
-2. **Define:** Strategizing solutions for equipment accessibility.
-3. **Ideate:** Creating features like the marketplace and social connect.
-4. **Design:** Building a premium, user-friendly interface for all platforms.
-
-### 🏢 Business Challenges
-
-- **Limited Tech Adoption:** Overcoming hesitation to embrace modern agricultural tools.
-- **High Cost of Equipment:** Bridging the gap for farmers struggling to afford technology.
-- **Fragmented Marketplace:** Solving the difficulty in connecting buyers with reliable sellers.
-- **Lack of Awareness:** Educating farmers on available UK-used and local-used equipment options.
-
 ---
 
 ## ✨ Key Features
@@ -50,19 +36,20 @@ Farmers across Nigeria face significant challenges in achieving sustainable and 
 - **AgroConnect:** A social feed for farmers to share posts, like, and comment.
 - **Direct Messaging:** Real-time chat interface to connect with experts and sellers.
 - **Profile Management:** Personalized user profiles with bio, follower/following counts, and post history.
-- **Farming Guide:** Curated tutorials and guides for modern farming techniques.
+- **Dynamic Farming Guides:** Database-backed video tutorials for modern farming techniques.
 
 ### 🌦️ Farmer Utilities
 
 - **Weather Tracker:** Geolocation-based weather updates and farming recommendations.
+- **Paystack Payment Integration:** Secure, seamless checkout with real-time webhook synchronization.
 - **Orders Tracking:** Detailed order history with tracking timelines (Processing -> Shipped -> Delivered).
-- **Address Management:** Multiple shipping address support.
+- **Multiple Shipping Support:** Address management with saved locations.
 
-### 🛠️ User Experience
+### 🛠️ Admin & Web
 
-- **Side Menu:** Quick access to all app sections.
-- **Dark Mode Support:** Clean, premium aesthetic with tailored color palettes.
-- **Interactive UI:** Smooth animations powered by React Native Reanimated.
+- **Detail Order Management:** Explore comprehensive order details, items, and customer info.
+- **Advanced Data Visualization:** Real-time monthly revenue trends and business analytics.
+- **Content Moderation:** Full control over users, products, posts, and reviews.
 
 ---
 
@@ -72,27 +59,21 @@ Farmers across Nigeria face significant challenges in achieving sustainable and 
 
 - **Framework:** [Expo](https://expo.dev/) (React Native)
 - **Language:** TypeScript
-- **Styling:** [NativeWind](https://www.nativewind.dev/) (Tailwind CSS)
 - **State Management:** [Zustand](https://github.com/pmndrs/zustand)
-- **Animations:** [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
+- **Payments:** Paystack Webview Integration
 
 ### 🌐 Web Frontend
 
 - **Framework:** [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)
-- **Styling:** Tailwind CSS
+- **Charts:** Chart.js for revenue analytics.
 - **Language:** TypeScript
-- **Admin Dashboard:**
-  - **User & Order Management:** Full control over users, orders, and payments.
-  - **Content Moderation:** Manage marketplace products, community posts, and reviews.
-  - **Farming Guides:** Create and update curated guides for the community.
-  - **Notifications:** Send system-wide announcements and direct notifications.
 
 ### ⚙️ Backend
 
 - **Runtime:** [Node.js](https://nodejs.org/)
 - **Framework:** [NestJS](https://nestjs.com/)
 - **Database:** [PostgreSQL](https://www.postgresql.org/) ([Prisma ORM](https://www.prisma.io/))
-- **Language:** TypeScript
+- **Webhook Integration:** Paystack automated payment status updates.
 
 ---
 
