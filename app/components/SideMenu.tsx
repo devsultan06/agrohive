@@ -20,6 +20,8 @@ import Logo2 from "../assets/logo2.svg";
 
 import { requestLogout } from "../services/auth/logout.service";
 
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 const { width } = Dimensions.get("window");
 
 interface SideMenuProps {
@@ -48,6 +50,7 @@ const MENU_ITEMS = [
 
 export const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
   const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
   const translateX = useSharedValue(-width);
   const opacity = useSharedValue(0);
   const [showModal, setShowModal] = useState(visible);
@@ -134,8 +137,8 @@ export const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
           <ScrollView
             className="flex-1 w-full"
             contentContainerStyle={{
-              paddingTop: 80,
-              paddingBottom: 40,
+              paddingTop: insets.top + 20,
+              paddingBottom: insets.bottom + 20,
               alignItems: "flex-start", // Changed from center to flex-start
             }}
             showsVerticalScrollIndicator={false}
