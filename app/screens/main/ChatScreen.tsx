@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,54 +10,143 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons, Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
-const DUMMY_MESSAGES = [
-  {
-    id: "1",
-    text: "Hello! I saw your recent post about the maize harvest. It looks fantastic! 🌽",
-    sender: "them",
-    time: "09:41 AM",
-  },
-  {
-    id: "2",
-    text: "Thank you! Yes, we had a really good yield this season. The new irrigation system really helped.",
-    sender: "me",
-    time: "09:42 AM",
-  },
-  {
-    id: "3",
-    text: "That's great to hear. I've been thinking about upgrading my irrigation too. Did you use drip or sprinkler?",
-    sender: "them",
-    time: "09:45 AM",
-  },
-  {
-    id: "4",
-    text: "We went with drip irrigation. It saves a lot of water and targets the roots directly. Highly recommend it! 💧",
-    sender: "me",
-    time: "09:46 AM",
-  },
-];
+import { io, Socket } from "socket.io-client";
+import { BASE_URL, http } from "../../lib/fetch";
+import * as SecureStore from "expo-secure-store";
+import { useUserProfile } from "../../hooks/useUserProfile";
 
 export default function ChatScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  // We expect user to come from route params, e.g. { id: '...', name: '...', avatar: '...' }
   const { user } = route.params || {};
-  const [messages, setMessages] = useState(DUMMY_MESSAGES);
+  
+  const { data: currentUser } = useUserProfile();
+  
+  const [messages, setMessages] = useState<any[]>([]);
   const [inputText, setInputText] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [isOnline, setIsOnline] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const chatUser = user || {
+    id: "farmer-123", // Fallback ID for testing
     name: "Farm Expert",
     avatar: { uri: "https://i.pravatar.cc/150?img=3" },
-    isOnline: true,
   };
 
-  const handleSend = () => {
-    if (!inputText.trim()) return;
+  useEffect(() => {
+    let newSocket: Socket;
 
-    const newMessage = {
-      id: Date.now().toString(),
+    const fetchHistory = async () => {
+      try {
+        setIsLoading(true);
+        const response = await http.get<any[]>(`/api/v1/chat/history/${chatUser.id}`);
+        if (response.success) {
+          const history = response.data.map((msg: any) => ({
+            id: msg.id,
+            text: msg.content,
+            sender: msg.senderId === currentUser?.id ? "me" : "them",
+            time: new Date(msg.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          }));
+          setMessages(history);
+        }
+      } catch (error) {
+        console.error("Failed to fetch history:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const initSocket = async () => {
+      const token = await SecureStore.getItemAsync("token");
+      if (!token) return;
+
+      // Extract raw base URL, removing api/v1 if it's there
+      const socketUrl = BASE_URL?.replace("/api/v1", "") || "http://localhost:4000";
+
+      newSocket = io(socketUrl, {
+        auth: { token },
+      });
+
+      newSocket.on("connect", () => {
+        console.log("🟢 Connected to WebSocket Server");
+        // Join 1-to-1 room right away
+        if (currentUser?.id && chatUser.id) {
+          newSocket.emit("joinRoom", { targetUserId: chatUser.id });
+          // Check if the other user is online
+          newSocket.emit("checkStatus", { targetUserId: chatUser.id });
+        }
+      });
+
+      // Listen for status response
+      newSocket.on("statusResponse", (data) => {
+        console.log("👤 Status Response:", data);
+        setIsOnline(data.isOnline);
+      });
+
+      // Listen for incoming incoming messages
+      newSocket.on("receiveMessage", (message) => {
+        console.log("📨 Received Message:", message);
+        
+        setMessages((prev) => {
+          // Prevent duplicates if we optimistically added it
+          if (prev.find((m) => m.id === message.id)) return prev;
+
+          const isMe = message.senderId === currentUser?.id;
+          
+          return [
+            ...prev,
+            {
+              id: message.id,
+              text: message.content,
+              sender: isMe ? "me" : "them",
+              time: new Date(message.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            },
+          ];
+        });
+      });
+
+      newSocket.on("disconnect", () => {
+        console.log("🔴 Disconnected from WebSocket Server");
+        setIsOnline(false);
+      });
+
+      setSocket(newSocket);
+    };
+
+    if (currentUser?.id) {
+      fetchHistory();
+      initSocket();
+    }
+
+    return () => {
+      if (newSocket) {
+        newSocket.disconnect();
+      }
+    };
+  }, [currentUser?.id, chatUser.id]);
+
+  const handleSend = () => {
+    if (!inputText.trim() || !socket || !currentUser) return;
+
+    // Send payload to backend
+    socket.emit("sendMessage", {
+      targetUserId: chatUser.id,
+      content: inputText,
+    });
+
+    // Optimistically update the UI
+    const optimisticMessage = {
+      id: Date.now().toString() + "_optimistic",
       text: inputText,
       sender: "me",
       time: new Date().toLocaleTimeString([], {
@@ -66,7 +155,7 @@ export default function ChatScreen() {
       }),
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages((prev) => [...prev, optimisticMessage]);
     setInputText("");
   };
 
@@ -78,7 +167,7 @@ export default function ChatScreen() {
       >
         {!isMe && (
           <Image
-            source={chatUser.avatar}
+            source={chatUser.avatar?.uri ? { uri: chatUser.avatar.uri } : chatUser.avatar}
             className="w-8 h-8 rounded-full bg-gray-200 mr-2 self-end mb-1"
           />
         )}
@@ -122,18 +211,18 @@ export default function ChatScreen() {
           <View>
             <View className="relative">
               <Image
-                source={chatUser.avatar}
+                source={chatUser.avatar?.uri ? { uri: chatUser.avatar.uri } : chatUser.avatar}
                 className="w-10 h-10 rounded-full bg-gray-200"
               />
-              <View className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+              <View className={`absolute bottom-0 right-0 w-3 h-3 ${isOnline ? "bg-green-500" : "bg-gray-300"} rounded-full border-2 border-white`} />
             </View>
           </View>
           <View className="ml-3">
             <Text className="text-[16px] font-bold text-[#1D2939] font-parkinsans-bold">
               {chatUser.name}
             </Text>
-            <Text className="text-[12px] text-green-600 font-poppins font-medium">
-              Online
+            <Text className={`text-[12px] ${isOnline ? "text-green-600" : "text-gray-400"} font-poppins font-medium`}>
+              {isOnline ? "Online" : "Offline"}
             </Text>
           </View>
         </View>
@@ -149,6 +238,11 @@ export default function ChatScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 20, paddingBottom: 20 }}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View className="flex-1 justify-center items-center mt-20">
+            <Text className="text-gray-400 font-poppins">No messages yet. Say hello!</Text>
+          </View>
+        }
       />
 
       {/* Input Area */}

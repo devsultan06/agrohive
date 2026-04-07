@@ -33,4 +33,37 @@ export class ChatService {
       },
     });
   }
+
+  async getConversations(userId: string) {
+    // Find all messages involving the user
+    const messages = await this.prisma.message.findMany({
+      where: {
+        OR: [{ senderId: userId }, { receiverId: userId }],
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        sender: { select: { id: true, fullName: true, avatarUrl: true } },
+        receiver: { select: { id: true, fullName: true, avatarUrl: true } },
+      },
+    });
+
+    // Extract unique rooms and their last message
+    const conversations = new Map<string, any>();
+
+    for (const msg of messages) {
+      if (!conversations.has(msg.roomId)) {
+        // Determine the 'other' user
+        const otherUser = msg.senderId === userId ? msg.receiver : msg.sender;
+        conversations.set(msg.roomId, {
+          roomId: msg.roomId,
+          lastMessage: msg.content,
+          lastMessageAt: msg.createdAt,
+          isRead: msg.isRead,
+          otherUser,
+        });
+      }
+    }
+
+    return Array.from(conversations.values());
+  }
 }
