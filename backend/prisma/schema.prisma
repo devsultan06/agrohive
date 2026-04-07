@@ -36,6 +36,8 @@ model User {
   posts         Post[]
   reviews       Review[]
   addresses     UserAddress[]
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
 
   @@index([fullName, email, username])
 }
@@ -254,4 +256,23 @@ enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isRead    Boolean  @default(false)
+  
+  senderId  String
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
+  
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  roomId    String
+  
+  @@index([roomId])
+  @@index([senderId, receiverId])
 }

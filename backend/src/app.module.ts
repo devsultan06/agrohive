@@ -22,6 +22,7 @@ import { GuidesModule } from './guides/guides.module';
 import { OrdersModule } from './orders/orders.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { PaymentModule } from './payment/payment.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { PaymentModule } from './payment/payment.module';
     OrdersModule,
     AddressesModule,
     PaymentModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [
