@@ -26,8 +26,8 @@ export default () => ({
     serviceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT_JSON,
   },
   mail: {
-    resendApiKey: process.env.RESEND_API_KEY,
-    from: process.env.MAIL_FROM || 'onboarding@resend.dev',
+    brevoApiKey: process.env.BREVO_API_KEY,
+    from: process.env.MAIL_FROM || 'support@agrohive.com',
   },
   cloudinary: {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,

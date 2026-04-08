@@ -23,15 +23,15 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
-      # - key: REDIS_URL
-      #   sync: false
+      - key: REDIS_URL
+        sync: false
       - key: FIREBASE_PROJECT_ID
         sync: false
       - key: FIREBASE_PRIVATE_KEY_PATH
         sync: false
-      - key: RESEND_API_KEY
+      - key: BREVO_API_KEY
         sync: false
       - key: MAIL_FROM
-        value: onboarding@resend.dev
-      - key: FRONTEND_URL
-        value: https://agrohive.vercel.app
+        value: sultanabaniks@gmail.com
+      - key: ALLOWED_ORIGINS
+        value: https://agrohive.vercel.app,https://agrohive-admin.vercel.app,http://localhost:3000

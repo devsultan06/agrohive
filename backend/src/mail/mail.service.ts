@@ -1,23 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Resend } from 'resend';
+import { BrevoClient } from '@getbrevo/brevo';
 
 @Injectable()
 export class MailService {
-  private resend: Resend;
+  private readonly logger = new Logger(MailService.name);
+  private client: BrevoClient;
 
   constructor(private configService: ConfigService) {
-    this.resend = new Resend(
-      this.configService.get<string>('mail.resendApiKey'),
-    );
+    this.client = new BrevoClient({
+      apiKey: this.configService.get<string>('mail.brevoApiKey') || '',
+    });
   }
 
   async sendUserConfirmation(email: string, otp: string) {
-    const { data, error } = await this.resend.emails.send({
-      from: `AgroHive <${this.configService.get<string>('mail.from')}>`,
-      to: [email],
-      subject: 'Welcome to AgroHive! Confirm your Email',
-      html: `
+    const sender = {
+      name: 'AgroHive',
+      email: this.configService.get<string>('mail.from') || 'support@agrohive.com',
+    };
+
+    try {
+      const data = await this.client.transactionalEmails.sendTransacEmail({
+        subject: 'Welcome to AgroHive! Confirm your Email',
+        htmlContent: `
         <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
           <h2 style="color: #1C6206;">Welcome to AgroHive!</h2>
           <p>Thank you for joining our community. To complete your registration, please enter the following OTP:</p>
@@ -30,13 +35,14 @@ export class MailService {
           <p style="font-size: 12px; color: #777;">&copy; 2026 AgroHive Platform. Supporting Farmers Everywhere.</p>
         </div>
       `,
-    });
-
-    if (error) {
-      console.error('❌ Resend error:', error);
+        sender,
+        to: [{ email }],
+      });
+      this.logger.log(`Email sent successfully to ${email}`);
+      return data;
+    } catch (error) {
+      this.logger.error('❌ Brevo error:', error);
       throw new Error('Failed to send email');
     }
-
-    return data;
   }
 }
