@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { authService } from "../../services/admin/authService";
+import { authService } from "../../services/admin/auth.service";
 
 const AdminLayout = ({
   children,

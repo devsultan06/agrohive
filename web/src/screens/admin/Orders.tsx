@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
-import { orderService } from "../../services/admin/orderService";
+import { orderService } from "../../services/admin/order.service";
 import type { OrderStatus } from "../../types/api";
 import { toast } from "react-hot-toast";
 

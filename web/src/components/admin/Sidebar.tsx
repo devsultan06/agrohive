@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { authService } from "../../services/admin/authService";
+import { authService } from "../../services/admin/auth.service";
 
 const navItems = [
   {

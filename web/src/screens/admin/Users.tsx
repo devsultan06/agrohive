@@ -1,7 +1,7 @@
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { userService } from "../../services/admin/userService";
+import { userService } from "../../services/admin/user.service";
 
 const AdminUsers = () => {
   const [activeFilter, setActiveFilter] = useState("All");

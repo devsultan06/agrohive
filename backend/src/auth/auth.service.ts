@@ -181,9 +181,16 @@ export class AuthService {
     });
 
     await this.notifications.create(user.id, {
-      type: 'SYSTEM',
-      title: 'Welcome to AgroHive! 🚜',
+      type: 'WELCOME',
+      title: 'Welcome to AgroHive!🎉',
       message: `Hi ${user.fullName}, we're glad to have you here! Explore our marketplace and community.`,
+    });
+
+    await this.notifications.create(user.id, {
+      type: 'SYSTEM',
+      title: 'Complete your profile 👤',
+      message: 'Add a bio and location to help other farmers connect with you faster!',
+      metadata: { screen: 'EditProfile' },
     });
 
     await this.deleteOtpFromCache(dto.email);
@@ -384,6 +391,20 @@ export class AuthService {
           },
         });
         this.logger.log(`New Google user created: ${email}`);
+        
+        // Send welcome notifications for new Google users
+        await this.notifications.create(user.id, {
+          type: 'WELCOME',
+          title: 'Welcome to AgroHive! 🚜',
+          message: `Hi ${user.fullName}, we're glad to have you here! Explore our marketplace and community.`,
+        });
+
+        await this.notifications.create(user.id, {
+          type: 'SYSTEM',
+          title: 'Complete your profile 👤',
+          message: 'Tell the community more about yourself by adding a bio and location to your profile.',
+          metadata: { screen: 'EditProfile' },
+        });
       }
 
       const tokens = await this.getTokens(user.id, user.email, user.role);

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { communityService } from "../../services/admin/communityService";
+import { communityService } from "../../services/admin/community.service";
 import { useNavigate } from "react-router-dom";
 
 const AdminCreatePost = () => {

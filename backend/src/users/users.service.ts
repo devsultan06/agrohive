@@ -179,6 +179,15 @@ export class UsersService {
       data: { isVerified: !user.isVerified },
     });
 
+    if (updatedUser.isVerified) {
+      await this.notifications.create(userId, {
+        type: 'SYSTEM',
+        title: 'Account Verified 🛡️',
+        message: 'Congratulations! Your account has been formally verified. You now have full access to all features.',
+        metadata: { screen: 'Profile' },
+      });
+    }
+
     this.logger.log(
       `User ${userId} verification toggled to: ${updatedUser.isVerified}`,
     );

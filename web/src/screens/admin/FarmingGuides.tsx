@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   guideService,
   type FarmingGuide,
-} from "../../services/admin/guideService";
+} from "../../services/admin/guide.service";
 
 const AdminFarmingGuides = () => {
   const [showAddModal, setShowAddModal] = useState(false);

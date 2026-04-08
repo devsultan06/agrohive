@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   productService,
   type Product,
-} from "../../services/admin/productService";
+} from "../../services/admin/product.service";
 import OfflineState from "../../components/common/OfflineState";
 
 const AdminProducts = () => {

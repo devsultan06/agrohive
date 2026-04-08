@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userService } from "../../services/admin/userService";
+import { userService } from "../../services/admin/user.service";
 
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState("profile");

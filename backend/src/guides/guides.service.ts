@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGuideDto, UpdateGuideDto } from './dto/guide.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class GuidesService {
@@ -10,6 +11,7 @@ export class GuidesService {
   constructor(
     private prisma: PrismaService,
     private cloudinary: CloudinaryService,
+    private notifications: NotificationsService,
   ) {}
 
   async create(
@@ -50,7 +52,15 @@ export class GuidesService {
       },
     });
 
-    this.logger.log(`Guide created: ${guide.id}`);
+    // Notify all users about new guide
+    await this.notifications.notifyAll({
+      type: 'SYSTEM',
+      title: 'New Farming Guide!',
+      message: `Learn something new: "${guide.title}" is now available in the library.`,
+      metadata: { screen: 'GuideDetails', params: { guideId: guide.id } },
+    });
+
+    this.logger.log(`Guide created and notifications sent: ${guide.id}`);
     return guide;
   }
 

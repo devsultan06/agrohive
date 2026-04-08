@@ -47,8 +47,44 @@ export class NotificationsService {
       );
       this.logger.log(`Push notification sent to user ${userId}`);
     }
-
     return notification;
+  }
+
+  async notifyAll(data: {
+    type: NotificationType;
+    title: string;
+    message: string;
+    metadata?: any;
+  }) {
+    this.logger.log(`Sending system-wide notification: "${data.title}"`);
+
+    // 1. Get all users
+    const users = await this.prisma.user.findMany({
+      select: { id: true, fcmToken: true },
+    });
+
+    // 2. Create database notifications (bulk)
+    await this.prisma.notification.createMany({
+      data: users.map((u) => ({
+        ...data,
+        userId: u.id,
+      })),
+    });
+
+    // 3. Send push notifications to those with tokens
+    const tokens = users.map((u) => u.fcmToken).filter((t) => !!t) as string[];
+    if (tokens.length > 0) {
+      // Note: In production, use Firebase's sendMulticast or batches
+      await this.firebase.sendMulticastNotification(
+        tokens,
+        data.title,
+        data.message,
+        data.metadata,
+      );
+      this.logger.log(`Push notifications sent to ${tokens.length} users`);
+    }
+
+    return { total: users.length, pushes: tokens.length };
   }
 
   async findAll(userId: string) {

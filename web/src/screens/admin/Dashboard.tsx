@@ -1,7 +1,7 @@
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useQuery } from "@tanstack/react-query";
-import { dashboardService } from "../../services/admin/dashboardService";
-import { productService } from "../../services/admin/productService";
+import { dashboardService } from "../../services/admin/dashboard.service";
+import { productService } from "../../services/admin/product.service";
 import {
   Chart as ChartJS,
   CategoryScale,

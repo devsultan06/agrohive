@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
+import { notificationService } from "../../services/admin/notification.service";
 
 // Matches Prisma NotificationType enum: FOLLOW, LIKE, COMMENT, ORDER_UPDATE, PROMOTION, SYSTEM, WELCOME
 const NOTIFICATION_TYPES = [
@@ -26,6 +27,7 @@ const AdminSendNotification = () => {
   const [message, setMessage] = useState("");
   const [target, setTarget] = useState("all");
   const [isSending, setIsSending] = useState(false);
+  const [status, setStatus] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const sentHistory = [
     {
@@ -58,14 +60,29 @@ const AdminSendNotification = () => {
     },
   ];
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    if (!title.trim() || !message.trim()) return;
+    
     setIsSending(true);
-    // Would POST to backend /notifications/send (create Notification for each user)
-    setTimeout(() => {
-      setIsSending(false);
+    setStatus(null);
+    
+    try {
+      await notificationService.sendToAll({
+        type: notifType,
+        title,
+        message,
+        target
+      });
+      
+      setStatus({ type: 'success', text: 'Notification sent successfully!' });
       setTitle("");
       setMessage("");
-    }, 1500);
+    } catch (error) {
+      console.error("Failed to send notification:", error);
+      setStatus({ type: 'error', text: 'Failed to send notification. Please try again.' });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -73,6 +90,15 @@ const AdminSendNotification = () => {
       <div className="grid grid-cols-3 gap-5">
         {/* Compose form */}
         <div className="col-span-2">
+          {status && (
+            <div className={`mb-4 p-4 rounded-lg flex items-center gap-3 ${status.type === 'success' ? 'bg-green-50 border border-green-100' : 'bg-red-50 border border-red-100'}`}>
+              <div className={`w-2 h-2 rounded-full ${status.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
+              <p className={`text-[13px] font-medium ${status.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+                {status.text}
+              </p>
+            </div>
+          )}
+
           <div className="bg-white rounded-xl border border-[#EAECF0]">
             <div className="px-6 py-4 border-b border-[#EAECF0]">
               <h2 className="text-[14px] font-semibold text-[#101828]">
@@ -154,7 +180,7 @@ const AdminSendNotification = () => {
                   className="w-full px-3 py-2 border border-[#D0D5DD] rounded-lg text-[13px]"
                   style={{ fontFamily: "inherit" }}
                 >
-                  <option value="all">All users (1,284)</option>
+                  <option value="all">All users</option>
                   <option value="verified">Verified users only</option>
                   <option value="new">New users (last 7 days)</option>
                 </select>

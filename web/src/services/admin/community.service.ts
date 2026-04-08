@@ -16,7 +16,7 @@ export interface CommunityPost {
   likesCount: number;
   commentsCount: number;
   bookmarksCount: number;
-  hasImage?: boolean; // Virtual for UI
+  hasImage?: boolean; 
   isLiked?: boolean;
   isBookmarked?: boolean;
 }

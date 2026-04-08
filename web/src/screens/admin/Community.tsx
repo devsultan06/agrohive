@@ -5,7 +5,7 @@ import {
   communityService,
   type CommunityPost,
   type TopContributor,
-} from "../../services/admin/communityService";
+} from "../../services/admin/community.service";
 import { toast } from "react-hot-toast";
 
 const AdminCommunity = () => {

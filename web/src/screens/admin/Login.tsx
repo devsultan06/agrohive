@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../../services/admin/authService";
+import { authService } from "../../services/admin/auth.service";
 import { useMutation } from "@tanstack/react-query";
 
 const AdminLogin = () => {

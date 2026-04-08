@@ -1,7 +1,7 @@
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { reviewService } from "../../services/admin/reviewService";
+import { reviewService } from "../../services/admin/review.service";
 
 const AdminReviews = () => {
   const [searchTerm, setSearchTerm] = useState("");

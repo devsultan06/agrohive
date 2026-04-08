@@ -1,8 +1,8 @@
 import { useState } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useQuery } from "@tanstack/react-query";
-import { orderService } from "../../services/admin/orderService";
-import { dashboardService } from "../../services/admin/dashboardService";
+import { orderService } from "../../services/admin/order.service";
+import { dashboardService } from "../../services/admin/dashboard.service";
 import dayjs from "dayjs";
 import {
   Chart as ChartJS,

@@ -71,4 +71,35 @@ export class FirebaseService implements OnModuleInit {
       this.logger.error(`Error sending push notification: ${error.message}`);
     }
   }
+
+  async sendMulticastNotification(
+    tokens: string[],
+    title: string,
+    body: string,
+    data?: any,
+  ) {
+    if (admin.apps.length === 0 || tokens.length === 0) return;
+
+    try {
+      const messageData: any = {};
+      if (data) {
+        Object.keys(data).forEach((key) => {
+          messageData[key] = String(data[key]);
+        });
+      }
+
+      const response = await admin.messaging().sendEachForMulticast({
+        tokens,
+        notification: { title, body },
+        data: messageData,
+      });
+
+      this.logger.log(
+        `Multicast: ${response.successCount} success, ${response.failureCount} failure`,
+      );
+      return response;
+    } catch (error) {
+      this.logger.error(`Error sending multicast notification: ${error.message}`);
+    }
+  }
 }

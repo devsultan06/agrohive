@@ -178,6 +178,9 @@ export class OrdersService {
     } else if (status === OrderStatus.DELIVERED) {
       title = 'Order Delivered! ✅';
       message = `Your order ${order.orderNumber} has been delivered. Thank you for shopping!`;
+    } else if (status === OrderStatus.CANCELLED) {
+      title = 'Order Cancelled ❌';
+      message = `Your order ${order.orderNumber} has been cancelled. If you have questions, please contact support.`;
     }
 
     await this.notifications.create(order.userId, {
