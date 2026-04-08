@@ -38,5 +38,4 @@ ENV PORT=10000
 EXPOSE 10000
 
 # Start with Prisma migration and then the app
-# (Optional: Use a shell script if you need more complex startup)
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main"]
