@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy source and prisma schema
 COPY . .
@@ -23,7 +23,7 @@ WORKDIR /app
 
 # Install production dependencies ONLY
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm install --omit=dev --legacy-peer-deps
 
 # Copy build artifacts and prisma from builder
 COPY --from=builder /app/dist ./dist
