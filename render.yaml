@@ -3,7 +3,7 @@ services:
     name: agrohive-backend
     env: docker
     dockerContext: backend
-    dockerfilePath: Dockerfile
+    dockerfilePath: backend/Dockerfile
     plan: free # or your preferred plan
     region: oregon # or your preferred region
     envVars:

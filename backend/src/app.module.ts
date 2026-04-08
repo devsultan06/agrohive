@@ -9,7 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { MailModule } from './mail/mail.module';
+import  { MailModule } from './mail/mail.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
@@ -40,14 +40,26 @@ import { ChatModule } from './chat/chat.module';
     ]),
     CacheModule.registerAsync({
       isGlobal: true,
-      useFactory: async (configService: ConfigService) => ({
-        store: await redisStore({
-          url:
-            configService.get('redis.url') ||
-            `redis://${configService.get('redis.host')}:${configService.get('redis.port')}`,
-          ttl: 600000, // 10 minutes default
-        }),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const url = configService.get('redis.url') || 
+                   `redis://${configService.get('redis.host')}:${configService.get('redis.port')}`;
+        
+        return {
+          store: await redisStore({
+            url,
+            // Explicit TLS and Reconnect settings
+            socket: {
+              tls: url.startsWith('rediss'),
+              reconnectStrategy: (retries) => {
+                const delay = Math.min(retries * 50, 2000);
+                return delay;
+              },
+              connectTimeout: 10000,
+            },
+            ttl: 600000, // 10 minutes default
+          }),
+        };
+      },
       inject: [ConfigService],
     }),
     AuthModule,
