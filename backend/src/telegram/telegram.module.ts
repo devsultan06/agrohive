@@ -4,10 +4,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegramService } from './telegram.service';
 import { TelegramUpdate } from './telegram.update';
 import { UsersModule } from '../users/users.module';
+import { OrdersModule } from '../orders/orders.module';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
+    forwardRef(() => OrdersModule),
+    ProductsModule,
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
