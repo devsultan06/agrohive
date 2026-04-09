@@ -8,7 +8,8 @@ The core API service for the AgroHive platform, built with **NestJS** and **Pris
 - **Products:** CRUD for the marketplace with category and price filtering.
 - **Posts:** Community feed with likes, comments, and media support via Cloudinary.
 - **Orders:** Managed purchase timelines and status tracking.
-- **Notifications:** Automated event-driven alerts using Firebase Admin.
+- **Notifications:** Multi-channel alerting via Firebase Push and Telegram Bot mirroring.
+- **🤖 Telegram Integration:** Custom NestJS-Telegraf implementation for marketplace browsing, order checks, and platform analytics.
 - **Resend:** Integrated email system for OTPs and notifications.
 - **🌿 Prisma & PostgreSQL:** Robust data modeling and migrations.
 

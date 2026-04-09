@@ -12,6 +12,7 @@ The mobile application for the AgroHive platform, built with **Expo** (React Nat
 - **Messaging:** Direct chat with experts and sellers.
 - **Order Tracking:** Dynamic timelines for your purchases.
 - **Notifications:** Rich notification system for likes, comments, and alerts.
+- **🤖 Telegram Linking:** Seamless one-click deep-linking to the AgroHive Telegram bot for notification mirroring.
 
 ## 🛠️ Installation
 
