@@ -45,6 +45,17 @@ Farmers across Nigeria face significant challenges in achieving sustainable and 
 - **Orders Tracking:** Detailed order history with tracking timelines (Processing -> Shipped -> Delivered).
 - **Multiple Shipping Support:** Address management with saved locations.
 
+### 🤖 Telegram Bot Integration
+
+- **Real-time Notifications:** Instant mirroring of push notifications for order status, payments, and product arrivals.
+- **Account Linking:** One-click deep-linking from the mobile app to Telegram for secure account association.
+- **Utility Commands:**
+  - `/orders`: View recent order history and delivery status.
+  - `/products`: Browse the top products in the marketplace.
+  - `/weather [city]`: Fetch real-time weather and farming recommendations.
+  - `/profile`: View linked AgroHive account details.
+  - `/stats` (Admin Only): View platform-wide business analytics (Total Users, Revenue, Order Count).
+
 ### 🛠️ Admin & Web
 
 - **Detail Order Management:** Explore comprehensive order details, items, and customer info.
@@ -122,8 +133,14 @@ This project is organized as a monorepo.
 
 1. Navigate to the backend directory: `cd backend`
 2. Install dependencies: `npm install`
-3. Run Prisma migrations: `npx prisma generate`
-4. Start development server: `npm run start:dev`
+3. Setup Environment Variables:
+   Add the following to your `.env` file:
+   ```env
+   TELEGRAM_BOT_TOKEN=your_bot_token_here
+   OPENWEATHER_API_KEY=your_weather_api_key_here
+   ```
+4. Run Prisma migrations: `npx prisma generate`
+5. Start development server: `npm run start:dev`
 
 ---
 
