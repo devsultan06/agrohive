@@ -23,10 +23,11 @@ export class TelegramUpdate {
     if (startPayload) {
       try {
         const linkedUser = await this.usersService.linkTelegramById(startPayload, telegramId);
-        return await ctx.reply(
+        await ctx.reply(
           `✅ <b>Account Linked</b>\n\nWelcome to AgroHive, ${linkedUser.fullName}. Your account is now connected.\n\nYou will receive order updates and market alerts here.`,
           { parse_mode: 'HTML' },
         );
+        return;
       } catch (error) {
         await ctx.reply(`⚠️ Failed to link account automatically: ${error.message}`);
       }
@@ -66,7 +67,8 @@ export class TelegramUpdate {
     const city = message.split(' ')[1];
 
     if (!city) {
-      return ctx.reply('Please provide a city name. Example: /weather Lagos');
+      await ctx.reply('Please provide a city name. Example: /weather Lagos');
+      return;
     }
 
     try {
@@ -85,7 +87,8 @@ export class TelegramUpdate {
     const email = message.split(' ')[1];
 
     if (!email) {
-      return ctx.reply('Please provide your email. Example: /link user@example.com');
+      await ctx.reply('Please provide your email. Example: /link user@example.com');
+      return;
     }
 
     try {
@@ -104,7 +107,8 @@ export class TelegramUpdate {
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (!user) {
-      return ctx.reply("You haven't linked your account yet. Use /link [email].");
+      await ctx.reply("You haven't linked your account yet. Use /link [email].");
+      return;
     }
 
     await ctx.reply(
@@ -120,14 +124,16 @@ export class TelegramUpdate {
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (!user) {
-      return ctx.reply("You haven't linked your account yet.");
+      await ctx.reply("You haven't linked your account yet.");
+      return;
     }
 
     try {
       const orders = await this.ordersService.findUserOrders(user.id);
 
       if (orders.length === 0) {
-        return ctx.reply("You haven't placed any orders yet.");
+        await ctx.reply("You haven't placed any orders yet.");
+        return;
       }
 
       let orderMsg = '<b>Your Recent Orders:</b>\n\n';
@@ -152,7 +158,8 @@ export class TelegramUpdate {
       const products = await this.productsService.findAll({ limit: 8 });
 
       if (products.length === 0) {
-        return ctx.reply('No products available right now.');
+        await ctx.reply('No products available right now.');
+        return;
       }
 
       let productMsg = '<b>Available Products:</b>\n\n';
@@ -179,7 +186,8 @@ export class TelegramUpdate {
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (!user || user.role !== 'ADMIN') {
-      return ctx.reply('Error: Only Admins can view platform stats.');
+      await ctx.reply('Error: Only Admins can view platform stats.');
+      return;
     }
 
     try {

@@ -16,7 +16,11 @@ export class TransformInterceptor<T> implements NestInterceptor<
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<ApiResponse<T>> {
+  ): Observable<any> {
+    if (context.getType() !== 'http') {
+      return next.handle();
+    }
+
     const response = context.switchToHttp().getResponse();
     const status = response.statusCode;
 
