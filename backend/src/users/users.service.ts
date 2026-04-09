@@ -399,4 +399,21 @@ export class UsersService {
       return { following: true };
     }
   }
+
+  async linkTelegram(email: string, telegramId: string) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) throw new NotFoundException('User not found with this email');
+
+    this.logger.log(`Linking Telegram ID ${telegramId} to user ${email}`);
+    return this.prisma.user.update({
+      where: { email },
+      data: { telegramId: telegramId.toString() },
+    });
+  }
+
+  async findByTelegramId(telegramId: string) {
+    return this.prisma.user.findUnique({
+      where: { telegramId: telegramId.toString() },
+    });
+  }
 }

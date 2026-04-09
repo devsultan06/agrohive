@@ -48,15 +48,17 @@
     "google-auth-library": "^10.6.1",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "nestjs-telegraf": "^2.9.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",
+    "prisma": "^7.4.2",
     "redis": "^5.11.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.3",
     "streamifier": "^0.1.1",
-    "prisma": "^7.4.2"
+    "telegraf": "^4.16.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

@@ -23,9 +23,12 @@ import { OrdersModule } from './orders/orders.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { PaymentModule } from './payment/payment.module';
 import { ChatModule } from './chat/chat.module';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
   imports: [
+    TelegramModule,
+
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
