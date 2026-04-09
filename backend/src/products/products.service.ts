@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class ProductsService {
@@ -11,6 +12,8 @@ export class ProductsService {
   constructor(
     private prisma: PrismaService,
     private cloudinary: CloudinaryService,
+    @Inject(forwardRef(() => NotificationsService))
+    private notifications: NotificationsService,
   ) {}
 
   async update(
@@ -62,11 +65,17 @@ export class ProductsService {
     this.logger.log(`Creating product: ${createProductDto.name}`);
 
     let imageUrl = null;
+    let cloudError: string | null = null;
 
     if (image) {
-      const upload = await this.cloudinary.uploadFile(image);
-      imageUrl = upload.secure_url;
-      this.logger.log(`Product image uploaded to Cloudinary`);
+      try {
+        const upload = await this.cloudinary.uploadFile(image);
+        imageUrl = upload.secure_url;
+        this.logger.log(`Product image uploaded to Cloudinary`);
+      } catch (error) {
+        this.logger.error(`Failed to upload product image: ${error.message}`);
+        cloudError = `Image upload failed (${error.message}). The product was created without an image.`;
+      }
     }
 
     const product = await this.prisma.product.create({
@@ -80,10 +89,34 @@ export class ProductsService {
       },
     });
 
+    // Send notification to all users about the new product
+    try {
+      await this.notifications.notifyAll({
+        type: 'SYSTEM',
+        title: 'New Product Arrival! 🚜',
+        message: `${product.name} is now available in the marketplace for ₦${product.price.toLocaleString()}. Check it out!`,
+        metadata: {
+          productId: product.id,
+          screen: 'ProductDetails',
+        },
+      });
+      this.logger.log(`New product notification broadcasted for: ${product.name}`);
+    } catch (error) {
+      this.logger.error(`Failed to broadcast new product notification: ${error.message}`);
+    }
+
+    if (cloudError) {
+      this.logger.warn(`Product ${product.id} created with warning: ${cloudError}`);
+    }
+
     this.logger.log(
       `Product created: ${product.id} — ${product.name} (₦${product.price})`,
     );
-    return product;
+
+    return {
+      ...product,
+      _warning: cloudError,
+    };
   }
 
   async findAll(query?: {
