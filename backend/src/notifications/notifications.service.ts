@@ -53,9 +53,11 @@ export class NotificationsService {
 
     // 2. Handle Telegram Notification
     if (user?.telegramId) {
+      this.logger.log(`Attempting to send Telegram message to ${user.telegramId}...`);
       const telegramMsg = `<b>${data.title}</b>\n\n${data.message}`;
       await this.telegram.sendMessage(user.telegramId, telegramMsg);
-      this.logger.log(`Telegram notification sent to user ${userId}`);
+    } else {
+      this.logger.warn(`User ${userId} has no telegramId. Skipping Telegram notification.`);
     }
 
     return notification;

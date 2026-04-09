@@ -94,7 +94,7 @@ export class OrdersService {
       },
     });
 
-    // Notify user
+    // 1. Notify the Customer
     await this.notifications.create(userId, {
       type: 'ORDER_UPDATE',
       title: 'Order Placed! 📦',
@@ -105,6 +105,26 @@ export class OrdersService {
         screen: 'OrderDetails',
       },
     });
+
+    // 2. Notify Admins about the new order
+    try {
+      const admins = await this.prisma.user.findMany({
+        where: { role: 'ADMIN' },
+        select: { id: true },
+      });
+
+      for (const admin of admins) {
+        // Skip if the user placing the order is the same as the admin (optional)
+        await this.notifications.create(admin.id, {
+          type: 'SYSTEM',
+          title: 'New Order Alert! 💰',
+          message: `Order ${orderNumber} for ₦${totalAmount.toLocaleString()} has been placed.`,
+          metadata: { orderId: order.id, screen: 'OrderDetails' },
+        });
+      }
+    } catch (error) {
+      this.logger.error(`Failed to notify admins of new order: ${error.message}`);
+    }
 
     return order;
   }
