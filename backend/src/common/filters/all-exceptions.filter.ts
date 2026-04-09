@@ -11,6 +11,11 @@ import { ApiResponse } from '../interfaces/api-response.interface';
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
+    if (host.getType() !== 'http') {
+      console.error('🔥 Non-HTTP Exception caught:', exception);
+      return;
+    }
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();

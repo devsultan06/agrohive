@@ -24,6 +24,7 @@ import { AddressesModule } from './addresses/addresses.module';
 import { PaymentModule } from './payment/payment.module';
 import { ChatModule } from './chat/chat.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { AppThrottlerGuard } from './common/guards/app-throttler.guard';
 
 @Module({
   imports: [
@@ -88,7 +89,7 @@ import { TelegramModule } from './telegram/telegram.module';
     // Apply throttle guard globally to all routes
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: AppThrottlerGuard,
     },
   ],
 })
