@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationType } from '@prisma/client';
 import { FirebaseService } from '../firebase/firebase.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Injectable()
 export class NotificationsService {
@@ -10,6 +11,7 @@ export class NotificationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly firebase: FirebaseService,
+    private readonly telegram: TelegramService,
   ) {}
 
   async create(
@@ -32,12 +34,13 @@ export class NotificationsService {
       `Notification created: [${data.type}] "${data.title}" for user ${userId}`,
     );
 
-    // Check if user has fcmToken and send push notification
+    // Fetch user for both Push and Telegram tokens
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { fcmToken: true },
+      select: { fcmToken: true, telegramId: true },
     });
 
+    // 1. Handle Firebase Push
     if (user?.fcmToken) {
       await this.firebase.sendPushNotification(
         user.fcmToken,
@@ -47,6 +50,14 @@ export class NotificationsService {
       );
       this.logger.log(`Push notification sent to user ${userId}`);
     }
+
+    // 2. Handle Telegram Notification
+    if (user?.telegramId) {
+      const telegramMsg = `<b>${data.title}</b>\n\n${data.message}`;
+      await this.telegram.sendMessage(user.telegramId, telegramMsg);
+      this.logger.log(`Telegram notification sent to user ${userId}`);
+    }
+
     return notification;
   }
 
@@ -58,12 +69,10 @@ export class NotificationsService {
   }) {
     this.logger.log(`Sending system-wide notification: "${data.title}"`);
 
-    // 1. Get all users
     const users = await this.prisma.user.findMany({
-      select: { id: true, fcmToken: true },
+      select: { id: true, fcmToken: true, telegramId: true },
     });
 
-    // 2. Create database notifications (bulk)
     await this.prisma.notification.createMany({
       data: users.map((u) => ({
         ...data,
@@ -71,20 +80,28 @@ export class NotificationsService {
       })),
     });
 
-    // 3. Send push notifications to those with tokens
+    // Push notifications
     const tokens = users.map((u) => u.fcmToken).filter((t) => !!t) as string[];
     if (tokens.length > 0) {
-      // Note: In production, use Firebase's sendMulticast or batches
       await this.firebase.sendMulticastNotification(
         tokens,
         data.title,
         data.message,
         data.metadata,
       );
-      this.logger.log(`Push notifications sent to ${tokens.length} users`);
     }
 
-    return { total: users.length, pushes: tokens.length };
+    // Telegram notifications
+    const telegramUsers = users.filter((u) => !!u.telegramId);
+    for (const u of telegramUsers) {
+      if (u.telegramId) {
+        const telegramMsg = `<b>${data.title}</b>\n\n${data.message}`;
+        await this.telegram.sendMessage(u.telegramId, telegramMsg);
+      }
+    }
+
+    this.logger.log(`System-wide notification sent to ${users.length} users`);
+    return { total: users.length, pushes: tokens.length, telegrams: telegramUsers.length };
   }
 
   async findAll(userId: string) {

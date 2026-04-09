@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectBot } from 'nestjs-telegraf';
+import { Telegraf, Context } from 'telegraf';
 import axios from 'axios';
 
 export interface WeatherData {
@@ -12,9 +14,13 @@ export interface WeatherData {
 
 @Injectable()
 export class TelegramService {
+  private readonly logger = new Logger(TelegramService.name);
   private readonly weatherApiKey: string;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    @InjectBot() private readonly bot: Telegraf<Context>,
+    private readonly configService: ConfigService,
+  ) {
     this.weatherApiKey = this.configService.get<string>('OPENWEATHER_API_KEY') || '';
   }
 
@@ -33,7 +39,7 @@ export class TelegramService {
         name: data.name,
       };
     } catch (error) {
-      console.error('Weather fetch error:', error.message);
+      this.logger.error('Weather fetch error:', error.message);
       throw new Error('Failed to fetch weather data');
     }
   }
@@ -53,8 +59,17 @@ export class TelegramService {
         name: data.name,
       };
     } catch (error) {
-      console.error('Weather fetch error:', error.message);
+      this.logger.error('Weather fetch error:', error.message);
       throw new Error(`Failed to fetch weather for ${city}`);
+    }
+  }
+
+  async sendMessage(chatId: string, message: string) {
+    try {
+      await this.bot.telegram.sendMessage(chatId, message, { parse_mode: 'HTML' });
+      this.logger.log(`Telegram message sent to ${chatId}`);
+    } catch (error) {
+      this.logger.error(`Failed to send Telegram message to ${chatId}: ${error.message}`);
     }
   }
 }
