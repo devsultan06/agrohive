@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Linking,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -155,6 +156,39 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
         </View>
+
+        {!user.telegramId && (
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(`https://t.me/agrohive_bot?start=${user.id}`)
+            }
+            className="rounded-2xl p-4 mb-6 flex-row items-center justify-between"
+            style={{
+              backgroundColor: "#1C6206",
+            }}
+          >
+            <View className="flex-row items-center gap-3">
+              <View
+                className="w-10 h-10 rounded-full justify-center items-center"
+                style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
+              >
+                <Ionicons name="send" size={20} color="white" />
+              </View>
+              <View>
+                <Text className="text-white font-bold text-[14px] font-parkinsans-bold">
+                  Connect to Telegram
+                </Text>
+                <Text
+                  style={{ color: "rgba(255,255,255,0.75)" }}
+                  className="text-[11px] font-poppins"
+                >
+                  Get real-time order & market alerts
+                </Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="white" />
+          </TouchableOpacity>
+        )}
 
         {/* Weather Update */}
         <View className="flex-row justify-between items-center mb-3">

@@ -411,6 +411,17 @@ export class UsersService {
     });
   }
 
+  async linkTelegramById(userId: string, telegramId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found with this ID');
+
+    this.logger.log(`Deep-linking Telegram ID ${telegramId} to user ID ${userId}`);
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { telegramId: telegramId.toString() },
+    });
+  }
+
   async findByTelegramId(telegramId: string) {
     return this.prisma.user.findUnique({
       where: { telegramId: telegramId.toString() },

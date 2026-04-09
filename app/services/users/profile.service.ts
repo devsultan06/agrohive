@@ -11,6 +11,7 @@ export interface UserProfileResponse {
   avatarUrl?: string;
   isVerified: boolean;
   provider: string;
+  telegramId?: string;
   isFollowing?: boolean;
   _count?: {
     followers: number;

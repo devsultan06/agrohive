@@ -18,6 +18,22 @@ export class TelegramUpdate {
   async onStart(@Ctx() ctx: Context) {
     if (!ctx.from) return;
     const telegramId = ctx.from.id.toString();
+    const startPayload = (ctx as any).startPayload;
+
+    // Check if user is opening a deep link from the app
+    if (startPayload) {
+      try {
+        const linkedUser = await this.usersService.linkTelegramById(startPayload, telegramId);
+        return await ctx.reply(
+          `✅ <b>Account Linked!</b>\n\nWelcome to AgroHive, ${linkedUser.fullName}! Your account is now connected to Telegram.\n\nYou will receive your order updates and market alerts here.`,
+          { parse_mode: 'HTML' },
+        );
+      } catch (error) {
+        await ctx.reply(`⚠️ Failed to link account automatically: ${error.message}`);
+        // Continue to normal start flow if deep link fails
+      }
+    }
+
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (user) {
@@ -26,7 +42,7 @@ export class TelegramUpdate {
       );
     } else {
       await ctx.reply(
-        'Welcome to AgroHive Bot! 🌾\n\nIt looks like your Telegram account is not linked to an AgroHive profile yet.\n\nType <code>/link your@email.com</code> to connect your account.',
+        'Welcome to AgroHive Bot! 🌾\n\nIt looks like your Telegram account is not linked to an AgroHive profile yet.\n\nType <code>/link your@email.com</code> to connect your account or use the "Connect Telegram" button in the AgroHive app.',
         { parse_mode: 'HTML' },
       );
     }
@@ -164,6 +180,36 @@ export class TelegramUpdate {
       await ctx.reply(productMsg, { parse_mode: 'HTML' });
     } catch (error) {
       await ctx.reply(`❌ Failed to fetch products: ${error.message}`);
+    }
+  }
+
+  @Command('stats')
+  async onStats(@Ctx() ctx: Context) {
+    if (!ctx.from) return;
+    const telegramId = ctx.from.id.toString();
+    const user = await this.usersService.findByTelegramId(telegramId);
+
+    if (!user || user.role !== 'ADMIN') {
+      return ctx.reply('⛔ Access denied. Only AgroHive Admins can view platform stats.');
+    }
+
+    try {
+      const stats = await this.usersService.getGeneralStats();
+      const linkedUsers = await (this.usersService as any).prisma.user.count({
+        where: { telegramId: { not: null } },
+      });
+
+      let statsMsg = '📊 <b>AgroHive Real-time Stats:</b>\n\n';
+      statsMsg += `👥 Total Users: ${stats.totalUsers}\n`;
+      statsMsg += `🤖 Linked Bots: ${linkedUsers}\n`;
+      statsMsg += `🛒 Active Products: ${stats.activeListings}\n`;
+      statsMsg += `📦 Total Orders: ${stats.totalOrders}\n`;
+      statsMsg += `💰 Revenue: ₦${stats.totalRevenue.toLocaleString()}\n`;
+      statsMsg += '\n<i>Keep growing, Admin! 🌱</i>';
+
+      await ctx.reply(statsMsg, { parse_mode: 'HTML' });
+    } catch (error) {
+      await ctx.reply(`❌ Failed to fetch stats: ${error.message}`);
     }
   }
 }
