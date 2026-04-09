@@ -20,17 +20,15 @@ export class TelegramUpdate {
     const telegramId = ctx.from.id.toString();
     const startPayload = (ctx as any).startPayload;
 
-    // Check if user is opening a deep link from the app
     if (startPayload) {
       try {
         const linkedUser = await this.usersService.linkTelegramById(startPayload, telegramId);
         return await ctx.reply(
-          `✅ <b>Account Linked!</b>\n\nWelcome to AgroHive, ${linkedUser.fullName}! Your account is now connected to Telegram.\n\nYou will receive your order updates and market alerts here.`,
+          `✅ <b>Account Linked</b>\n\nWelcome to AgroHive, ${linkedUser.fullName}. Your account is now connected.\n\nYou will receive order updates and market alerts here.`,
           { parse_mode: 'HTML' },
         );
       } catch (error) {
         await ctx.reply(`⚠️ Failed to link account automatically: ${error.message}`);
-        // Continue to normal start flow if deep link fails
       }
     }
 
@@ -38,11 +36,11 @@ export class TelegramUpdate {
 
     if (user) {
       await ctx.reply(
-        `Welcome back, ${user.fullName}! 🌾\n\nI'm ready to help you with AgroHive.\n\nCommands:\n/products - Browse available products\n/orders - View your recent orders\n/weather [city] - Get current weather\n/profile - View your linked profile\n/help - See all commands`,
+        `Welcome back, ${user.fullName}.\n\nI'm ready to help you with AgroHive.\n\nCommands:\n/products - Browse products\n/orders - View recent orders\n/weather [city] - Get weather\n/profile - View profile\n/help - All commands`,
       );
     } else {
       await ctx.reply(
-        'Welcome to AgroHive Bot! 🌾\n\nIt looks like your Telegram account is not linked to an AgroHive profile yet.\n\nType <code>/link your@email.com</code> to connect your account or use the "Connect Telegram" button in the AgroHive app.',
+        'Welcome to AgroHive Bot.\n\nYour Telegram account is not linked to a profile yet.\n\nType <code>/link your@email.com</code> to connect.',
         { parse_mode: 'HTML' },
       );
     }
@@ -51,13 +49,13 @@ export class TelegramUpdate {
   @Command('help')
   async onHelp(@Ctx() ctx: Context) {
     await ctx.reply(
-      '❓ <b>How to use AgroHive Bot:</b>\n\n' +
-        '1️⃣ <b>Link your account:</b> Type <code>/link your@email.com</code>\n' +
-        '2️⃣ <b>Browse Products:</b> Type <code>/products</code>\n' +
-        '3️⃣ <b>Check Weather:</b> Type <code>/weather Lagos</code>\n' +
-        '4️⃣ <b>Recent Orders:</b> Type <code>/orders</code>\n' +
-        '5️⃣ <b>Your Profile:</b> Type <code>/profile</code>\n\n' +
-        '<i>Once linked, you will receive real-time notifications from the AgroHive app here!</i>',
+      '<b>AgroHive Bot Guide:</b>\n\n' +
+        '1. <b>Link account:</b> Type <code>/link your@email.com</code>\n' +
+        '2. <b>Browse Products:</b> Type <code>/products</code>\n' +
+        '3. <b>Check Weather:</b> Type <code>/weather [city]</code>\n' +
+        '4. <b>Recent Orders:</b> Type <code>/orders</code>\n' +
+        '5. <b>Profile:</b> Type <code>/profile</code>\n\n' +
+        '<i>Once linked, notifications will be mirrored here.</i>',
       { parse_mode: 'HTML' },
     );
   }
@@ -73,10 +71,10 @@ export class TelegramUpdate {
 
     try {
       const data = await this.telegramService.fetchWeatherByCity(city);
-      const weatherMsg = `🌤 Weather in ${data.name}:\n\n🌡 Temp: ${data.temp}°C\n💧 Humidity: ${data.humidity}%\n🌬 Wind: ${data.windSpeed} m/s\n📝 Description: ${data.description}`;
+      const weatherMsg = `Weather in ${data.name}:\n\nTemp: ${data.temp}°C\nHumidity: ${data.humidity}%\nWind: ${data.windSpeed} m/s\nDescription: ${data.description}`;
       await ctx.reply(weatherMsg);
     } catch (error) {
-      await ctx.reply(`❌ ${error.message}`);
+      await ctx.reply(`Error: ${error.message}`);
     }
   }
 
@@ -87,15 +85,15 @@ export class TelegramUpdate {
     const email = message.split(' ')[1];
 
     if (!email) {
-      return ctx.reply('Please provide your AgroHive email. Example: /link user@example.com');
+      return ctx.reply('Please provide your email. Example: /link user@example.com');
     }
 
     try {
       const telegramId = ctx.from.id.toString();
       await this.usersService.linkTelegram(email, telegramId);
-      await ctx.reply('✅ Success! Your Telegram account has been linked to ' + email);
+      await ctx.reply('✅ Success! Your account has been linked to ' + email);
     } catch (error) {
-      await ctx.reply(`❌ Failed to link account: ${error.message}`);
+      await ctx.reply(`Error: ${error.message}`);
     }
   }
 
@@ -106,11 +104,12 @@ export class TelegramUpdate {
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (!user) {
-      return ctx.reply('You haven\'t linked your account yet. Use /link <email> first.');
+      return ctx.reply("You haven't linked your account yet. Use /link [email].");
     }
 
     await ctx.reply(
-      `👤 Linked Profile:\n\nName: ${user.fullName}\nEmail: ${user.email}\nUsername: @${user.username}\nVerified: ${user.isVerified ? '✅' : '❌'}`,
+      `<b>Linked Profile:</b>\n\nName: ${user.fullName}\nEmail: ${user.email}\nStatus: ${user.isVerified ? 'Verified' : 'Unverified'}`,
+      { parse_mode: 'HTML' },
     );
   }
 
@@ -121,38 +120,29 @@ export class TelegramUpdate {
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (!user) {
-      return ctx.reply('You haven\'t linked your account yet. Use /link <email> to see your orders.');
+      return ctx.reply("You haven't linked your account yet.");
     }
 
     try {
       const orders = await this.ordersService.findUserOrders(user.id);
 
       if (orders.length === 0) {
-        return ctx.reply('📦 You haven\'t placed any orders yet. Visit the AgroHive app to start shopping!');
+        return ctx.reply("You haven't placed any orders yet.");
       }
 
-      let orderMsg = '📦 <b>Your Recent Orders:</b>\n\n';
+      let orderMsg = '<b>Your Recent Orders:</b>\n\n';
 
       orders.slice(0, 5).forEach((order) => {
-        const statusEmoji =
-          order.status === 'DELIVERED'
-            ? '✅'
-            : order.status === 'SHIPPED'
-            ? '🚚'
-            : order.status === 'CANCELLED'
-            ? '❌'
-            : '⏳';
-
-        orderMsg += `🆔 <b>${order.orderNumber}</b>\n`;
-        orderMsg += `💰 Total: ₦${order.totalAmount.toLocaleString()}\n`;
-        orderMsg += `📊 Status: ${statusEmoji} ${order.status}\n`;
-        orderMsg += `📅 Date: ${new Date(order.createdAt).toLocaleDateString()}\n`;
+        orderMsg += `ID: <b>${order.orderNumber}</b>\n`;
+        orderMsg += `Total: ₦${order.totalAmount.toLocaleString()}\n`;
+        orderMsg += `Status: ${order.status}\n`;
+        orderMsg += `Date: ${new Date(order.createdAt).toLocaleDateString()}\n`;
         orderMsg += '-------------------\n';
       });
 
       await ctx.reply(orderMsg, { parse_mode: 'HTML' });
     } catch (error) {
-      await ctx.reply(`❌ Failed to fetch orders: ${error.message}`);
+      await ctx.reply(`Error: ${error.message}`);
     }
   }
 
@@ -162,24 +152,23 @@ export class TelegramUpdate {
       const products = await this.productsService.findAll({ limit: 8 });
 
       if (products.length === 0) {
-        return ctx.reply('🚜 No products available right now. Check back later!');
+        return ctx.reply('No products available right now.');
       }
 
-      let productMsg = '🚜 <b>Available Products:</b>\n\n';
+      let productMsg = '<b>Available Products:</b>\n\n';
 
       products.forEach((p) => {
-        productMsg += `🛒 <b>${p.name}</b>\n`;
-        productMsg += `💰 Price: ₦${p.price.toLocaleString()}\n`;
-        productMsg += `📁 Category: ${p.category}\n`;
-        productMsg += `📦 Stock: ${p.stock > 0 ? p.stock + ' available' : '❌ Out of stock'}\n`;
+        productMsg += `<b>${p.name}</b>\n`;
+        productMsg += `Price: ₦${p.price.toLocaleString()}\n`;
+        productMsg += `Stock: ${p.stock > 0 ? p.stock + ' left' : 'Out of stock'}\n`;
         productMsg += '-------------------\n';
       });
 
-      productMsg += '\n<i>Visit the AgroHive app to purchase!</i>';
+      productMsg += '\n<i>Visit the app to purchase.</i>';
 
       await ctx.reply(productMsg, { parse_mode: 'HTML' });
     } catch (error) {
-      await ctx.reply(`❌ Failed to fetch products: ${error.message}`);
+      await ctx.reply(`Error: ${error.message}`);
     }
   }
 
@@ -190,7 +179,7 @@ export class TelegramUpdate {
     const user = await this.usersService.findByTelegramId(telegramId);
 
     if (!user || user.role !== 'ADMIN') {
-      return ctx.reply('⛔ Access denied. Only AgroHive Admins can view platform stats.');
+      return ctx.reply('Error: Only Admins can view platform stats.');
     }
 
     try {
@@ -199,17 +188,16 @@ export class TelegramUpdate {
         where: { telegramId: { not: null } },
       });
 
-      let statsMsg = '📊 <b>AgroHive Real-time Stats:</b>\n\n';
-      statsMsg += `👥 Total Users: ${stats.totalUsers}\n`;
-      statsMsg += `🤖 Linked Bots: ${linkedUsers}\n`;
-      statsMsg += `🛒 Active Products: ${stats.activeListings}\n`;
-      statsMsg += `📦 Total Orders: ${stats.totalOrders}\n`;
-      statsMsg += `💰 Revenue: ₦${stats.totalRevenue.toLocaleString()}\n`;
-      statsMsg += '\n<i>Keep growing, Admin! 🌱</i>';
+      let statsMsg = '📊 <b>Platform Stats:</b>\n\n';
+      statsMsg += `Total Users: ${stats.totalUsers}\n`;
+      statsMsg += `Linked Bots: ${linkedUsers}\n`;
+      statsMsg += `Active Products: ${stats.activeListings}\n`;
+      statsMsg += `Total Orders: ${stats.totalOrders}\n`;
+      statsMsg += `Revenue: ₦${stats.totalRevenue.toLocaleString()}\n`;
 
       await ctx.reply(statsMsg, { parse_mode: 'HTML' });
     } catch (error) {
-      await ctx.reply(`❌ Failed to fetch stats: ${error.message}`);
+      await ctx.reply(`Error: ${error.message}`);
     }
   }
 }
