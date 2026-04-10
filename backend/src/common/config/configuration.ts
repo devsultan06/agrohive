@@ -9,7 +9,7 @@ export default () => ({
   },
   cors: {
     origins: process.env.ALLOWED_ORIGINS
-      ? process.env.ALLOWED_ORIGINS.split(',')
+      ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
       : '*',
   },
   database: {
