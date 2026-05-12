@@ -180,9 +180,9 @@ export default function CreateAccount({ navigation }: any) {
               <View className="self-center my-8 relative">
                 <View className="w-[100px] h-[100px] rounded-full bg-white overflow-hidden items-center justify-center">
                   <Image
-                    source={{
-                      uri: image || "https://avatar.iran.liara.run/public/31",
-                    }}
+                    source={
+                      image ? { uri: image } : require("../../assets/home2.png")
+                    }
                     className="w-full h-full"
                   />
                 </View>
